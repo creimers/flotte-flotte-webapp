@@ -34,3 +34,11 @@ mutation RefreshToken($refreshToken: String!) {
     token
   }
 }
+
+mutation VerifyEmail($token: String!) {
+  __typename
+  verifyAccount(token: $token) {
+    errors
+    success
+  }
+}
