@@ -1,13 +1,17 @@
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
 import Head from "next/head";
+import type { AppProps } from "next/app";
 import { DefaultSeo } from "next-seo";
 
-import type { AppProps } from "next/app";
+import { ApolloProvider } from "@apollo/client";
+import { useApollo } from "@lib/apolloClient";
+import { AuthProvider } from "@context/auth";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
   return (
-    <>
+    <ApolloProvider client={apolloClient}>
       <Head>
         <link
           rel="apple-touch-icon"
@@ -44,8 +48,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         title="Este-Esel - das freie Lastenrad an der Este"
         description="Der Este-Esel ist das Lastenrad an der Este zur freien Nutzung für alle!"
       />
-      <Component {...pageProps} />
-    </>
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
+    </ApolloProvider>
   );
 }
 export default MyApp;

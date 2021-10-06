@@ -32,11 +32,9 @@ const Home: NextPage = () => {
                 Der <span className="text-blue-500">Este-Esel</span> ist ein
                 Lastenrad zur freien Nutzung für die Este-Gemeinden und Jork.
               </p>
-              <p>
-                <li>Zum Einkaufen...</li>
-                <li>Zum Rumdüsen...</li>
-                <li>Für Ausflüge...</li>
-              </p>
+              <li>Zum Einkaufen...</li>
+              <li>Zum Rumdüsen...</li>
+              <li>Für Ausflüge...</li>
               <p>Frei und für alle!</p>
             </div>
             <div className="flex justify-center md:block">
