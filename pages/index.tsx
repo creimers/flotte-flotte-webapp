@@ -5,7 +5,7 @@ import DefaultLayout from "@components/layout/DefaultLayout";
 
 const Home: NextPage = () => {
   return (
-    <DefaultLayout>
+    <DefaultLayout fullWidth={true}>
       <main>
         <div className="max-w-2xl mx-auto mb-8 sm:mb-12 mt-8">
           <h1 className="text-3xl sm:text-4xl md:text-7xl text-center font-semibold text-gray-900">
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="px-8">
+        <div className="px-8 mt-24">
           <p className="text-center mb-6">
             Der <span className="text-blue-500">Este-Esel</span> ist eine
             Initiative der{" "}

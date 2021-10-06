@@ -94,7 +94,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       setAuthState(AuthStatus.checking);
       const theRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
       if (!theRefreshToken) {
-        router.push("/");
+        // router.push("/");
         setAuthState(AuthStatus.unauthenticated);
       } else {
         // get that token
@@ -114,7 +114,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         } catch (error) {
           console.log(error);
           // redirect to login
-          router.push("/");
+          //   router.push("/");
           setTimeout(() => {
             setAuthState(AuthStatus.unauthenticated);
           }, 200);

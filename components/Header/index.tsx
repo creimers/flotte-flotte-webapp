@@ -3,15 +3,9 @@ import * as React from "react";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import Link from "next/link";
 
 import { useAuth, AuthStatus } from "@context/auth";
-
-const navigation = [
-  { name: "Buchungen", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -22,18 +16,21 @@ export default function Header() {
 
   const menuItems = React.useMemo(() => {
     if (authState === AuthStatus.authenticated) {
-      return [{ name: "Buchungen", href: "#", current: true }];
+      return [{ name: "Buchungen", href: "/bookings", current: true }];
     } else if (authState === AuthStatus.unauthenticated) {
       return [
-        { name: "Registrieren", href: "#", current: false },
-        { name: "Login", href: "#", current: false },
+        { name: "Registrieren", href: "/register", current: false },
+        { name: "Login", href: "/login", current: false },
       ];
     }
     return [];
   }, [authState]);
 
   return (
-    <Disclosure as="nav" className="sticky top-0 bg-white">
+    <Disclosure
+      as="nav"
+      className="sticky top-0 bg-white border-b border-gray-300"
+    >
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -51,28 +48,32 @@ export default function Header() {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <img
-                    className="block h-10 w-auto"
-                    src="/img/logo-menu.svg"
-                    alt="Este-Esel"
-                  />
+                  <Link href="/">
+                    <a>
+                      <img
+                        className="block h-10 w-auto"
+                        src="/img/logo-menu.svg"
+                        alt="Este-Esel"
+                      />
+                    </a>
+                  </Link>
                 </div>
                 <div className="hidden sm:block sm:ml-6 sm:flex-1">
                   <div className="flex space-x-4 justify-end">
                     {menuItems.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-blue-500 text-white"
-                            : "text-blue-500 hover:text-blue-700",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
+                      <Link href={item.href} key={item.name}>
+                        <a
+                          className={classNames(
+                            item.current
+                              ? "bg-blue-500 text-white"
+                              : "text-blue-500 hover:text-blue-700",
+                            "px-3 py-2 rounded-md text-sm font-medium"
+                          )}
+                          aria-current={item.current ? "page" : undefined}
+                        >
+                          {item.name}
+                        </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -129,19 +130,19 @@ export default function Header() {
           <Disclosure.Panel className="sm:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {menuItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-blue-500 text-white"
-                      : "text-blue-500 hover:text-blue-700",
-                    "block px-3 py-2 rounded-md text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </a>
+                <Link key={item.name} href={item.href}>
+                  <a
+                    className={classNames(
+                      item.current
+                        ? "bg-blue-500 text-white"
+                        : "text-blue-500 hover:text-blue-700",
+                      "block px-3 py-2 rounded-md text-base font-medium"
+                    )}
+                    aria-current={item.current ? "page" : undefined}
+                  >
+                    {item.name}
+                  </a>
+                </Link>
               ))}
             </div>
           </Disclosure.Panel>
