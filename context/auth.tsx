@@ -10,12 +10,10 @@ import {
   useRefreshTokenMutation,
 } from "@generated/graphql";
 
-// import FullPageLoader from "@components/FullPageLoader";
-
 const JWT_TOKEN_KEY = "jwt-token";
 const REFRESH_TOKEN_KEY = "refresh-token";
 
-enum AuthStatus {
+export enum AuthStatus {
   idle,
   checking,
   authenticated,
@@ -23,7 +21,7 @@ enum AuthStatus {
 }
 
 interface AuthContextInterface {
-  status: AuthStatus;
+  authState: AuthStatus;
   loginError: ApolloError | undefined;
   login: (email: string, password: string) => void;
   logout: () => void;
@@ -37,7 +35,7 @@ type AuthProviderProps = { children: React.ReactNode };
 
 function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
-  const [status, setStatus] = React.useState(AuthStatus.idle);
+  const [authState, setAuthState] = React.useState(AuthStatus.idle);
 
   //   const [getUser, { data: user, loading: userLoading }] = useUserLazyQuery({
   //     fetchPolicy: "network-only",
@@ -77,7 +75,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     try {
       await loginMutation({ variables: { email, password } });
       //   router.push("/products");
-      setStatus(AuthStatus.authenticated);
+      setAuthState(AuthStatus.authenticated);
     } catch (error) {
       //   console.log(error);
     }
@@ -86,18 +84,18 @@ function AuthProvider({ children }: AuthProviderProps) {
   function logout() {
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(JWT_TOKEN_KEY);
-    setStatus(AuthStatus.unauthenticated);
+    setAuthState(AuthStatus.unauthenticated);
     router.push("/");
   }
 
   // initially refresh tokens
   React.useEffect(() => {
     async function refresh() {
-      setStatus(AuthStatus.checking);
+      setAuthState(AuthStatus.checking);
       const theRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
       if (!theRefreshToken) {
         router.push("/");
-        setStatus(AuthStatus.unauthenticated);
+        setAuthState(AuthStatus.unauthenticated);
       } else {
         // get that token
         try {
@@ -111,14 +109,14 @@ function AuthProvider({ children }: AuthProviderProps) {
           }
 
           setTimeout(() => {
-            setStatus(AuthStatus.authenticated);
+            setAuthState(AuthStatus.authenticated);
           }, 200);
         } catch (error) {
           console.log(error);
           // redirect to login
           router.push("/");
           setTimeout(() => {
-            setStatus(AuthStatus.unauthenticated);
+            setAuthState(AuthStatus.unauthenticated);
           }, 200);
         }
       }
@@ -128,12 +126,12 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   // periodically refresh tokens
   useInterval(() => {
-    if (status === AuthStatus.authenticated) {
+    if (authState === AuthStatus.authenticated) {
       (async () => {
         const theRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
         if (!theRefreshToken) {
           router.push("/");
-          setStatus(AuthStatus.unauthenticated);
+          setAuthState(AuthStatus.unauthenticated);
         } else {
           // get that token
           try {
@@ -142,7 +140,7 @@ function AuthProvider({ children }: AuthProviderProps) {
             });
           } catch (error) {
             router.push("/");
-            setStatus(AuthStatus.unauthenticated);
+            setAuthState(AuthStatus.unauthenticated);
           }
         }
       })();
@@ -155,12 +153,8 @@ function AuthProvider({ children }: AuthProviderProps) {
   //     }
   //   }, [status]);
 
-  //   if (status === AuthStatus.checking || status === AuthStatus.idle) {
-  //     return <div>ding</div>;
-  //   }
-
   const value: AuthContextInterface = {
-    status,
+    authState: authState,
     login,
     loginError,
     logout,
