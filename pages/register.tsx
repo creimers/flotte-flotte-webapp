@@ -7,13 +7,6 @@ import DefaultLayout from "@components/layout/DefaultLayout";
 
 import { useRegisterMutation } from "@generated/graphql";
 
-enum RegisterState {
-  idle,
-  loading,
-  error,
-  success,
-}
-
 interface Values {
   firstName: string;
   lastName: string;

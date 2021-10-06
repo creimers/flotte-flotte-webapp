@@ -465,6 +465,11 @@ export type VerifyEmailMutationVariables = Exact<{
 
 export type VerifyEmailMutation = { __typename: 'Mutation', verifyAccount?: { __typename?: 'VerifyAccount', errors?: any | null | undefined, success?: boolean | null | undefined } | null | undefined };
 
+export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined> } | null | undefined };
+
 
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password1: String!, $password2: String!, $firstName: String!, $lastName: String!) {
@@ -618,3 +623,44 @@ export function useVerifyEmailMutation(baseOptions?: Apollo.MutationHookOptions<
 export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
 export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutation>;
 export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;
+export const BookingsDocument = gql`
+    query Bookings {
+  __typename
+  bookings {
+    edges {
+      node {
+        uuid
+        startDate
+        pickupTimestamp
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useBookingsQuery__
+ *
+ * To run a query within a React component, call `useBookingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBookingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBookingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBookingsQuery(baseOptions?: Apollo.QueryHookOptions<BookingsQuery, BookingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BookingsQuery, BookingsQueryVariables>(BookingsDocument, options);
+      }
+export function useBookingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookingsQuery, BookingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BookingsQuery, BookingsQueryVariables>(BookingsDocument, options);
+        }
+export type BookingsQueryHookResult = ReturnType<typeof useBookingsQuery>;
+export type BookingsLazyQueryHookResult = ReturnType<typeof useBookingsLazyQuery>;
+export type BookingsQueryResult = Apollo.QueryResult<BookingsQuery, BookingsQueryVariables>;

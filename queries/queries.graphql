@@ -1,0 +1,12 @@
+query Bookings {
+  __typename
+  bookings {
+    edges {
+      node {
+        uuid
+        startDate
+        pickupTimestamp
+      }
+    }
+  }
+}

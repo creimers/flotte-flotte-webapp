@@ -12,11 +12,14 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
-  const { authState } = useAuth();
+  const { authState, logout } = useAuth();
 
   const menuItems = React.useMemo(() => {
     if (authState === AuthStatus.authenticated) {
-      return [{ name: "Buchungen", href: "/bookings", current: true }];
+      return [
+        { name: "Buchungen", href: "/bookings", current: true },
+        { name: "jetzt buchen", href: "/bookings/new", current: false },
+      ];
     } else if (authState === AuthStatus.unauthenticated) {
       return [
         { name: "Registrieren", href: "/register", current: false },
@@ -29,7 +32,7 @@ export default function Header() {
   return (
     <Disclosure
       as="nav"
-      className="sticky top-0 bg-white border-b border-gray-300"
+      className="sticky top-0 bg-white/95 border-b border-gray-300 z-50"
     >
       {({ open }) => (
         <>
@@ -110,7 +113,7 @@ export default function Header() {
                         <Menu.Item>
                           {({ active }) => (
                             <a
-                              href="#"
+                              onClick={logout}
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"

@@ -10,8 +10,7 @@ import {
   useRefreshTokenMutation,
 } from "@generated/graphql";
 
-const JWT_TOKEN_KEY = "jwt-token";
-const REFRESH_TOKEN_KEY = "refresh-token";
+import { JWT_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@lib/constants";
 
 export enum AuthStatus {
   idle,
@@ -22,8 +21,7 @@ export enum AuthStatus {
 
 interface AuthContextInterface {
   authState: AuthStatus;
-  loginError: ApolloError | undefined;
-  login: (email: string, password: string) => void;
+  setAuthState: (s: AuthStatus) => void;
   logout: () => void;
   //   user: UserQuery | undefined;
   //   userLoading: boolean;
@@ -154,9 +152,8 @@ function AuthProvider({ children }: AuthProviderProps) {
   //   }, [status]);
 
   const value: AuthContextInterface = {
-    authState: authState,
-    login,
-    loginError,
+    authState,
+    setAuthState,
     logout,
     // user,
     // userLoading,

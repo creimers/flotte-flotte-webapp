@@ -15,9 +15,10 @@ const DefaultLayout: React.FC<Props> = ({ children, fullWidth = false }) => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <div
-        className={
-          fullWidth ? "" : "max-w-5xl w-full mx-auto px-2 sm:px-6 lg:px-8"
-        }
+        className={classNames(
+          fullWidth ? "" : "max-w-5xl w-full mx-auto px-2 sm:px-6 lg:px-8",
+          "mt-4"
+        )}
       >
         {children}
       </div>
