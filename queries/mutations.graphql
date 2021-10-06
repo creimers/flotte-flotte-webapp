@@ -1,0 +1,36 @@
+mutation Register(
+  $email: String!
+  $password1: String!
+  $password2: String!
+  $firstName: String!
+  $lastName: String!
+) {
+  __typename
+  register(
+    email: $email
+    firstName: $firstName
+    lastName: $lastName
+    password1: $password1
+    password2: $password2
+    username: $email
+  ) {
+    success
+    errors
+  }
+}
+
+mutation Login($email: String!, $password: String!) {
+  __typename
+  tokenAuth(email: $email, password: $password) {
+    refreshToken
+    token
+  }
+}
+
+mutation RefreshToken($refreshToken: String!) {
+  __typename
+  refreshToken(refreshToken: $refreshToken) {
+    refreshToken
+    token
+  }
+}
