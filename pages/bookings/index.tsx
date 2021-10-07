@@ -40,9 +40,11 @@ export default function Bookings() {
           </div>
         )}
         {data?.bookings?.edges.map((edge) => (
-          <Link key={edge?.node?.uuid} href={`/bookings/${edge?.node?.uuid}`}>
-            {edge?.node?.uuid}
-          </Link>
+          <div key={edge?.node?.uuid}>
+            <Link href={`/bookings/${edge?.node?.uuid}`}>
+              {edge?.node?.uuid}
+            </Link>
+          </div>
         ))}
       </DefaultLayout>
     );

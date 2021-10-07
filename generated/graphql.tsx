@@ -509,6 +509,13 @@ export type BookedDatesQueryVariables = Exact<{
 
 export type BookedDatesQuery = { __typename: 'Query', bookedDates?: Array<any | null | undefined> | null | undefined };
 
+export type BookingDetailsQueryVariables = Exact<{
+  uuid: Scalars['String'];
+}>;
+
+
+export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
+
 
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password1: String!, $password2: String!, $firstName: String!, $lastName: String!) {
@@ -815,3 +822,50 @@ export function useBookedDatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type BookedDatesQueryHookResult = ReturnType<typeof useBookedDatesQuery>;
 export type BookedDatesLazyQueryHookResult = ReturnType<typeof useBookedDatesLazyQuery>;
 export type BookedDatesQueryResult = Apollo.QueryResult<BookedDatesQuery, BookedDatesQueryVariables>;
+export const BookingDetailsDocument = gql`
+    query BookingDetails($uuid: String!) {
+  __typename
+  booking(uuid: $uuid) {
+    bike {
+      pickupStation {
+        locationCity
+        locationPostalcode
+        locationStreet
+        contactTelephone
+        contactName
+      }
+    }
+    pickupTimestamp
+    startDate
+    state
+  }
+}
+    `;
+
+/**
+ * __useBookingDetailsQuery__
+ *
+ * To run a query within a React component, call `useBookingDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBookingDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBookingDetailsQuery({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *   },
+ * });
+ */
+export function useBookingDetailsQuery(baseOptions: Apollo.QueryHookOptions<BookingDetailsQuery, BookingDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BookingDetailsQuery, BookingDetailsQueryVariables>(BookingDetailsDocument, options);
+      }
+export function useBookingDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookingDetailsQuery, BookingDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BookingDetailsQuery, BookingDetailsQueryVariables>(BookingDetailsDocument, options);
+        }
+export type BookingDetailsQueryHookResult = ReturnType<typeof useBookingDetailsQuery>;
+export type BookingDetailsLazyQueryHookResult = ReturnType<typeof useBookingDetailsLazyQuery>;
+export type BookingDetailsQueryResult = Apollo.QueryResult<BookingDetailsQuery, BookingDetailsQueryVariables>;

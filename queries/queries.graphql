@@ -25,3 +25,21 @@ query BookedDates($bikeId: Int!) {
   __typename
   bookedDates(bikeId: $bikeId)
 }
+
+query BookingDetails($uuid: String!) {
+  __typename
+  booking(uuid: $uuid) {
+    bike {
+      pickupStation {
+        locationCity
+        locationPostalcode
+        locationStreet
+        contactTelephone
+        contactName
+      }
+    }
+    pickupTimestamp
+    startDate
+    state
+  }
+}
