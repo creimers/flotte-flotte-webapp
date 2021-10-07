@@ -42,3 +42,16 @@ mutation VerifyEmail($token: String!) {
     success
   }
 }
+
+mutation CreateABooking($input: CreateBookingInput!) {
+  __typename
+  createBooking(input: $input) {
+    booking {
+      id
+      uuid
+      state
+      startDate
+      pickupTimestamp
+    }
+  }
+}

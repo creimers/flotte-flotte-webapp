@@ -12,7 +12,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
-  const { authState, logout } = useAuth();
+  const { authState, logout, user } = useAuth();
 
   const menuItems = React.useMemo(() => {
     if (authState === AuthStatus.authenticated) {
@@ -112,15 +112,22 @@ export default function Header() {
                       <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              onClick={logout}
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
+                            <>
+                              {user?.me?.email && (
+                                <div className="px-4 py-2 text-sm text-gray-700">
+                                  {user?.me?.email}
+                                </div>
                               )}
-                            >
-                              ausloggen
-                            </a>
+                              <div
+                                onClick={logout}
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                                )}
+                              >
+                                ausloggen
+                              </div>
+                            </>
                           )}
                         </Menu.Item>
                       </Menu.Items>

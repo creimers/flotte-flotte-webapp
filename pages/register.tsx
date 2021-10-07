@@ -1,4 +1,5 @@
 import * as React from "react";
+import Link from "next/link";
 
 import { Formik, Field, Form, FormikHelpers, ErrorMessage } from "formik";
 
@@ -18,8 +19,6 @@ interface Values {
 
 export default function Register() {
   const [registerMutation, { error, data, loading }] = useRegisterMutation();
-
-  console.log(error, data);
 
   const registrationSucceeded = data?.register?.success === true;
   const registrationFailed =
@@ -185,10 +184,15 @@ export default function Register() {
                       />
                     </div>
                   </div>
-                  <label>
-                    <Field type="checkbox" name="agreeToTerms" /> Ich habe die
-                    Nutzungsbedingungen gelesen und stimme diesen zu.
-                  </label>
+                  <div>
+                    <label className="prose">
+                      <Field type="checkbox" name="agreeToTerms" /> Ich habe die{" "}
+                      <Link href="/terms">
+                        <a>Nutzungsbedingungen</a>
+                      </Link>{" "}
+                      gelesen und stimme diesen zu.
+                    </label>
+                  </div>
                   {/* <div className="flex items-center justify-between">
                 <div className="text-sm">
                   <a

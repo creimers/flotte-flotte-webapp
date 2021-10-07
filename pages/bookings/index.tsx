@@ -13,8 +13,6 @@ export default function Bookings() {
 
   const [getBookings, { loading, data, error }] = useBookingsLazyQuery();
 
-  console.log(loading, data, error);
-
   React.useEffect(() => {
     if (authState === AuthStatus.unauthenticated) {
       router.push("/login");
@@ -29,6 +27,18 @@ export default function Bookings() {
         <div className="prose">
           <h1>Buchungen</h1>
         </div>
+        {data?.bookings?.edges && !data?.bookings?.edges.length && (
+          <div className="prose">
+            <p>Du hast noch keine Buchungen.</p>
+            <p>
+              Jetzt den Este-Esel{" "}
+              <Link href="/bookings/new">
+                <a>buchen</a>
+              </Link>
+              .
+            </p>
+          </div>
+        )}
         {data?.bookings?.edges.map((edge) => (
           <Link key={edge?.node?.uuid} href={`/bookings/${edge?.node?.uuid}`}>
             {edge?.node?.uuid}

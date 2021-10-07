@@ -8,6 +8,8 @@ import {
   //   UserQuery,
   useLoginMutation,
   useRefreshTokenMutation,
+  useUserQueryLazyQuery,
+  UserQueryQuery,
 } from "@generated/graphql";
 
 import { JWT_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@lib/constants";
@@ -23,7 +25,7 @@ interface AuthContextInterface {
   authState: AuthStatus;
   setAuthState: (s: AuthStatus) => void;
   logout: () => void;
-  //   user: UserQuery | undefined;
+  user: UserQueryQuery | undefined;
   //   userLoading: boolean;
 }
 
@@ -35,9 +37,11 @@ function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
   const [authState, setAuthState] = React.useState(AuthStatus.idle);
 
-  //   const [getUser, { data: user, loading: userLoading }] = useUserLazyQuery({
-  //     fetchPolicy: "network-only",
-  //   });
+  const [getUser, { data: user, loading: userLoading }] = useUserQueryLazyQuery(
+    {
+      fetchPolicy: "network-only",
+    }
+  );
 
   const [loginMutation, { error: loginError }] = useLoginMutation({
     update: (_, { data: result }) => {
@@ -145,17 +149,17 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }, 1000 * 120);
 
-  //   React.useEffect(() => {
-  //     if (status === AuthStatus.authenticated) {
-  //       getUser();
-  //     }
-  //   }, [status]);
+  React.useEffect(() => {
+    if (authState === AuthStatus.authenticated) {
+      getUser();
+    }
+  }, [authState]);
 
   const value: AuthContextInterface = {
     authState,
     setAuthState,
     logout,
-    // user,
+    user,
     // userLoading,
   };
 

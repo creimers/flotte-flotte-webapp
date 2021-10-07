@@ -41,7 +41,7 @@ export default function ConfirmEmail() {
   React.useEffect(() => {
     if (data?.verifyAccount?.success) {
       setTimeout(() => {
-        router.push("/");
+        router.push("/login");
       }, 2000);
     }
   }, [data, router]);

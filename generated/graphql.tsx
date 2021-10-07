@@ -77,6 +77,7 @@ export type BikeNode = Node & {
   /** The ID of the object. */
   id: Scalars['ID'];
   name: Scalars['String'];
+  pickupStation?: Maybe<PickupStationNode>;
   purchaseDate: Scalars['Date'];
 };
 
@@ -150,7 +151,6 @@ export enum BookingState {
 }
 
 export type CreateBookingInput = {
-  bikeId: Scalars['Int'];
   pickupTimestamp: Scalars['Time'];
   startDate: Scalars['Date'];
 };
@@ -297,6 +297,28 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type PickupStationNode = Node & {
+  __typename?: 'PickupStationNode';
+  bikes: BikeNodeConnection;
+  contactName?: Maybe<Scalars['String']>;
+  contactTelephone?: Maybe<Scalars['String']>;
+  /** The ID of the object. */
+  id: Scalars['ID'];
+  locationCity?: Maybe<Scalars['String']>;
+  locationPostalcode?: Maybe<Scalars['String']>;
+  locationStreet?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+
+export type PickupStationNodeBikesArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   bikes?: Maybe<BikeNodeConnection>;
@@ -367,9 +389,7 @@ export type RefreshToken = {
 export type Register = {
   __typename?: 'Register';
   errors?: Maybe<Scalars['ExpectedErrorType']>;
-  refreshToken?: Maybe<Scalars['String']>;
   success?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
 };
 
 /** Same as `grapgql_jwt` implementation, with standard output. */
@@ -465,10 +485,29 @@ export type VerifyEmailMutationVariables = Exact<{
 
 export type VerifyEmailMutation = { __typename: 'Mutation', verifyAccount?: { __typename?: 'VerifyAccount', errors?: any | null | undefined, success?: boolean | null | undefined } | null | undefined };
 
+export type CreateABookingMutationVariables = Exact<{
+  input: CreateBookingInput;
+}>;
+
+
+export type CreateABookingMutation = { __typename: 'Mutation', createBooking?: { __typename?: 'CreateBookingMutation', booking?: { __typename?: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
+
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined> } | null | undefined };
+export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, pickupTimestamp?: any | null | undefined, state: BookingState } | null | undefined } | null | undefined> } | null | undefined };
+
+export type UserQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserQueryQuery = { __typename: 'Query', me?: { __typename?: 'UserNode', email: string, firstName: string, lastName: string } | null | undefined };
+
+export type BookedDatesQueryVariables = Exact<{
+  bikeId: Scalars['Int'];
+}>;
+
+
+export type BookedDatesQuery = { __typename: 'Query', bookedDates?: Array<any | null | undefined> | null | undefined };
 
 
 export const RegisterDocument = gql`
@@ -623,6 +662,46 @@ export function useVerifyEmailMutation(baseOptions?: Apollo.MutationHookOptions<
 export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
 export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutation>;
 export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;
+export const CreateABookingDocument = gql`
+    mutation CreateABooking($input: CreateBookingInput!) {
+  __typename
+  createBooking(input: $input) {
+    booking {
+      id
+      uuid
+      state
+      startDate
+      pickupTimestamp
+    }
+  }
+}
+    `;
+export type CreateABookingMutationFn = Apollo.MutationFunction<CreateABookingMutation, CreateABookingMutationVariables>;
+
+/**
+ * __useCreateABookingMutation__
+ *
+ * To run a mutation, you first call `useCreateABookingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateABookingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createABookingMutation, { data, loading, error }] = useCreateABookingMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateABookingMutation(baseOptions?: Apollo.MutationHookOptions<CreateABookingMutation, CreateABookingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateABookingMutation, CreateABookingMutationVariables>(CreateABookingDocument, options);
+      }
+export type CreateABookingMutationHookResult = ReturnType<typeof useCreateABookingMutation>;
+export type CreateABookingMutationResult = Apollo.MutationResult<CreateABookingMutation>;
+export type CreateABookingMutationOptions = Apollo.BaseMutationOptions<CreateABookingMutation, CreateABookingMutationVariables>;
 export const BookingsDocument = gql`
     query Bookings {
   __typename
@@ -632,6 +711,7 @@ export const BookingsDocument = gql`
         uuid
         startDate
         pickupTimestamp
+        state
       }
     }
   }
@@ -664,3 +744,74 @@ export function useBookingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<B
 export type BookingsQueryHookResult = ReturnType<typeof useBookingsQuery>;
 export type BookingsLazyQueryHookResult = ReturnType<typeof useBookingsLazyQuery>;
 export type BookingsQueryResult = Apollo.QueryResult<BookingsQuery, BookingsQueryVariables>;
+export const UserQueryDocument = gql`
+    query UserQuery {
+  __typename
+  me {
+    email
+    firstName
+    lastName
+  }
+}
+    `;
+
+/**
+ * __useUserQueryQuery__
+ *
+ * To run a query within a React component, call `useUserQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQueryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserQueryQuery, UserQueryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQueryQuery, UserQueryQueryVariables>(UserQueryDocument, options);
+      }
+export function useUserQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQueryQuery, UserQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQueryQuery, UserQueryQueryVariables>(UserQueryDocument, options);
+        }
+export type UserQueryQueryHookResult = ReturnType<typeof useUserQueryQuery>;
+export type UserQueryLazyQueryHookResult = ReturnType<typeof useUserQueryLazyQuery>;
+export type UserQueryQueryResult = Apollo.QueryResult<UserQueryQuery, UserQueryQueryVariables>;
+export const BookedDatesDocument = gql`
+    query BookedDates($bikeId: Int!) {
+  __typename
+  bookedDates(bikeId: $bikeId)
+}
+    `;
+
+/**
+ * __useBookedDatesQuery__
+ *
+ * To run a query within a React component, call `useBookedDatesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBookedDatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBookedDatesQuery({
+ *   variables: {
+ *      bikeId: // value for 'bikeId'
+ *   },
+ * });
+ */
+export function useBookedDatesQuery(baseOptions: Apollo.QueryHookOptions<BookedDatesQuery, BookedDatesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BookedDatesQuery, BookedDatesQueryVariables>(BookedDatesDocument, options);
+      }
+export function useBookedDatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookedDatesQuery, BookedDatesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BookedDatesQuery, BookedDatesQueryVariables>(BookedDatesDocument, options);
+        }
+export type BookedDatesQueryHookResult = ReturnType<typeof useBookedDatesQuery>;
+export type BookedDatesLazyQueryHookResult = ReturnType<typeof useBookedDatesLazyQuery>;
+export type BookedDatesQueryResult = Apollo.QueryResult<BookedDatesQuery, BookedDatesQueryVariables>;

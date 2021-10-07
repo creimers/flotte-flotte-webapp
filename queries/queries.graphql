@@ -6,7 +6,22 @@ query Bookings {
         uuid
         startDate
         pickupTimestamp
+        state
       }
     }
   }
+}
+
+query UserQuery {
+  __typename
+  me {
+    email
+    firstName
+    lastName
+  }
+}
+
+query BookedDates($bikeId: Int!) {
+  __typename
+  bookedDates(bikeId: $bikeId)
 }
