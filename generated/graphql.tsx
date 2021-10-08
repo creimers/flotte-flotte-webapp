@@ -118,6 +118,7 @@ export type BookingNode = Node & {
   returnTimestamp?: Maybe<Scalars['Time']>;
   startDate: Scalars['Date'];
   state: BookingState;
+  token?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -509,14 +510,32 @@ export type BookedDatesQueryVariables = Exact<{
 
 export type BookedDatesQuery = { __typename: 'Query', bookedDates?: Array<any | null | undefined> | null | undefined };
 
+export type BookingFragment = { __typename?: 'BookingNode', token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } };
+
 export type BookingDetailsQueryVariables = Exact<{
   uuid: Scalars['String'];
 }>;
 
 
-export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
+export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
 
-
+export const BookingFragmentDoc = gql`
+    fragment Booking on BookingNode {
+  bike {
+    pickupStation {
+      locationCity
+      locationPostalcode
+      locationStreet
+      contactTelephone
+      contactName
+    }
+  }
+  token
+  pickupTimestamp
+  startDate
+  state
+}
+    `;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password1: String!, $password2: String!, $firstName: String!, $lastName: String!) {
   __typename
@@ -826,21 +845,10 @@ export const BookingDetailsDocument = gql`
     query BookingDetails($uuid: String!) {
   __typename
   booking(uuid: $uuid) {
-    bike {
-      pickupStation {
-        locationCity
-        locationPostalcode
-        locationStreet
-        contactTelephone
-        contactName
-      }
-    }
-    pickupTimestamp
-    startDate
-    state
+    ...Booking
   }
 }
-    `;
+    ${BookingFragmentDoc}`;
 
 /**
  * __useBookingDetailsQuery__

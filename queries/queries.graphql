@@ -26,20 +26,25 @@ query BookedDates($bikeId: Int!) {
   bookedDates(bikeId: $bikeId)
 }
 
+fragment Booking on BookingNode {
+  bike {
+    pickupStation {
+      locationCity
+      locationPostalcode
+      locationStreet
+      contactTelephone
+      contactName
+    }
+  }
+  token
+  pickupTimestamp
+  startDate
+  state
+}
+
 query BookingDetails($uuid: String!) {
   __typename
   booking(uuid: $uuid) {
-    bike {
-      pickupStation {
-        locationCity
-        locationPostalcode
-        locationStreet
-        contactTelephone
-        contactName
-      }
-    }
-    pickupTimestamp
-    startDate
-    state
+    ...Booking
   }
 }
