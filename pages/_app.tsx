@@ -51,6 +51,17 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AuthProvider>
         <Component {...pageProps} />
       </AuthProvider>
+      <script
+        async
+        defer
+        src="https://scripts.simpleanalyticscdn.com/latest.js"
+      ></script>
+      <noscript>
+        <img
+          src="https://queue.simpleanalyticscdn.com/noscript.gif"
+          alt="ding dong"
+        />
+      </noscript>
     </ApolloProvider>
   );
 }
