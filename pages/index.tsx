@@ -19,11 +19,9 @@ const Home: NextPage = () => {
             <img src="/img/waves.svg" className="h-full md:h-96 object-cover" />
             <div className="absolute inset-0 flex justify-center items-center">
               <div className="h-32 md:h-64 relative">
-                <Image
+                <img
                   src="/img/esel-hamburg.jpg"
                   className="min-h-full h-full relative z-10"
-                  width={1920}
-                  height={1440}
                   alt="Este-Esel in Hamburg"
                 />
                 <div className="absolute top-0 left-0 h-full w-full bg-pink-600 transform -translate-x-3 translate-y-3 md:-translate-x-5 md:translate-y-5"></div>
