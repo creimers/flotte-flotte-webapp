@@ -67,12 +67,9 @@ export default function Header() {
                       <Link href={item.href} key={item.name}>
                         <a
                           className={classNames(
-                            item.current
-                              ? "bg-blue-500 text-white"
-                              : "text-blue-500 hover:text-blue-700",
+                            "text-blue-500 hover:text-blue-700",
                             "px-3 py-2 rounded-md text-sm font-medium"
                           )}
-                          aria-current={item.current ? "page" : undefined}
                         >
                           {item.name}
                         </a>
@@ -143,9 +140,7 @@ export default function Header() {
                 <Link key={item.name} href={item.href}>
                   <a
                     className={classNames(
-                      item.current
-                        ? "bg-blue-500 text-white"
-                        : "text-blue-500 hover:text-blue-700",
+                      "text-blue-500 hover:text-blue-700",
                       "block px-3 py-2 rounded-md text-base font-medium"
                     )}
                     aria-current={item.current ? "page" : undefined}

@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 import DefaultLayout from "@components/layout/DefaultLayout";
 
@@ -18,9 +19,12 @@ const Home: NextPage = () => {
             <img src="/img/waves.svg" className="h-full md:h-96 object-cover" />
             <div className="absolute inset-0 flex justify-center items-center">
               <div className="h-32 md:h-64 relative">
-                <img
+                <Image
                   src="/img/esel-hamburg.jpg"
                   className="min-h-full h-full relative z-10"
+                  width={1920}
+                  height={1440}
+                  alt="Este-Esel in Hamburg"
                 />
                 <div className="absolute top-0 left-0 h-full w-full bg-pink-600 transform -translate-x-3 translate-y-3 md:-translate-x-5 md:translate-y-5"></div>
               </div>
@@ -37,13 +41,12 @@ const Home: NextPage = () => {
               <li>Für Ausflüge...</li>
               <p>Frei und für alle!</p>
             </div>
-            <div className="flex justify-center md:block">
-              <a
-                href="/ausleihen/neu/"
-                className="px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-              >
-                Jetzt buchen
-              </a>
+            <div className="flex justify-center">
+              <Link href="/bookings/new/">
+                <a className="px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                  Jetzt buchen
+                </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -10,7 +10,6 @@ import {
   setMinutes,
   getHours,
   getMinutes,
-  isDate,
 } from "date-fns";
 import de from "date-fns/locale/de";
 import "react-datepicker/dist/react-datepicker.css";
@@ -33,7 +32,7 @@ export default function NewBooking() {
   const { authState } = useAuth();
   const router = useRouter();
   const [getBookedDates, { data: bookedDates }] = useBookedDatesLazyQuery();
-  const [createBooking, { loading, error }] = useCreateABookingMutation();
+  const [createBooking, { loading }] = useCreateABookingMutation();
 
   React.useEffect(() => {
     if (authState === AuthStatus.unauthenticated) {
@@ -56,6 +55,10 @@ export default function NewBooking() {
     if (uuid) {
       router.push(`/bookings/${uuid}?success=true`);
     }
+  }
+
+  if (authState !== AuthStatus.authenticated) {
+    return null;
   }
 
   return (

@@ -1,0 +1,32 @@
+import DefaultLayout from "@components/layout/DefaultLayout";
+
+# Impressum
+
+Diese Webseite wird betrieben durch:
+
+Die Brückenbäckerei e.V.<br />
+Estebrügger Str. 113<br />
+21635 Jork
+
+Telefon: 04162 8844<br />
+E-Mail: jansulzer (at) web.de
+
+Vertreten durch den 1. Vorsitzenden:<br />
+Dr. Jan Sulzer<br />
+Hinterstraße 1<br />
+21635 Jork
+
+Telefon: 04162 8844<br />
+E-Mail: jansulzer (at) web.de
+
+Verantwortlich für die technische Umsetzung dieser Webseite:
+
+Christoph Reimers<br />
+[superservice-international.com](https://superservice-international.com)<br />
+christoph@superservice-international.com
+
+export default ({ children }) => (
+  <DefaultLayout>
+    <div className="prose mx-auto">{children}</div>
+  </DefaultLayout>
+);
