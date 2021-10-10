@@ -1,4 +1,5 @@
 import * as React from "react";
+import Link from "next/link";
 
 import { useRouter } from "next/router";
 import { Formik, Field, Form, FormikHelpers, ErrorMessage } from "formik";
@@ -113,12 +114,11 @@ export default function Login() {
 
                 <div className="flex items-center justify-between">
                   <div className="text-sm">
-                    <a
-                      href="#"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Passwort vergessen?
-                    </a>
+                    <Link href="/register">
+                      <a className="font-medium text-indigo-600 hover:text-indigo-500">
+                        Noch kein Konto? Jetzt registrieren!
+                      </a>
+                    </Link>
                   </div>
                 </div>
 

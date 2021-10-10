@@ -3,32 +3,27 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="mt-auto">
-      {/* <div
-        className="h-24"
-        style={{ backgroundImage: "url('/img/waves.svg')", backgroundSize: "" }}
-      ></div> */}
-      {/* <div className="text-blue-500 -mb-px">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-          className="fill-current"
-        >
-          <path d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,165.3C840,149,960,171,1080,181.3C1200,192,1320,192,1380,192L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
-        </svg>
-      </div> */}
       <div className="h-32"></div>
-      <div className="p-4 text-white text-xs bg-blue-500 space-x-4">
-        <Link href="/terms">
-          <a>Nutzungsbedingungen</a>
-        </Link>
-        <Link href="/imprint">
-          <a>Impressum</a>
-        </Link>
-        <Link href="/privacy">
-          <a>Datenschutz</a>
-        </Link>
+      <div className="p-4 text-white bg-blue-500 flex space-x-4">
+        <div className="bg-white h-32 p-1 inline-block">
+          <img
+            className="block h-full w-auto"
+            src="/img/logo-menu.svg"
+            alt="Este-Esel"
+          />
+        </div>
+        <div className="flex flex-col justify-between">
+          <Link href="/terms">
+            <a>Nutzungsbedingungen</a>
+          </Link>
+          <Link href="/privacy">
+            <a>Datenschutz</a>
+          </Link>
+          <Link href="/imprint">
+            <a>Impressum</a>
+          </Link>
+        </div>
       </div>
-      <div></div>
     </footer>
   );
 }
