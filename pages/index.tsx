@@ -15,10 +15,10 @@ const Home: NextPage = () => {
           </h1>
         </div>
         <div className="flex space-x-12 flex-col sm:flex-row mb-8">
-          <div className="flex-1 overflow-hidden relative pb-8 sm:pb-0">
+          <div className="flex-1 relative pb-8 sm:pb-0">
             <img src="/img/waves.svg" className="h-full md:h-96 object-cover" />
             <div className="absolute inset-0 flex justify-center items-center">
-              <div className="h-32 md:h-64 relative">
+              <div className="h-48 md:h-64 relative">
                 <img
                   src="/img/esel-hamburg.jpg"
                   className="min-h-full h-full relative z-10"
@@ -32,17 +32,30 @@ const Home: NextPage = () => {
             <div className="max-w-md md:max-w-lg">
               <p>
                 Der <span className="text-blue-500">Este-Esel</span> ist ein
-                Lastenrad zur freien Nutzung für die Este-Gemeinden und Jork.
+                Lastenrad zur freien Nutzung für die Este-Gemeinden und Jork und
+                eignet sich hervorragend...
               </p>
-              <li>Zum Einkaufen...</li>
-              <li>Zum Rumdüsen...</li>
-              <li>Für Ausflüge...</li>
-              <p>Frei und für alle!</p>
+              <li>zum Einkaufen...</li>
+              <li>zum Rumdüsen...</li>
+              <li>für Ausflüge...</li>
+              <p>
+                Der <span className="text-blue-500">Este-Esel</span> ist dabei
+                ein{" "}
+                <a
+                  href="https://dein-lastenrad.de/wiki/Willkommen_beim_Forum_Freie_Lastenr%C3%A4der/de"
+                  className="text-blue-500 underline hover:text-blue-700"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  freies Lastenrad
+                </a>
+                , das heißt es kann kostenfrei von allen ausgeliehen werden.
+              </p>
             </div>
-            <div className="flex justify-center">
+            <div className="flex">
               <Link href="/bookings/new/">
                 <a className="px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
-                  Jetzt buchen
+                  Jetzt ausleihen
                 </a>
               </Link>
             </div>
@@ -53,8 +66,8 @@ const Home: NextPage = () => {
             Der <span className="text-blue-500">Este-Esel</span> ist eine
             Initiative der{" "}
             <a
-              className="text-blue-500 underline hover:text-blue-700"
               href="https://diebrueckenbaeckerei.de/"
+              className="text-blue-500 underline hover:text-blue-700"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -79,19 +92,22 @@ const Home: NextPage = () => {
               Postcode-Lotterie.
             </a>
           </p>
-          <div className="flex flex-col md:flex-row items-center max-w-2xl w-full mx-auto md:space-x-4 space-y-8 md:space-y-0">
-            <div className="flex-1">
-              <img
-                src="/img/brueckenbaeckerei-logo.jpg"
-                className="max-w-full"
-              />
-            </div>
-            <div className="flex-1">
-              <img src="/img/reew-logo.JPG" className="max-w-full" />
-            </div>
-            <div className="flex-1">
-              <img src="/img/dpl-logo.png" className="max-w-full" />
-            </div>
+        </div>
+        <div className="flex flex-col lg:flex-row items-center w-64 lg:w-full mx-auto lg:space-x-6 space-y-8 lg:space-y-0 lg:h-24 justify-center">
+          <div className="h-full">
+            <img
+              src="/img/brueckenbaeckerei-logo.jpg"
+              className="max-w-full w-auto h-full"
+            />
+          </div>
+          <div className="h-full">
+            <img
+              src="/img/reew-logo.JPG"
+              className="max-w-full h-full w-auto"
+            />
+          </div>
+          <div className="h-full">
+            <img src="/img/dpl-logo.png" className="max-w-full h-full w-auto" />
           </div>
         </div>
       </main>
