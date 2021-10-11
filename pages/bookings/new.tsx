@@ -62,7 +62,7 @@ export default function NewBooking() {
   }
 
   return (
-    <DefaultLayout>
+    <DefaultLayout title="Neue Buchung">
       <div className="prose">
         <h1>Neue Buchung</h1>
       </div>

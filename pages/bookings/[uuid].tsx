@@ -34,7 +34,7 @@ export default function BookingDetail() {
   }, [authState, router, getBookingDetails]);
 
   return (
-    <DefaultLayout>
+    <DefaultLayout title="Buchungs-Details">
       <div className="prose">
         <h1>Buchungs-Details</h1>
       </div>

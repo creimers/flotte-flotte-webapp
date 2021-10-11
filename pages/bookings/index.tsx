@@ -27,7 +27,7 @@ export default function Bookings() {
 
   if (authState === AuthStatus.authenticated) {
     return (
-      <DefaultLayout>
+      <DefaultLayout title="Buchungen">
         <div className="prose">
           <h1>Buchungen</h1>
         </div>
