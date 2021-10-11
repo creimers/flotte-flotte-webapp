@@ -31,7 +31,7 @@ export default function Bookings() {
         <div className="prose">
           <h1>Buchungen</h1>
         </div>
-        {data?.bookings?.edges && !data?.bookings?.edges.length ? (
+        {!loading && data?.bookings?.edges && !data?.bookings?.edges.length ? (
           <div className="prose">
             <p>Du hast noch keine Buchungen.</p>
             <p>
