@@ -17,7 +17,10 @@ export default function BookingDetail() {
   const { uuid } = router.query;
 
   const [getBookingDetails, { data, loading, error }] =
-    useBookingDetailsLazyQuery({ variables: { uuid: `${uuid}` } });
+    useBookingDetailsLazyQuery({
+      variables: { uuid: `${uuid}` },
+      fetchPolicy: "cache-and-network",
+    });
 
   React.useEffect(() => {
     if (window.location.search.includes("success")) {
@@ -57,6 +60,19 @@ export default function BookingDetail() {
             text="Die Buchung konnte nicht gefunden werden."
             type="error"
           />
+        </div>
+      )}
+      {data?.booking?.state === "CONFIRMED" && (
+        <div className="my-2">
+          <Alert
+            text="Bitte bringe den Buchungs-Code und deinen Ausweis mit zum Abholen."
+            type="info"
+          />
+        </div>
+      )}
+      {data?.booking?.state === "REJECTED" && (
+        <div className="my-2">
+          <Alert text="Die Buchung wurde leider abgelehnt." type="error" />
         </div>
       )}
       {data && data.booking && <BookingDetails booking={data.booking} />}
