@@ -97,20 +97,14 @@ const Home: NextPage = () => {
           <div className="h-full">
             <img
               src="/img/brueckenbaeckerei-logo.jpg"
-              className="max-w-full w-full max-h-[6rem]"
+              className="max-w-full max-h-[6rem]"
             />
           </div>
           <div className="h-full">
-            <img
-              src="/img/reew-logo.JPG"
-              className="max-w-full w-full max-h-[6rem]"
-            />
+            <img src="/img/reew-logo.JPG" className="max-w-full max-h-[6rem]" />
           </div>
           <div className="h-full">
-            <img
-              src="/img/dpl-logo.png"
-              className="max-w-full w-full max-h-[6rem]"
-            />
+            <img src="/img/dpl-logo.png" className="max-w-full max-h-[6rem]" />
           </div>
         </div>
       </main>
