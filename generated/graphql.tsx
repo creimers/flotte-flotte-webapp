@@ -110,6 +110,7 @@ export type BikeNodeEdge = {
 export type BookingNode = Node & {
   __typename?: 'BookingNode';
   bike: BikeNode;
+  created?: Maybe<Scalars['DateTime']>;
   /** The ID of the object. */
   id: Scalars['ID'];
   notes?: Maybe<Scalars['String']>;
@@ -161,9 +162,62 @@ export type CreateBookingMutation = {
   booking?: Maybe<BookingNode>;
 };
 
+/**
+ * Delete account permanently or make `user.is_active=False`.
+ *
+ * The behavior is defined on settings.
+ * Anyway user refresh tokens are revoked.
+ *
+ * User must be verified and confirm password.
+ */
+export type DeleteAccount = {
+  __typename?: 'DeleteAccount';
+  errors?: Maybe<Scalars['ExpectedErrorType']>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createBooking?: Maybe<CreateBookingMutation>;
+  /**
+   * Delete account permanently or make `user.is_active=False`.
+   *
+   * The behavior is defined on settings.
+   * Anyway user refresh tokens are revoked.
+   *
+   * User must be verified and confirm password.
+   */
+  deleteAccount?: Maybe<DeleteAccount>;
+  /**
+   * Change account password when user knows the old password.
+   *
+   * A new token and refresh token are sent. User must be verified.
+   */
+  passwordChange?: Maybe<PasswordChange>;
+  /**
+   * Change user password without old password.
+   *
+   * Receive the token that was sent by email.
+   *
+   * If token and new passwords are valid, update
+   * user password and in case of using refresh
+   * tokens, revoke all of them.
+   *
+   * Also, if user has not been verified yet, verify it.
+   */
+  passwordReset?: Maybe<PasswordReset>;
+  /**
+   * Set user password - for passwordless registration
+   *
+   * Receive the token that was sent by email.
+   *
+   * If token and new passwords are valid, set
+   * user password and in case of using refresh
+   * tokens, revoke all of them.
+   *
+   * Also, if user has not been verified yet, verify it.
+   */
+  passwordSet?: Maybe<PasswordSet>;
   /** Same as `grapgql_jwt` implementation, with standard output. */
   refreshToken?: Maybe<RefreshToken>;
   /**
@@ -187,8 +241,31 @@ export type Mutation = {
    * If allowed to not verified users login, return token.
    */
   register?: Maybe<Register>;
+  /**
+   * Sends activation email.
+   *
+   * It is called resend because theoretically
+   * the first activation email was sent when
+   * the user registered.
+   *
+   * If there is no user with the requested email,
+   * a successful response is returned.
+   */
+  resendActivationEmail?: Maybe<ResendActivationEmail>;
   /** Same as `grapgql_jwt` implementation, with standard output. */
   revokeToken?: Maybe<RevokeToken>;
+  /**
+   * Send password reset email.
+   *
+   * For non verified users, send an activation
+   * email instead.
+   *
+   * Accepts both primary and secondary email.
+   *
+   * If there is no user with the requested email,
+   * a successful response is returned.
+   */
+  sendPasswordResetEmail?: Maybe<SendPasswordResetEmail>;
   /**
    * Obtain JSON web token for given user.
    *
@@ -221,6 +298,32 @@ export type MutationCreateBookingArgs = {
 };
 
 
+export type MutationDeleteAccountArgs = {
+  password: Scalars['String'];
+};
+
+
+export type MutationPasswordChangeArgs = {
+  newPassword1: Scalars['String'];
+  newPassword2: Scalars['String'];
+  oldPassword: Scalars['String'];
+};
+
+
+export type MutationPasswordResetArgs = {
+  newPassword1: Scalars['String'];
+  newPassword2: Scalars['String'];
+  token: Scalars['String'];
+};
+
+
+export type MutationPasswordSetArgs = {
+  newPassword1: Scalars['String'];
+  newPassword2: Scalars['String'];
+  token: Scalars['String'];
+};
+
+
 export type MutationRefreshTokenArgs = {
   refreshToken: Scalars['String'];
 };
@@ -236,8 +339,18 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationResendActivationEmailArgs = {
+  email: Scalars['String'];
+};
+
+
 export type MutationRevokeTokenArgs = {
   refreshToken: Scalars['String'];
+};
+
+
+export type MutationSendPasswordResetEmailArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -296,6 +409,53 @@ export type PageInfo = {
   hasPreviousPage: Scalars['Boolean'];
   /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['String']>;
+};
+
+/**
+ * Change account password when user knows the old password.
+ *
+ * A new token and refresh token are sent. User must be verified.
+ */
+export type PasswordChange = {
+  __typename?: 'PasswordChange';
+  errors?: Maybe<Scalars['ExpectedErrorType']>;
+  refreshToken?: Maybe<Scalars['String']>;
+  success?: Maybe<Scalars['Boolean']>;
+  token?: Maybe<Scalars['String']>;
+};
+
+/**
+ * Change user password without old password.
+ *
+ * Receive the token that was sent by email.
+ *
+ * If token and new passwords are valid, update
+ * user password and in case of using refresh
+ * tokens, revoke all of them.
+ *
+ * Also, if user has not been verified yet, verify it.
+ */
+export type PasswordReset = {
+  __typename?: 'PasswordReset';
+  errors?: Maybe<Scalars['ExpectedErrorType']>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+/**
+ * Set user password - for passwordless registration
+ *
+ * Receive the token that was sent by email.
+ *
+ * If token and new passwords are valid, set
+ * user password and in case of using refresh
+ * tokens, revoke all of them.
+ *
+ * Also, if user has not been verified yet, verify it.
+ */
+export type PasswordSet = {
+  __typename?: 'PasswordSet';
+  errors?: Maybe<Scalars['ExpectedErrorType']>;
+  success?: Maybe<Scalars['Boolean']>;
 };
 
 export type PickupStationNode = Node & {
@@ -390,6 +550,24 @@ export type RefreshToken = {
 export type Register = {
   __typename?: 'Register';
   errors?: Maybe<Scalars['ExpectedErrorType']>;
+  refreshToken?: Maybe<Scalars['String']>;
+  success?: Maybe<Scalars['Boolean']>;
+  token?: Maybe<Scalars['String']>;
+};
+
+/**
+ * Sends activation email.
+ *
+ * It is called resend because theoretically
+ * the first activation email was sent when
+ * the user registered.
+ *
+ * If there is no user with the requested email,
+ * a successful response is returned.
+ */
+export type ResendActivationEmail = {
+  __typename?: 'ResendActivationEmail';
+  errors?: Maybe<Scalars['ExpectedErrorType']>;
   success?: Maybe<Scalars['Boolean']>;
 };
 
@@ -398,6 +576,23 @@ export type RevokeToken = {
   __typename?: 'RevokeToken';
   errors?: Maybe<Scalars['ExpectedErrorType']>;
   revoked?: Maybe<Scalars['Int']>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+/**
+ * Send password reset email.
+ *
+ * For non verified users, send an activation
+ * email instead.
+ *
+ * Accepts both primary and secondary email.
+ *
+ * If there is no user with the requested email,
+ * a successful response is returned.
+ */
+export type SendPasswordResetEmail = {
+  __typename?: 'SendPasswordResetEmail';
+  errors?: Maybe<Scalars['ExpectedErrorType']>;
   success?: Maybe<Scalars['Boolean']>;
 };
 
@@ -462,7 +657,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename: 'Mutation', register?: { __typename?: 'Register', success?: boolean | null | undefined, errors?: any | null | undefined } | null | undefined };
+export type RegisterMutation = { __typename: 'Mutation', register?: { __typename?: 'Register', success?: boolean | null | undefined, errors?: any | null | undefined, token?: string | null | undefined, refreshToken?: string | null | undefined } | null | undefined };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
@@ -493,6 +688,13 @@ export type CreateABookingMutationVariables = Exact<{
 
 export type CreateABookingMutation = { __typename: 'Mutation', createBooking?: { __typename?: 'CreateBookingMutation', booking?: { __typename?: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
 
+export type ResendActiviationEmailMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type ResendActiviationEmailMutation = { __typename: 'Mutation', resendActivationEmail?: { __typename?: 'ResendActivationEmail', errors?: any | null | undefined, success?: boolean | null | undefined } | null | undefined };
+
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -501,7 +703,7 @@ export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'Bo
 export type UserQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQueryQuery = { __typename: 'Query', me?: { __typename?: 'UserNode', email: string, firstName: string, lastName: string } | null | undefined };
+export type UserQueryQuery = { __typename: 'Query', me?: { __typename?: 'UserNode', email: string, firstName: string, lastName: string, verified?: boolean | null | undefined } | null | undefined };
 
 export type BookedDatesQueryVariables = Exact<{
   bikeId: Scalars['Int'];
@@ -549,6 +751,8 @@ export const RegisterDocument = gql`
   ) {
     success
     errors
+    token
+    refreshToken
   }
 }
     `;
@@ -728,6 +932,41 @@ export function useCreateABookingMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateABookingMutationHookResult = ReturnType<typeof useCreateABookingMutation>;
 export type CreateABookingMutationResult = Apollo.MutationResult<CreateABookingMutation>;
 export type CreateABookingMutationOptions = Apollo.BaseMutationOptions<CreateABookingMutation, CreateABookingMutationVariables>;
+export const ResendActiviationEmailDocument = gql`
+    mutation ResendActiviationEmail($email: String!) {
+  __typename
+  resendActivationEmail(email: $email) {
+    errors
+    success
+  }
+}
+    `;
+export type ResendActiviationEmailMutationFn = Apollo.MutationFunction<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>;
+
+/**
+ * __useResendActiviationEmailMutation__
+ *
+ * To run a mutation, you first call `useResendActiviationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResendActiviationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resendActiviationEmailMutation, { data, loading, error }] = useResendActiviationEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useResendActiviationEmailMutation(baseOptions?: Apollo.MutationHookOptions<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>(ResendActiviationEmailDocument, options);
+      }
+export type ResendActiviationEmailMutationHookResult = ReturnType<typeof useResendActiviationEmailMutation>;
+export type ResendActiviationEmailMutationResult = Apollo.MutationResult<ResendActiviationEmailMutation>;
+export type ResendActiviationEmailMutationOptions = Apollo.BaseMutationOptions<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>;
 export const BookingsDocument = gql`
     query Bookings {
   __typename
@@ -777,6 +1016,7 @@ export const UserQueryDocument = gql`
     email
     firstName
     lastName
+    verified
   }
 }
     `;

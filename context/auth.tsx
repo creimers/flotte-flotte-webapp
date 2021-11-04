@@ -1,18 +1,18 @@
 import * as React from "react";
-import { ApolloError } from "@apollo/client";
 import { useRouter } from "next/router";
 import useInterval from "@use-it/interval";
 
 import {
-  //   useUserLazyQuery,
-  //   UserQuery,
-  useLoginMutation,
   useRefreshTokenMutation,
   useUserQueryLazyQuery,
   UserQueryQuery,
 } from "@generated/graphql";
 
-import { JWT_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@lib/constants";
+import {
+  JWT_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  EMAIL_VERIFIED_KEY,
+} from "@lib/constants";
 
 export enum AuthStatus {
   idle,
@@ -43,17 +43,17 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   );
 
-  const [loginMutation, { error: loginError }] = useLoginMutation({
-    update: (_, { data: result }) => {
-      if (result && result.tokenAuth) {
-        const { refreshToken, token } = result.tokenAuth;
-        if (token && refreshToken) {
-          localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-          localStorage.setItem(JWT_TOKEN_KEY, token);
-        }
-      }
-    },
-  });
+  function refetchUser() {
+    const emailVerified = window.localStorage.getItem(EMAIL_VERIFIED_KEY);
+    if (emailVerified) {
+      getUser();
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener("storage", refetchUser);
+    return () => window.removeEventListener("storage", refetchUser);
+  }, []);
 
   const [refreshTokenMutation] = useRefreshTokenMutation({
     update: (_, { data: result }) => {
@@ -73,21 +73,13 @@ function AuthProvider({ children }: AuthProviderProps) {
     // },
   });
 
-  async function login(email: string, password: string) {
-    try {
-      await loginMutation({ variables: { email, password } });
-      //   router.push("/products");
-      setAuthState(AuthStatus.authenticated);
-    } catch (error) {
-      //   console.log(error);
-    }
-  }
-
   function logout() {
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    localStorage.removeItem(JWT_TOKEN_KEY);
-    setAuthState(AuthStatus.unauthenticated);
     router.push("/");
+    setTimeout(() => {
+      localStorage.removeItem(REFRESH_TOKEN_KEY);
+      localStorage.removeItem(JWT_TOKEN_KEY);
+      setAuthState(AuthStatus.unauthenticated);
+    }, 200);
   }
 
   // initially refresh tokens
@@ -153,7 +145,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     if (authState === AuthStatus.authenticated) {
       getUser();
     }
-  }, [authState]);
+  }, [authState, getUser]);
 
   const value: AuthContextInterface = {
     authState,

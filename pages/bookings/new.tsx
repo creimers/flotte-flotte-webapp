@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useRouter } from "next/router";
-import { Formik, Form, Field, FormikHelpers, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
 import Link from "next/link";
 import DatePicker, { registerLocale } from "react-datepicker";
 import {
@@ -29,7 +29,7 @@ interface Values {
 }
 
 export default function NewBooking() {
-  const { authState } = useAuth();
+  const { authState, user } = useAuth();
   const router = useRouter();
   const [getBookedDates, { data: bookedDates }] = useBookedDatesLazyQuery();
   const [createBooking, { loading }] = useCreateABookingMutation();
@@ -42,10 +42,7 @@ export default function NewBooking() {
     }
   }, [authState, router, getBookedDates]);
 
-  async function handleSubmit(
-    values: Values,
-    { resetForm, setErrors }: FormikHelpers<Values>
-  ) {
+  async function handleSubmit(values: Values) {
     const input = {
       startDate: values.startDate,
       pickupTimestamp: values.pickupTimestamp,
@@ -66,7 +63,7 @@ export default function NewBooking() {
       <div className="prose">
         <h1>Neue Buchung</h1>
       </div>
-      <div className="flex flex-col justify-center pt-12 sm:px-6 lg:px-8">
+      <div className="flex flex-col justify-center sm:px-6 lg:px-8">
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
             <Formik
@@ -172,7 +169,9 @@ export default function NewBooking() {
                       <button
                         type="submit"
                         className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-500"
-                        disabled={!values.agreeToTerms || loading}
+                        disabled={
+                          !values.agreeToTerms || loading || !user?.me?.verified
+                        }
                       >
                         Jetzt buchen
                       </button>

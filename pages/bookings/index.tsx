@@ -1,19 +1,20 @@
 import * as React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import { ChevronRightIcon } from "@heroicons/react/outline";
 
 import DefaultLayout from "@components/layout/DefaultLayout";
 import { AuthStatus, useAuth } from "@context/auth";
+import Alert from "@components/Alert";
 
 import { useBookingsLazyQuery } from "@generated/graphql";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
-import { ChevronRightIcon } from "@heroicons/react/outline";
 
 export default function Bookings() {
   const { authState } = useAuth();
   const router = useRouter();
 
-  const [getBookings, { loading, data, error }] = useBookingsLazyQuery({
+  const [getBookings, { loading, data }] = useBookingsLazyQuery({
     fetchPolicy: "network-only",
   });
 
@@ -25,15 +26,37 @@ export default function Bookings() {
     }
   }, [authState, router, getBookings]);
 
+  const [showRegistrationSuccess, setShowRegistrationSuccess] =
+    React.useState(false);
+
+  React.useEffect(() => {
+    if (window.location.search.includes("registered")) {
+      setShowRegistrationSuccess(true);
+    }
+  }, []);
+
   if (authState === AuthStatus.authenticated) {
     return (
-      <DefaultLayout title="Buchungen">
-        <div className="prose">
+      <DefaultLayout
+        title="Buchungen"
+        alerts={
+          showRegistrationSuccess
+            ? [
+                <Alert
+                  type="success"
+                  text="Willkommen!"
+                  key={`welcome-alert`}
+                />,
+              ]
+            : []
+        }
+      >
+        <div className="prose my-3">
           <h1>Buchungen</h1>
         </div>
         {!loading && data?.bookings?.edges && !data?.bookings?.edges.length ? (
           <div className="prose">
-            <p>Du hast noch keine Buchungen.</p>
+            <p>Du hast bisher noch keine Buchungen.</p>
             <p>
               Jetzt den Este-Esel{" "}
               <Link href="/bookings/new">

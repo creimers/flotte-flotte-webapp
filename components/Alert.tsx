@@ -7,7 +7,7 @@ import {
 
 type Props = {
   type: "success" | "error" | "warning" | "info";
-  text: string;
+  text: string | JSX.Element;
 };
 
 const iconMapping = {
@@ -50,7 +50,7 @@ export default function Alert({ type, text }: Props) {
           <Icon className={`h-5 w-5 ${iconColor}`} aria-hidden="true" />
         </div>
         <div className="ml-3">
-          <p className={`text-sm font-medium ${textColor}`}>{text}</p>
+          <div className={`text-sm font-medium ${textColor}`}>{text}</div>
         </div>
       </div>
     </div>

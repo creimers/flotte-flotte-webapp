@@ -16,6 +16,8 @@ mutation Register(
   ) {
     success
     errors
+    token
+    refreshToken
   }
 }
 
@@ -53,5 +55,13 @@ mutation CreateABooking($input: CreateBookingInput!) {
       startDate
       pickupTimestamp
     }
+  }
+}
+
+mutation ResendActiviationEmail($email: String!) {
+  __typename
+  resendActivationEmail(email: $email) {
+    errors
+    success
   }
 }

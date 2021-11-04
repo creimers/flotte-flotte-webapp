@@ -1,12 +1,15 @@
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { Formik, Field, Form, FormikHelpers, ErrorMessage } from "formik";
 
 import Alert from "@components/Alert";
 import DefaultLayout from "@components/layout/DefaultLayout";
 
+import { AuthStatus, useAuth } from "@context/auth";
 import { useRegisterMutation } from "@generated/graphql";
+import { JWT_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@lib/constants";
 
 interface Values {
   firstName: string;
@@ -18,7 +21,9 @@ interface Values {
 }
 
 export default function Register() {
+  const { setAuthState } = useAuth();
   const [registerMutation, { error, data, loading }] = useRegisterMutation();
+  const router = useRouter();
 
   const registrationSucceeded = data?.register?.success === true;
   const registrationFailed =
@@ -37,8 +42,17 @@ export default function Register() {
     };
     const resp = await registerMutation({ variables });
     const success = resp.data?.register?.success === true;
+    window.scrollTo(0, 0);
     if (success) {
-      resetForm();
+      const token = resp.data?.register?.token;
+      const refreshToken = resp.data?.register?.refreshToken;
+      if (token && refreshToken) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        localStorage.setItem(JWT_TOKEN_KEY, token);
+        setAuthState(AuthStatus.authenticated);
+        resetForm();
+        router.push("/bookings?registered=true");
+      }
     } else {
       const errors = resp.data?.register?.errors;
       let formikErrors: { [key: string]: string } = {};
@@ -48,7 +62,6 @@ export default function Register() {
       console.log(formikErrors);
       setErrors(formikErrors);
     }
-    window.scrollTo(0, 0);
   }
   return (
     <DefaultLayout>
@@ -61,12 +74,6 @@ export default function Register() {
             Um den Este-Esel ausleihen zu können, musst du dich bitte kurz
             registrieren.
           </p>
-          {registrationSucceeded && (
-            <Alert
-              type="success"
-              text="Bitte bestätige jetzt deine Email-Adresse."
-            />
-          )}
           {registrationFailed && (
             <Alert type="error" text="Registrierung fehlgeschlagen." />
           )}
