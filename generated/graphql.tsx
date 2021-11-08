@@ -116,6 +116,7 @@ export type BookingNode = Node & {
   notes?: Maybe<Scalars['String']>;
   pickupKilometers?: Maybe<Scalars['Int']>;
   pickupTimestamp?: Maybe<Scalars['Time']>;
+  returnKilometers?: Maybe<Scalars['Int']>;
   returnTimestamp?: Maybe<Scalars['Time']>;
   startDate: Scalars['Date'];
   state: BookingState;
@@ -487,6 +488,7 @@ export type Query = {
   booking?: Maybe<BookingNode>;
   bookings?: Maybe<BookingNodeConnection>;
   me?: Maybe<UserNode>;
+  stats?: Maybe<Stats>;
 };
 
 
@@ -594,6 +596,13 @@ export type SendPasswordResetEmail = {
   __typename?: 'SendPasswordResetEmail';
   errors?: Maybe<Scalars['ExpectedErrorType']>;
   success?: Maybe<Scalars['Boolean']>;
+};
+
+export type Stats = {
+  __typename?: 'Stats';
+  bookings?: Maybe<Scalars['Int']>;
+  kilometers?: Maybe<Scalars['Int']>;
+  users?: Maybe<Scalars['Int']>;
 };
 
 export type UserNode = Node & {
@@ -736,6 +745,11 @@ export type BookingDetailsQueryVariables = Exact<{
 
 
 export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
+
+export type StatsQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StatsQueryQuery = { __typename?: 'Query', stats?: { __typename?: 'Stats', users?: number | null | undefined, kilometers?: number | null | undefined, bookings?: number | null | undefined } | null | undefined };
 
 export const BookingFragmentDoc = gql`
     fragment Booking on BookingNode {
@@ -1209,3 +1223,39 @@ export function useBookingDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type BookingDetailsQueryHookResult = ReturnType<typeof useBookingDetailsQuery>;
 export type BookingDetailsLazyQueryHookResult = ReturnType<typeof useBookingDetailsLazyQuery>;
 export type BookingDetailsQueryResult = Apollo.QueryResult<BookingDetailsQuery, BookingDetailsQueryVariables>;
+export const StatsQueryDocument = gql`
+    query StatsQuery {
+  stats {
+    users
+    kilometers
+    bookings
+  }
+}
+    `;
+
+/**
+ * __useStatsQueryQuery__
+ *
+ * To run a query within a React component, call `useStatsQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStatsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStatsQueryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStatsQueryQuery(baseOptions?: Apollo.QueryHookOptions<StatsQueryQuery, StatsQueryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StatsQueryQuery, StatsQueryQueryVariables>(StatsQueryDocument, options);
+      }
+export function useStatsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StatsQueryQuery, StatsQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StatsQueryQuery, StatsQueryQueryVariables>(StatsQueryDocument, options);
+        }
+export type StatsQueryQueryHookResult = ReturnType<typeof useStatsQueryQuery>;
+export type StatsQueryLazyQueryHookResult = ReturnType<typeof useStatsQueryLazyQuery>;
+export type StatsQueryQueryResult = Apollo.QueryResult<StatsQueryQuery, StatsQueryQueryVariables>;

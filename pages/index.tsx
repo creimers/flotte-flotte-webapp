@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import DefaultLayout from "@components/layout/DefaultLayout";
+import Stats from "components/Stats";
 
 const Home: NextPage = () => {
   return (
@@ -10,8 +10,8 @@ const Home: NextPage = () => {
       <main>
         <div className="max-w-2xl mx-auto mb-8 sm:mb-12 mt-8">
           <h1 className="text-3xl sm:text-4xl md:text-7xl text-center font-semibold text-gray-900">
-            Das <span className="text-blue-500">freie Lastenrad</span> an der
-            Este.
+            Este-Esel: Das{" "}
+            <span className="text-blue-500">freie Lastenrad</span> an der Este.
           </h1>
         </div>
         <div className="flex space-x-12 flex-col sm:flex-row mb-8">
@@ -61,7 +61,8 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="px-8 mt-24">
+        <Stats />
+        <div className="px-8 mt-12">
           <p className="text-center mb-6">
             Der <span className="text-blue-500">Este-Esel</span> ist eine
             Initiative der{" "}

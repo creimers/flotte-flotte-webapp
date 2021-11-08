@@ -49,3 +49,11 @@ query BookingDetails($uuid: String!) {
     ...Booking
   }
 }
+
+query StatsQuery {
+  stats {
+    users
+    kilometers
+    bookings
+  }
+}
