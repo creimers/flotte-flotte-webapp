@@ -65,3 +65,27 @@ mutation ResendActiviationEmail($email: String!) {
     success
   }
 }
+
+mutation SendPasswordResetEmail($email: String!) {
+  __typename
+  sendPasswordResetEmail(email: $email) {
+    success
+    errors
+  }
+}
+
+mutation PasswordReset(
+  $token: String!
+  $newPassword1: String!
+  $newPassword2: String!
+) {
+  __typename
+  passwordReset(
+    token: $token
+    newPassword1: $newPassword1
+    newPassword2: $newPassword2
+  ) {
+    success
+    errors
+  }
+}
