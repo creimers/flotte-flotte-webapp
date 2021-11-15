@@ -132,7 +132,7 @@ export default function NewBooking() {
                           showTimeSelectOnly
                           timeIntervals={15}
                           locale="de"
-                          dateFormat="hh:mm"
+                          dateFormat="HH:mm"
                           selected={pickupTimestampDate}
                           onChange={(date) => {
                             if (date) {
