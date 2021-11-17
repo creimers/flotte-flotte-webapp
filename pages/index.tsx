@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import Image from "next/Image";
+import Image from "next/image";
 import Link from "next/link";
 
 import DefaultLayout from "@components/layout/DefaultLayout";
