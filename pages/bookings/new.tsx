@@ -65,7 +65,7 @@ export default function NewBooking() {
   }, []);
 
   const earliestDate = React.useMemo(() => {
-    return getEarliestDate(bookedDates?.bookedDates!);
+    return getEarliestDate(bookedDates?.bookedDates || []);
   }, [bookedDates]);
 
   async function handleSubmit(values: Values) {
