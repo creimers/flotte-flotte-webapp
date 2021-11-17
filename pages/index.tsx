@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   return (
     <DefaultLayout fullWidth={true}>
       <main>
-        <div className="max-w-2xl mx-auto mb-8 sm:mb-12 mt-8">
+        <div className="max-w-2xl mx-auto mb-8 sm:mb-12 mt-8 px-3">
           <h1 className="text-3xl sm:text-4xl md:text-7xl text-center font-semibold text-gray-900">
             Este-Esel: Das{" "}
             <span className="text-blue-500">freie Lastenrad</span> an der Este.
@@ -99,17 +99,17 @@ const Home: NextPage = () => {
             </a>
           </p>
         </div>
-        <div className="flex flex-col lg:flex-row items-center w-full mx-auto lg:space-x-10 space-y-8 lg:space-y-0 lg:h-16 justify-center">
-          <div className="h-full max-h-full">
+        <div className="flex flex-col md:flex-row items-center mx-auto space-y-8 md:space-y-0 justify-around max-w-4xl">
+          <div className="h-16">
             <img
               src="/img/brueckenbaeckerei-logo.jpg"
               className="max-w-full max-h-full"
             />
           </div>
-          <div className="h-full">
+          <div className="h-16">
             <img src="/img/reew-logo.JPG" className="max-w-full max-h-full" />
           </div>
-          <div className="h-full">
+          <div className="h-16">
             <img src="/img/dpl-logo.png" className="max-w-full max-h-full" />
           </div>
         </div>
