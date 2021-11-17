@@ -20,7 +20,6 @@ import DefaultLayout from "@components/layout/DefaultLayout";
 import { useAuth, AuthStatus } from "@context/auth";
 import {
   useCreateABookingMutation,
-  useBookedDatesLazyQuery,
   useBookedDatesQuery,
 } from "@generated/graphql";
 import PageTitle from "@components/PageTitle";
