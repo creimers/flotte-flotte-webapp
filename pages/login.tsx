@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { Formik, Field, Form, FormikHelpers, ErrorMessage } from "formik";
 
 import Alert from "@components/Alert";
+import Button from "@components/Button";
 import DefaultLayout from "@components/layout/DefaultLayout";
 import { AuthStatus, useAuth } from "@context/auth";
 
@@ -132,13 +133,12 @@ export default function Login() {
                 </div>
 
                 <div>
-                  <button
+                  <Button
+                    text="Einloggen"
                     type="submit"
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-500"
                     disabled={loading}
-                  >
-                    Einloggen
-                  </button>
+                    loading={loading}
+                  />
                 </div>
               </Form>
             </Formik>

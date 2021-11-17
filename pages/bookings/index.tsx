@@ -7,6 +7,7 @@ import { ChevronRightIcon } from "@heroicons/react/outline";
 import DefaultLayout from "@components/layout/DefaultLayout";
 import { AuthStatus, useAuth } from "@context/auth";
 import Alert from "@components/Alert";
+import PageTitle from "components/PageTitle";
 
 import { useBookingsLazyQuery } from "@generated/graphql";
 
@@ -38,7 +39,6 @@ export default function Bookings() {
   if (authState === AuthStatus.authenticated) {
     return (
       <DefaultLayout
-        title="Buchungen"
         alerts={
           showRegistrationSuccess
             ? [
@@ -51,9 +51,7 @@ export default function Bookings() {
             : []
         }
       >
-        <div className="prose my-3">
-          <h1>Buchungen</h1>
-        </div>
+        <PageTitle title="Buchungen" />
         {!loading && data?.bookings?.edges && !data?.bookings?.edges.length ? (
           <div className="prose">
             <p>Du hast bisher noch keine Buchungen.</p>

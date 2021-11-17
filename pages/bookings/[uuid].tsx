@@ -9,6 +9,7 @@ import DefaultLayout from "@components/layout/DefaultLayout";
 import { useBookingDetailsLazyQuery } from "@generated/graphql";
 
 import BookingDetails from "@components/BookingDetails";
+import PageTitle from "@components/PageTitle";
 
 export default function BookingDetail() {
   const { authState } = useAuth();
@@ -36,11 +37,12 @@ export default function BookingDetail() {
     }
   }, [authState, router, getBookingDetails]);
 
+  const dateInPast =
+    new Date(data?.booking?.startDate) < new Date() ? true : false;
+
   return (
-    <DefaultLayout title="Buchungs-Details">
-      <div className="prose">
-        <h1>Buchungs-Details</h1>
-      </div>
+    <DefaultLayout>
+      <PageTitle title="Buchungs-Details" />
       {showSuccessAlert && (
         <div className="my-2">
           <Alert text="Du hast den Este-Esel gebucht!" type="success" />
@@ -62,7 +64,12 @@ export default function BookingDetail() {
           />
         </div>
       )}
-      {data?.booking?.state === "CONFIRMED" && (
+      {data?.booking?.state === "REJECTED" && (
+        <div className="my-2">
+          <Alert text="Die Buchung wurde leider abgelehnt." type="error" />
+        </div>
+      )}
+      {!loading && !dateInPast && data?.booking?.state === "CONFIRMED" && (
         <div className="my-2">
           <Alert
             text="Bitte bringe den Buchungs-Code und deinen Ausweis mit zum Abholen."
@@ -70,9 +77,12 @@ export default function BookingDetail() {
           />
         </div>
       )}
-      {data?.booking?.state === "REJECTED" && (
+      {!loading && dateInPast && data?.booking?.state === "CONFIRMED" && (
         <div className="my-2">
-          <Alert text="Die Buchung wurde leider abgelehnt." type="error" />
+          <Alert
+            text="Die Buchung liegt in der Vergangenheit."
+            type="warning"
+          />
         </div>
       )}
       {data && data.booking && <BookingDetails booking={data.booking} />}

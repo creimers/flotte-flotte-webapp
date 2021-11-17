@@ -14,12 +14,16 @@ import {
 import de from "date-fns/locale/de";
 import "react-datepicker/dist/react-datepicker.css";
 
+import Alert from "components/Alert";
+import Button from "@components/Button";
 import DefaultLayout from "@components/layout/DefaultLayout";
 import { useAuth, AuthStatus } from "@context/auth";
 import {
   useCreateABookingMutation,
   useBookedDatesLazyQuery,
+  useBookedDatesQuery,
 } from "@generated/graphql";
+import PageTitle from "@components/PageTitle";
 
 registerLocale("de", de);
 interface Values {
@@ -28,19 +32,42 @@ interface Values {
   agreeToTerms: boolean;
 }
 
+function getEarliestDate(bookedDates: string[]): string {
+  let theDate = null;
+  let daysDelta = 0;
+  while (theDate === null) {
+    const date = addDays(new Date(), daysDelta).toISOString().split("T")[0];
+    if (!bookedDates.includes(date)) {
+      theDate = date;
+      break;
+    }
+    daysDelta++;
+  }
+  return theDate;
+}
+
 export default function NewBooking() {
   const { authState, user } = useAuth();
   const router = useRouter();
-  const [getBookedDates, { data: bookedDates }] = useBookedDatesLazyQuery();
+  const { data: bookedDates, refetch } = useBookedDatesQuery({
+    nextFetchPolicy: "network-only",
+    variables: { bikeId: 1 },
+  });
   const [createBooking, { loading }] = useCreateABookingMutation();
 
   React.useEffect(() => {
     if (authState === AuthStatus.unauthenticated) {
       router.push("/login");
-    } else if (authState === AuthStatus.authenticated) {
-      getBookedDates({ variables: { bikeId: 1 } });
     }
-  }, [authState, router, getBookedDates]);
+  }, [authState, router, router.asPath]);
+
+  React.useEffect(() => {
+    refetch();
+  }, []);
+
+  const earliestDate = React.useMemo(() => {
+    return getEarliestDate(bookedDates?.bookedDates!);
+  }, [bookedDates]);
 
   async function handleSubmit(values: Values) {
     const input = {
@@ -59,130 +86,135 @@ export default function NewBooking() {
   }
 
   return (
-    <DefaultLayout title="Neue Buchung">
-      <div className="prose">
-        <h1>Neue Buchung</h1>
-      </div>
-      <div className="flex flex-col justify-center sm:px-6 lg:px-8">
-        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
-            <Formik
-              initialValues={{
-                startDate: addDays(new Date(), 1).toISOString().split("T")[0],
-                pickupTimestamp: "09:00",
-                agreeToTerms: false,
-              }}
-              onSubmit={handleSubmit}
-            >
-              {({ values, setFieldValue }) => {
-                let pickupTimestampDate = setHours(
-                  addDays(new Date(), 1),
-                  parseInt(values.pickupTimestamp.split(":")[0])
-                );
-                pickupTimestampDate = setMinutes(
-                  pickupTimestampDate,
-                  parseInt(values.pickupTimestamp.split(":")[1])
-                );
+    <DefaultLayout>
+      <PageTitle title="Neue Buchung" />
+      <Alert
+        type="info"
+        text="Die Abhol-Station liegt im Esteburgring, Moorende, und ist fußläufig vom Estebrügger Zentrum zu erreichen. Es gibt dort keine Parkplätze."
+      />
+      {bookedDates !== undefined && (
+        <div className="flex flex-col justify-center sm:px-6 lg:px-8">
+          <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
+            <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
+              <Formik
+                initialValues={{
+                  startDate: earliestDate,
+                  pickupTimestamp: "09:00",
+                  agreeToTerms: false,
+                }}
+                onSubmit={handleSubmit}
+              >
+                {({ values, setFieldValue }) => {
+                  let pickupTimestampDate = setHours(
+                    addDays(new Date(), 1),
+                    parseInt(values.pickupTimestamp.split(":")[0])
+                  );
+                  pickupTimestampDate = setMinutes(
+                    pickupTimestampDate,
+                    parseInt(values.pickupTimestamp.split(":")[1])
+                  );
 
-                return (
-                  <Form className="space-y-6">
-                    <div>
-                      <label
-                        htmlFor="startDate"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Datum
-                      </label>
-                      <div className="mt-1">
-                        <DatePicker
-                          name="startDate"
-                          className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          locale="de"
-                          dateFormat="dd.MM.yyyy"
-                          selected={new Date(values.startDate)}
-                          excludeDates={bookedDates?.bookedDates?.map(
-                            (d) => new Date(d)
-                          )}
-                          minDate={new Date()}
-                          maxDate={addMonths(new Date(), 1)}
-                          onChange={(date) => {
-                            if (date) {
-                              const d = new Date(date.toString());
-                              setFieldValue(
-                                "startDate",
-                                d.toISOString().split("T")[0]
-                              );
-                            }
-                          }}
+                  return (
+                    <Form className="space-y-6">
+                      <div>
+                        <label
+                          htmlFor="startDate"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Datum
+                        </label>
+                        <div className="mt-1">
+                          <DatePicker
+                            name="startDate"
+                            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            locale="de"
+                            dateFormat="dd.MM.yyyy"
+                            selected={new Date(values.startDate)}
+                            excludeDates={bookedDates?.bookedDates?.map(
+                              (d) => new Date(d)
+                            )}
+                            minDate={new Date()}
+                            maxDate={addMonths(new Date(), 1)}
+                            onChange={(date) => {
+                              if (date) {
+                                const d = new Date(date.toString());
+                                setFieldValue(
+                                  "startDate",
+                                  d.toISOString().split("T")[0]
+                                );
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="pickupTimestamp"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Abhol-Zeit
+                        </label>
+                        <div className="mt-1">
+                          <DatePicker
+                            name="pickupTimestamp"
+                            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            showTimeSelect
+                            showTimeSelectOnly
+                            timeIntervals={15}
+                            locale="de"
+                            dateFormat="HH:mm"
+                            selected={pickupTimestampDate}
+                            onChange={(date) => {
+                              if (date) {
+                                const d = new Date(date.toString());
+                                const hours = getHours(d);
+                                const minutes = getMinutes(d);
+                                const paddedHours = `${hours}`.padStart(2, "0");
+                                const paddedMinutes = `${minutes}`.padStart(
+                                  2,
+                                  "0"
+                                );
+                                setFieldValue(
+                                  "pickupTimestamp",
+                                  `${paddedHours}:${paddedMinutes}`
+                                );
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="prose">
+                          <Field type="checkbox" name="agreeToTerms" /> Ich habe
+                          die{" "}
+                          <Link href="/terms">
+                            <a>Nutzungsbedingungen</a>
+                          </Link>{" "}
+                          gelesen und stimme diesen zu.
+                        </label>
+                      </div>
+
+                      <div>
+                        <Button
+                          text="Jetzt Buchen"
+                          type="submit"
+                          disabled={
+                            !values.agreeToTerms ||
+                            loading ||
+                            !user?.me?.verified
+                          }
+                          loading={loading}
                         />
                       </div>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="pickupTimestamp"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Abhol-Zeit
-                      </label>
-                      <div className="mt-1">
-                        <DatePicker
-                          name="pickupTimestamp"
-                          className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          showTimeSelect
-                          showTimeSelectOnly
-                          timeIntervals={15}
-                          locale="de"
-                          dateFormat="HH:mm"
-                          selected={pickupTimestampDate}
-                          onChange={(date) => {
-                            if (date) {
-                              const d = new Date(date.toString());
-                              const hours = getHours(d);
-                              const minutes = getMinutes(d);
-                              const paddedHours = `${hours}`.padStart(2, "0");
-                              const paddedMinutes = `${minutes}`.padStart(
-                                2,
-                                "0"
-                              );
-                              setFieldValue(
-                                "pickupTimestamp",
-                                `${paddedHours}:${paddedMinutes}`
-                              );
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="prose">
-                        <Field type="checkbox" name="agreeToTerms" /> Ich habe
-                        die{" "}
-                        <Link href="/terms">
-                          <a>Nutzungsbedingungen</a>
-                        </Link>{" "}
-                        gelesen und stimme diesen zu.
-                      </label>
-                    </div>
-
-                    <div>
-                      <button
-                        type="submit"
-                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-500"
-                        disabled={
-                          !values.agreeToTerms || loading || !user?.me?.verified
-                        }
-                      >
-                        Jetzt buchen
-                      </button>
-                    </div>
-                  </Form>
-                );
-              }}
-            </Formik>
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </DefaultLayout>
   );
 }

@@ -1,4 +1,5 @@
 import {
+  TicketIcon,
   CalendarIcon,
   ClockIcon,
   LocationMarkerIcon,
@@ -17,7 +18,10 @@ export default function BookingDetails({ booking }: Props) {
       <div className="font-semibold border-b border-gray-600 inline-block">
         Buchungs-Code
       </div>
-      <div className="font-mono">{booking.token}</div>
+      <div className="font-mono flex space-x-4 items-center">
+        <TicketIcon className="w-5 h-5 stroke-current" />
+        <span>{booking.token}</span>
+      </div>
       <div className="font-semibold border-b border-gray-600 inline-block">
         Datum &amp; Abohlzeit
       </div>

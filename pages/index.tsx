@@ -99,18 +99,18 @@ const Home: NextPage = () => {
             </a>
           </p>
         </div>
-        <div className="flex flex-col lg:flex-row items-center w-full mx-auto lg:space-x-6 space-y-8 lg:space-y-0 lg:h-24 justify-center">
-          <div className="h-full">
+        <div className="flex flex-col lg:flex-row items-center w-full mx-auto lg:space-x-10 space-y-8 lg:space-y-0 lg:h-16 justify-center">
+          <div className="h-full max-h-full">
             <img
               src="/img/brueckenbaeckerei-logo.jpg"
-              className="max-w-full max-h-[6rem]"
+              className="max-w-full max-h-full"
             />
           </div>
           <div className="h-full">
-            <img src="/img/reew-logo.JPG" className="max-w-full max-h-[6rem]" />
+            <img src="/img/reew-logo.JPG" className="max-w-full max-h-full" />
           </div>
           <div className="h-full">
-            <img src="/img/dpl-logo.png" className="max-w-full max-h-[6rem]" />
+            <img src="/img/dpl-logo.png" className="max-w-full max-h-full" />
           </div>
         </div>
       </main>
