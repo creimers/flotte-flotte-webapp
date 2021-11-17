@@ -6,6 +6,7 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 
 import { useAuth, AuthStatus } from "@context/auth";
+import Logo from "@components/Logo";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -53,11 +54,9 @@ export default function Header() {
                 <div className="flex-shrink-0 flex items-center">
                   <Link href="/">
                     <a>
-                      <img
-                        className="block h-10 w-auto"
-                        src="/img/logo-menu.svg"
-                        alt="Este-Esel"
-                      />
+                      <span className="inline-block text-blue-500 h-10 w-10">
+                        <Logo />
+                      </span>
                     </a>
                   </Link>
                 </div>
