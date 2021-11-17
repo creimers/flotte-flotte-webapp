@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 
 import DefaultLayout from "@components/layout/DefaultLayout";
+import Waves from "components/Waves";
 import Stats from "components/Stats";
 
 const Home: NextPage = () => {
@@ -14,17 +15,21 @@ const Home: NextPage = () => {
             <span className="text-blue-500">freie Lastenrad</span> an der Este.
           </h1>
         </div>
-        <div className="flex space-x-12 flex-col sm:flex-row mb-8">
-          <div className="flex-1 relative pb-8 sm:pb-0">
-            <img src="/img/waves.svg" className="h-full md:h-96 object-cover" />
+        <div className="flex space-x-12 flex-col md:flex-row mb-8">
+          <div className="h-80 sm:h-96 md:h-auto md:flex-1 relative pb-8 sm:pb-0 overflow-hidden">
+            <Waves />
+
             <div className="absolute inset-0 flex justify-center items-center">
-              <div className="h-48 md:h-64 relative">
-                <img
-                  src="/img/esel-hamburg.jpg"
-                  className="min-h-full h-full relative z-10"
-                  alt="Este-Esel in Hamburg"
-                />
-                <div className="absolute top-0 left-0 h-full w-full bg-pink-600 transform -translate-x-3 translate-y-3 md:-translate-x-5 md:translate-y-5"></div>
+              <div className="w-2/3 sm:w-1/2">
+                <div className="aspect-w-4 aspect-h-3 bg-pink-600 relative">
+                  <div className="absolute inset-0 transform -translate-y-3 translate-x-3">
+                    <img
+                      src="/img/esel-hamburg.jpg"
+                      className="relative z-10 block"
+                      alt="Este-Esel in Hamburg"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
