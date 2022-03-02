@@ -708,12 +708,12 @@ export type CreateABookingMutationVariables = Exact<{
 
 export type CreateABookingMutation = { __typename: 'Mutation', createBooking?: { __typename?: 'CreateBookingMutation', booking?: { __typename?: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
 
-export type CancelBookingMutationVariables = Exact<{
+export type CancelThatBookingMutationVariables = Exact<{
   bookingUuid: Scalars['String'];
 }>;
 
 
-export type CancelBookingMutation = { __typename: 'Mutation', cancelBooking?: { __typename?: 'CancelBookingMutation', booking?: { __typename: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
+export type CancelThatBookingMutation = { __typename: 'Mutation', cancelBooking?: { __typename?: 'CancelBookingMutation', booking?: { __typename: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
 
 export type ResendActiviationEmailMutationVariables = Exact<{
   email: Scalars['String'];
@@ -981,8 +981,8 @@ export function useCreateABookingMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateABookingMutationHookResult = ReturnType<typeof useCreateABookingMutation>;
 export type CreateABookingMutationResult = Apollo.MutationResult<CreateABookingMutation>;
 export type CreateABookingMutationOptions = Apollo.BaseMutationOptions<CreateABookingMutation, CreateABookingMutationVariables>;
-export const CancelBookingDocument = gql`
-    mutation CancelBooking($bookingUuid: String!) {
+export const CancelThatBookingDocument = gql`
+    mutation CancelThatBooking($bookingUuid: String!) {
   __typename
   cancelBooking(bookingUuid: $bookingUuid) {
     booking {
@@ -996,32 +996,32 @@ export const CancelBookingDocument = gql`
   }
 }
     `;
-export type CancelBookingMutationFn = Apollo.MutationFunction<CancelBookingMutation, CancelBookingMutationVariables>;
+export type CancelThatBookingMutationFn = Apollo.MutationFunction<CancelThatBookingMutation, CancelThatBookingMutationVariables>;
 
 /**
- * __useCancelBookingMutation__
+ * __useCancelThatBookingMutation__
  *
- * To run a mutation, you first call `useCancelBookingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCancelBookingMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCancelThatBookingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelThatBookingMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [cancelBookingMutation, { data, loading, error }] = useCancelBookingMutation({
+ * const [cancelThatBookingMutation, { data, loading, error }] = useCancelThatBookingMutation({
  *   variables: {
  *      bookingUuid: // value for 'bookingUuid'
  *   },
  * });
  */
-export function useCancelBookingMutation(baseOptions?: Apollo.MutationHookOptions<CancelBookingMutation, CancelBookingMutationVariables>) {
+export function useCancelThatBookingMutation(baseOptions?: Apollo.MutationHookOptions<CancelThatBookingMutation, CancelThatBookingMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CancelBookingMutation, CancelBookingMutationVariables>(CancelBookingDocument, options);
+        return Apollo.useMutation<CancelThatBookingMutation, CancelThatBookingMutationVariables>(CancelThatBookingDocument, options);
       }
-export type CancelBookingMutationHookResult = ReturnType<typeof useCancelBookingMutation>;
-export type CancelBookingMutationResult = Apollo.MutationResult<CancelBookingMutation>;
-export type CancelBookingMutationOptions = Apollo.BaseMutationOptions<CancelBookingMutation, CancelBookingMutationVariables>;
+export type CancelThatBookingMutationHookResult = ReturnType<typeof useCancelThatBookingMutation>;
+export type CancelThatBookingMutationResult = Apollo.MutationResult<CancelThatBookingMutation>;
+export type CancelThatBookingMutationOptions = Apollo.BaseMutationOptions<CancelThatBookingMutation, CancelThatBookingMutationVariables>;
 export const ResendActiviationEmailDocument = gql`
     mutation ResendActiviationEmail($email: String!) {
   __typename

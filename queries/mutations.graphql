@@ -58,7 +58,7 @@ mutation CreateABooking($input: CreateBookingInput!) {
   }
 }
 
-mutation CancelBooking($bookingUuid: String!) {
+mutation CancelThatBooking($bookingUuid: String!) {
   __typename
   cancelBooking(bookingUuid: $bookingUuid) {
     booking {

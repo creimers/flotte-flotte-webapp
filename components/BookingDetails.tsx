@@ -7,15 +7,12 @@ import {
   PhoneIcon,
 } from "@heroicons/react/outline";
 
-import { BookingFragment, useCancelBookingMutation } from "@generated/graphql";
+import { BookingFragment } from "@generated/graphql";
 
 type Props = {
   booking: BookingFragment;
 };
 export default function BookingDetails({ booking }: Props) {
-  const [cancelBooking, { loading }] = useCancelBookingMutation({
-    variables: { bookingUuid: booking.uuid },
-  });
   return (
     <div className="text-gray-700 space-y-4">
       <div className="font-semibold border-b border-gray-600 inline-block">

@@ -2,14 +2,17 @@ import * as React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 
-import { BookingFragment, useCancelBookingMutation } from "@generated/graphql";
+import {
+  BookingFragment,
+  useCancelThatBookingMutation,
+} from "@generated/graphql";
 import Button from "./Button";
 
 type Props = {
   booking: BookingFragment;
 };
 export default function CancelBooking({ booking }: Props) {
-  const [cancelBooking, { loading }] = useCancelBookingMutation({
+  const [cancelBooking, { loading }] = useCancelThatBookingMutation({
     variables: { bookingUuid: booking.uuid },
   });
   let [isOpen, setIsOpen] = React.useState(false);
