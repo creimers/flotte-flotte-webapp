@@ -153,6 +153,11 @@ export enum BookingState {
   Requested = 'REQUESTED'
 }
 
+export type CancelBookingMutation = {
+  __typename?: 'CancelBookingMutation';
+  booking?: Maybe<BookingNode>;
+};
+
 export type CreateBookingInput = {
   pickupTimestamp: Scalars['Time'];
   startDate: Scalars['Date'];
@@ -179,6 +184,7 @@ export type DeleteAccount = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  cancelBooking?: Maybe<CancelBookingMutation>;
   createBooking?: Maybe<CreateBookingMutation>;
   /**
    * Delete account permanently or make `user.is_active=False`.
@@ -291,6 +297,11 @@ export type Mutation = {
   verifyAccount?: Maybe<VerifyAccount>;
   /** Same as `grapgql_jwt` implementation, with standard output. */
   verifyToken?: Maybe<VerifyToken>;
+};
+
+
+export type MutationCancelBookingArgs = {
+  bookingUuid?: Maybe<Scalars['String']>;
 };
 
 
@@ -697,6 +708,13 @@ export type CreateABookingMutationVariables = Exact<{
 
 export type CreateABookingMutation = { __typename: 'Mutation', createBooking?: { __typename?: 'CreateBookingMutation', booking?: { __typename?: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
 
+export type CancelBookingMutationVariables = Exact<{
+  bookingUuid: Scalars['String'];
+}>;
+
+
+export type CancelBookingMutation = { __typename: 'Mutation', cancelBooking?: { __typename?: 'CancelBookingMutation', booking?: { __typename: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
+
 export type ResendActiviationEmailMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -737,14 +755,14 @@ export type BookedDatesQueryVariables = Exact<{
 
 export type BookedDatesQuery = { __typename: 'Query', bookedDates?: Array<any | null | undefined> | null | undefined };
 
-export type BookingFragment = { __typename?: 'BookingNode', token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } };
+export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } };
 
 export type BookingDetailsQueryVariables = Exact<{
   uuid: Scalars['String'];
 }>;
 
 
-export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
+export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
 
 export type StatsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -753,6 +771,7 @@ export type StatsQueryQuery = { __typename?: 'Query', stats?: { __typename?: 'St
 
 export const BookingFragmentDoc = gql`
     fragment Booking on BookingNode {
+  uuid
   bike {
     pickupStation {
       locationCity
@@ -962,6 +981,47 @@ export function useCreateABookingMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateABookingMutationHookResult = ReturnType<typeof useCreateABookingMutation>;
 export type CreateABookingMutationResult = Apollo.MutationResult<CreateABookingMutation>;
 export type CreateABookingMutationOptions = Apollo.BaseMutationOptions<CreateABookingMutation, CreateABookingMutationVariables>;
+export const CancelBookingDocument = gql`
+    mutation CancelBooking($bookingUuid: String!) {
+  __typename
+  cancelBooking(bookingUuid: $bookingUuid) {
+    booking {
+      __typename
+      id
+      uuid
+      state
+      startDate
+      pickupTimestamp
+    }
+  }
+}
+    `;
+export type CancelBookingMutationFn = Apollo.MutationFunction<CancelBookingMutation, CancelBookingMutationVariables>;
+
+/**
+ * __useCancelBookingMutation__
+ *
+ * To run a mutation, you first call `useCancelBookingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelBookingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelBookingMutation, { data, loading, error }] = useCancelBookingMutation({
+ *   variables: {
+ *      bookingUuid: // value for 'bookingUuid'
+ *   },
+ * });
+ */
+export function useCancelBookingMutation(baseOptions?: Apollo.MutationHookOptions<CancelBookingMutation, CancelBookingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelBookingMutation, CancelBookingMutationVariables>(CancelBookingDocument, options);
+      }
+export type CancelBookingMutationHookResult = ReturnType<typeof useCancelBookingMutation>;
+export type CancelBookingMutationResult = Apollo.MutationResult<CancelBookingMutation>;
+export type CancelBookingMutationOptions = Apollo.BaseMutationOptions<CancelBookingMutation, CancelBookingMutationVariables>;
 export const ResendActiviationEmailDocument = gql`
     mutation ResendActiviationEmail($email: String!) {
   __typename

@@ -561,6 +561,29 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "CancelBookingMutation",
+        "description": null,
+        "fields": [
+          {
+            "name": "booking",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "BookingNode",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "CreateBookingInput",
         "description": null,
@@ -726,6 +749,31 @@
         "name": "Mutation",
         "description": null,
         "fields": [
+          {
+            "name": "cancelBooking",
+            "description": null,
+            "args": [
+              {
+                "name": "bookingUuid",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CancelBookingMutation",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "createBooking",
             "description": null,

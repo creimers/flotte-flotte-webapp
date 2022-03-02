@@ -181,6 +181,10 @@ export default function NewBooking() {
                             }}
                           />
                         </div>
+                        <div className="text-xs mt-2">
+                          Du kannst den Este-Esel nach der Abholung den ganzen
+                          Tag lang nutzen!
+                        </div>
                       </div>
 
                       <div>

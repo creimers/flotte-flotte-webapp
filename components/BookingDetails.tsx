@@ -7,12 +7,15 @@ import {
   PhoneIcon,
 } from "@heroicons/react/outline";
 
-import { BookingFragment } from "@generated/graphql";
+import { BookingFragment, useCancelBookingMutation } from "@generated/graphql";
 
 type Props = {
   booking: BookingFragment;
 };
 export default function BookingDetails({ booking }: Props) {
+  const [cancelBooking, { loading }] = useCancelBookingMutation({
+    variables: { bookingUuid: booking.uuid },
+  });
   return (
     <div className="text-gray-700 space-y-4">
       <div className="font-semibold border-b border-gray-600 inline-block">
@@ -29,9 +32,15 @@ export default function BookingDetails({ booking }: Props) {
         <CalendarIcon className="w-5 h-5 stroke-current" />
         <span>{new Date(booking.startDate).toLocaleDateString()}</span>
       </div>
-      <div className="flex space-x-4 items-center">
-        <ClockIcon className="w-5 h-5 stroke-current" />
-        <span>{booking.pickupTimestamp}</span>
+      <div className="space-y-3">
+        <div className="flex space-x-4 items-center">
+          <ClockIcon className="w-5 h-5 stroke-current" />
+          <span>{booking.pickupTimestamp}</span>
+        </div>
+        <div className="text-xs">
+          (Du kannst den Este-Esel nach der Abholung den ganzen Tag lang
+          nutzen!)
+        </div>
       </div>
       <div className="font-semibold border-b border-gray-600 inline-block">
         Abhol-Station

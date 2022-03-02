@@ -9,6 +9,7 @@ import DefaultLayout from "@components/layout/DefaultLayout";
 import { useBookingDetailsLazyQuery } from "@generated/graphql";
 
 import BookingDetails from "@components/BookingDetails";
+import CancelBooking from "@components/CancelBooking";
 import PageTitle from "@components/PageTitle";
 
 export default function BookingDetail() {
@@ -69,6 +70,11 @@ export default function BookingDetail() {
           <Alert text="Die Buchung wurde leider abgelehnt." type="error" />
         </div>
       )}
+      {data?.booking?.state === "CANCELED" && (
+        <div className="my-2">
+          <Alert text="Die Buchung wurde storniert." type="error" />
+        </div>
+      )}
       {!loading && !dateInPast && data?.booking?.state === "CONFIRMED" && (
         <div className="my-2">
           <Alert
@@ -86,6 +92,12 @@ export default function BookingDetail() {
         </div>
       )}
       {data && data.booking && <BookingDetails booking={data.booking} />}
+      {data &&
+        data.booking &&
+        !dateInPast &&
+        data?.booking?.state !== "CANCELED" && (
+          <CancelBooking booking={data.booking} />
+        )}
     </DefaultLayout>
   );
 }

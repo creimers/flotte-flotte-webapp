@@ -58,6 +58,20 @@ mutation CreateABooking($input: CreateBookingInput!) {
   }
 }
 
+mutation CancelBooking($bookingUuid: String!) {
+  __typename
+  cancelBooking(bookingUuid: $bookingUuid) {
+    booking {
+      __typename
+      id
+      uuid
+      state
+      startDate
+      pickupTimestamp
+    }
+  }
+}
+
 mutation ResendActiviationEmail($email: String!) {
   __typename
   resendActivationEmail(email: $email) {

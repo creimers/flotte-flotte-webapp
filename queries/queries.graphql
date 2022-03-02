@@ -28,6 +28,7 @@ query BookedDates($bikeId: Int!) {
 }
 
 fragment Booking on BookingNode {
+  uuid
   bike {
     pickupStation {
       locationCity
