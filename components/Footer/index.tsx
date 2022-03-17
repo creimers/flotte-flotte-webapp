@@ -30,7 +30,7 @@ export default function Footer() {
               <a
                 href="https://www.instagram.com/este_esel/"
                 target="_blank"
-                rel="norefferer"
+                rel="noreferrer"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
