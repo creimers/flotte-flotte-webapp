@@ -11,7 +11,6 @@ const FAQItem: React.FC<Props> = ({
   question,
   defaultOpen = false,
 }) => {
-  console.log("ding");
   return (
     <Disclosure defaultOpen={defaultOpen}>
       {({ open }) => (
