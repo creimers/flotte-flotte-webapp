@@ -116,8 +116,8 @@ const Home: NextPage = () => {
                 Urban-Arrow Family
               </a>
               , dessen maximales Gesamtgewicht 250kg beträgt, wobei das Rad 50kg
-              schwer ist. Je nach deinem eigen Gewicht kannst du also ordentlich
-              was reinpacken, in der Regel weit über 100kg.
+              schwer ist. Je nach deinem eigenen Gewicht kannst du also
+              ordentlich was reinpacken, in der Regel weit über 100kg.
             </p>
             <p>
               Der Este-Esel hat außerdem eine Sitzbank, auf der zwei Kinder
