@@ -1,16 +1,16 @@
 import * as React from "react";
 import { useRouter } from "next/router";
 
-import { useAuth, AuthStatus } from "@context/auth";
+import { useAuth, AuthStatus } from "context/auth";
 
-import Alert from "@components/Alert";
-import DefaultLayout from "@components/layout/DefaultLayout";
+import Alert from "components/Alert";
+import DefaultLayout from "components/layout/DefaultLayout";
 
-import { useBookingDetailsLazyQuery } from "@generated/graphql";
+import { useBookingDetailsLazyQuery } from "generated/graphql";
 
-import BookingDetails from "@components/BookingDetails";
-import CancelBooking from "@components/CancelBooking";
-import PageTitle from "@components/PageTitle";
+import BookingDetails from "components/BookingDetails";
+import CancelBooking from "components/CancelBooking";
+import PageTitle from "components/PageTitle";
 
 export default function BookingDetail() {
   const { authState } = useAuth();

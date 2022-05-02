@@ -2,9 +2,9 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import { Formik, Field, Form, FormikHelpers, ErrorMessage } from "formik";
 
-import DefaultLayout from "@components/layout/DefaultLayout";
-import Alert from "@components/Alert";
-import { usePasswordResetMutation } from "@generated/graphql";
+import DefaultLayout from "components/layout/DefaultLayout";
+import Alert from "components/Alert";
+import { usePasswordResetMutation } from "generated/graphql";
 
 interface IFormValues {
   newPassword1: string;

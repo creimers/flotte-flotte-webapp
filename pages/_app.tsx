@@ -5,8 +5,8 @@ import type { AppProps } from "next/app";
 import { DefaultSeo } from "next-seo";
 
 import { ApolloProvider } from "@apollo/client";
-import { useApollo } from "@lib/apolloClient";
-import { AuthProvider } from "@context/auth";
+import { useApollo } from "lib/apolloClient";
+import { AuthProvider } from "context/auth";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);

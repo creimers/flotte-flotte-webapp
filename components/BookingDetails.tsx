@@ -7,7 +7,7 @@ import {
   PhoneIcon,
 } from "@heroicons/react/outline";
 
-import { BookingFragment } from "@generated/graphql";
+import { BookingFragment } from "generated/graphql";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 
 type Props = {

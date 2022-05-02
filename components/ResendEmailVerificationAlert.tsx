@@ -1,8 +1,8 @@
-import { useAuth } from "@context/auth";
-import Alert from "@components/Alert";
-import Spinner from "@components/Spinner";
-import { useResendActiviationEmailMutation } from "@generated/graphql";
-import { AuthStatus } from "@context/auth";
+import { useAuth } from "context/auth";
+import Alert from "components/Alert";
+import Spinner from "components/Spinner";
+import { useResendActiviationEmailMutation } from "generated/graphql";
+import { AuthStatus } from "context/auth";
 
 export default function ResendEmailVerificationAlert() {
   const { user, authState } = useAuth();

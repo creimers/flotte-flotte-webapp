@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import {
   BookingFragment,
   useCancelThatBookingMutation,
-} from "@generated/graphql";
+} from "generated/graphql";
 import Button from "./Button";
 
 type Props = {

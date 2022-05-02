@@ -4,19 +4,19 @@ import Link from "next/link";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import { ChevronRightIcon } from "@heroicons/react/outline";
 
-import DefaultLayout from "@components/layout/DefaultLayout";
-import { AuthStatus, useAuth } from "@context/auth";
-import Alert from "@components/Alert";
+import DefaultLayout from "components/layout/DefaultLayout";
+import { AuthStatus, useAuth } from "context/auth";
+import Alert from "components/Alert";
 import PageTitle from "components/PageTitle";
 
-import { useBookingsLazyQuery } from "@generated/graphql";
+import { useBookingsLazyQuery } from "generated/graphql";
 
 export default function Bookings() {
   const { authState } = useAuth();
   const router = useRouter();
 
   const [getBookings, { loading, data }] = useBookingsLazyQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
 
   React.useEffect(() => {

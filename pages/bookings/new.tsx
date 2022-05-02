@@ -15,14 +15,14 @@ import de from "date-fns/locale/de";
 import "react-datepicker/dist/react-datepicker.css";
 
 import Alert from "components/Alert";
-import Button from "@components/Button";
-import DefaultLayout from "@components/layout/DefaultLayout";
-import { useAuth, AuthStatus } from "@context/auth";
+import Button from "components/Button";
+import DefaultLayout from "components/layout/DefaultLayout";
+import { useAuth, AuthStatus } from "context/auth";
 import {
   useCreateABookingMutation,
   useBookedDatesQuery,
-} from "@generated/graphql";
-import PageTitle from "@components/PageTitle";
+} from "generated/graphql";
+import PageTitle from "components/PageTitle";
 
 registerLocale("de", de);
 interface Values {

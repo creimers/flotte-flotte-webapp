@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Formik, Field, Form, FormikHelpers, ErrorMessage } from "formik";
 
-import Alert from "@components/Alert";
-import Button from "@components/Button";
-import DefaultLayout from "@components/layout/DefaultLayout";
-import { AuthStatus, useAuth } from "@context/auth";
+import Alert from "components/Alert";
+import Button from "components/Button";
+import DefaultLayout from "components/layout/DefaultLayout";
+import { AuthStatus, useAuth } from "context/auth";
 
-import { useLoginMutation } from "@generated/graphql";
-import { JWT_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@lib/constants";
+import { useLoginMutation } from "generated/graphql";
+import { JWT_TOKEN_KEY, REFRESH_TOKEN_KEY } from "lib/constants";
 
 interface Values {
   email: string;

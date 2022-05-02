@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import ResendEmailVerificationAlert from "@components/ResendEmailVerificationAlert";
+import Footer from "components/Footer";
+import Header from "components/Header";
+import ResendEmailVerificationAlert from "components/ResendEmailVerificationAlert";
 
 type Props = {
   fullWidth?: boolean;

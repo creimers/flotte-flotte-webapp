@@ -2,10 +2,10 @@ import * as React from "react";
 
 import { Formik, Field, Form, FormikHelpers, ErrorMessage } from "formik";
 
-import Alert from "@components/Alert";
-import DefaultLayout from "@components/layout/DefaultLayout";
+import Alert from "components/Alert";
+import DefaultLayout from "components/layout/DefaultLayout";
 
-import { useSendPasswordResetEmailMutation } from "@generated/graphql";
+import { useSendPasswordResetEmailMutation } from "generated/graphql";
 
 interface Values {
   email: string;

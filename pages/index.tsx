@@ -2,10 +2,10 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import DefaultLayout from "@components/layout/DefaultLayout";
+import DefaultLayout from "components/layout/DefaultLayout";
 import Waves from "components/Waves";
 import Stats from "components/Stats";
-import FAQItem from "@components/FAQItem";
+import FAQItem from "components/FAQItem";
 
 const Home: NextPage = () => {
   return (

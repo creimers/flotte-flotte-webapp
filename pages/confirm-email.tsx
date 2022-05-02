@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useRouter } from "next/router";
 
-import DefaultLayout from "@components/layout/DefaultLayout";
-import Alert from "@components/Alert";
-import { useVerifyEmailMutation } from "@generated/graphql";
-import { EMAIL_VERIFIED_KEY } from "@lib/constants";
+import DefaultLayout from "components/layout/DefaultLayout";
+import Alert from "components/Alert";
+import { useVerifyEmailMutation } from "generated/graphql";
+import { EMAIL_VERIFIED_KEY } from "lib/constants";
 
 export default function ConfirmEmail() {
   const [token, setToken] = React.useState<string | null>(null);

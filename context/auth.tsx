@@ -6,13 +6,13 @@ import {
   useRefreshTokenMutation,
   useUserQueryLazyQuery,
   UserQueryQuery,
-} from "@generated/graphql";
+} from "generated/graphql";
 
 import {
   JWT_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
   EMAIL_VERIFIED_KEY,
-} from "@lib/constants";
+} from "lib/constants";
 
 export enum AuthStatus {
   idle,
@@ -57,12 +57,16 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   const [refreshTokenMutation] = useRefreshTokenMutation({
     update: (_, { data: result }) => {
-      if (result && result.refreshToken) {
+      if (result && result.refreshToken?.refreshToken) {
         const { refreshToken, token } = result.refreshToken;
         if (token && refreshToken) {
           localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
           localStorage.setItem(JWT_TOKEN_KEY, token);
         }
+      } else {
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        localStorage.removeItem(JWT_TOKEN_KEY);
+        setAuthState(AuthStatus.unauthenticated);
       }
     },
     // onError: (error) => {
@@ -88,7 +92,6 @@ function AuthProvider({ children }: AuthProviderProps) {
       setAuthState(AuthStatus.checking);
       const theRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
       if (!theRefreshToken) {
-        // router.push("/");
         setAuthState(AuthStatus.unauthenticated);
       } else {
         // get that token
@@ -152,7 +155,6 @@ function AuthProvider({ children }: AuthProviderProps) {
     setAuthState,
     logout,
     user,
-    // userLoading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

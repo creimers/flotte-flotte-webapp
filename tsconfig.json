@@ -18,23 +18,23 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
-    "paths": {
-      "@components/*": [
-        "./components/*"
-      ],
-      "@context/*": [
-        "./context/*"
-      ],
-      "@generated/*": [
-        "./generated/*"
-      ],
-      "@interfaces/*": [
-        "./interfaces/*"
-      ],
-      "@lib/*": [
-        "./lib/*"
-      ]
-    },
+    // "paths": {
+    //   "components/*": [
+    //     "./components/*"
+    //   ],
+    //   "context/*": [
+    //     "./context/*"
+    //   ],
+    //   "generated/*": [
+    //     "./generated/*"
+    //   ],
+    //   "interfaces/*": [
+    //     "./interfaces/*"
+    //   ],
+    //   "lib/*": [
+    //     "./lib/*"
+    //   ]
+    // },
     "incremental": true
   },
   "include": [

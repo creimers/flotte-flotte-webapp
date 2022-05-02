@@ -1,5 +1,5 @@
 import Spinner from "components/Spinner";
-import { classNames } from "@lib/utils";
+import { classNames } from "lib/utils";
 
 const emphasisClasses = {
   primary: "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500",

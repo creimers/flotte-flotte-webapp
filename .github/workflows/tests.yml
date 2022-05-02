@@ -1,0 +1,23 @@
+name: run tests
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    branches: [master, main, develop]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  tests:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+      NEXT_TELEMETRY_DISABLED: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm test

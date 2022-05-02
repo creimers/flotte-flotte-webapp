@@ -5,8 +5,8 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 
-import { useAuth, AuthStatus } from "@context/auth";
-import Logo from "@components/Logo";
+import { useAuth, AuthStatus } from "context/auth";
+import Logo from "components/Logo";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
