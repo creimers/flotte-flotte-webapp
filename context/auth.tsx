@@ -57,11 +57,15 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   const [refreshTokenMutation] = useRefreshTokenMutation({
     update: (_, { data: result }) => {
-      if (result && result.refreshToken?.refreshToken) {
+      if (result?.refreshToken?.refreshToken) {
         const { refreshToken, token } = result.refreshToken;
         if (token && refreshToken) {
           localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
           localStorage.setItem(JWT_TOKEN_KEY, token);
+        } else {
+          localStorage.removeItem(REFRESH_TOKEN_KEY);
+          localStorage.removeItem(JWT_TOKEN_KEY);
+          setAuthState(AuthStatus.unauthenticated);
         }
       } else {
         localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -69,12 +73,6 @@ function AuthProvider({ children }: AuthProviderProps) {
         setAuthState(AuthStatus.unauthenticated);
       }
     },
-    // onError: (error) => {
-    //   console.log(error);
-    //   setStatus(AuthStatus.unauthenticated);
-    //   // redirect to login
-    //   router.push("/");
-    // },
   });
 
   function logout() {
