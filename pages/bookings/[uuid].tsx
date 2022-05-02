@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { useAuth, AuthStatus } from "context/auth";
 
@@ -11,6 +12,7 @@ import { useBookingDetailsLazyQuery } from "generated/graphql";
 import BookingDetails from "components/BookingDetails";
 import CancelBooking from "components/CancelBooking";
 import PageTitle from "components/PageTitle";
+import { ArrowLeftIcon } from "@heroicons/react/solid";
 
 export default function BookingDetail() {
   const { authState } = useAuth();
@@ -43,6 +45,14 @@ export default function BookingDetail() {
 
   return (
     <DefaultLayout>
+      <div>
+        <Link href="/bookings">
+          <a className="inline-flex items-center hover:underline space-x-3">
+            <ArrowLeftIcon className="w-4" />
+            <span>zurück</span>
+          </a>
+        </Link>
+      </div>
       <PageTitle title="Buchungs-Details" />
       {showSuccessAlert && (
         <div className="my-2">
