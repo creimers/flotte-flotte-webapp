@@ -62,6 +62,9 @@ function AuthProvider({ children }: AuthProviderProps) {
         if (token && refreshToken) {
           localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
           localStorage.setItem(JWT_TOKEN_KEY, token);
+          setTimeout(() => {
+            setAuthState(AuthStatus.authenticated);
+          }, 200);
         } else {
           localStorage.removeItem(REFRESH_TOKEN_KEY);
           localStorage.removeItem(JWT_TOKEN_KEY);
@@ -89,6 +92,8 @@ function AuthProvider({ children }: AuthProviderProps) {
     async function refresh() {
       setAuthState(AuthStatus.checking);
       const theRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+      localStorage.removeItem(REFRESH_TOKEN_KEY);
+      localStorage.removeItem(JWT_TOKEN_KEY);
       if (!theRefreshToken) {
         setAuthState(AuthStatus.unauthenticated);
       } else {
@@ -97,15 +102,11 @@ function AuthProvider({ children }: AuthProviderProps) {
           await refreshTokenMutation({
             variables: { refreshToken: theRefreshToken },
           });
-          if (router.asPath == "/") {
-            // router.push(router.asPath);
-            // router.push("/products");
-            // router.push({ pathname: router.asPath, query: router.query });
-          }
-
-          setTimeout(() => {
-            setAuthState(AuthStatus.authenticated);
-          }, 200);
+          // if (router.asPath == "/") {
+          // router.push(router.asPath);
+          // router.push("/products");
+          // router.push({ pathname: router.asPath, query: router.query });
+          // }
         } catch (error) {
           console.log(error);
           // redirect to login
