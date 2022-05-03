@@ -148,7 +148,7 @@ export default function BookingDetails({ booking }: Props) {
       )}
       {booking.bike.pickupStation?.locationDescription && (
         <div className="flex space-x-4">
-          <InformationCircleIcon className="w-5 h-5 stroke-current" />
+          <InformationCircleIcon className="w-5 h-5 stroke-current flex-shrink-0" />
           <div className="prose">
             {booking.bike.pickupStation?.locationDescription}
           </div>

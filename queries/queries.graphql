@@ -1,3 +1,44 @@
+fragment PickupStation on PickupStationNode {
+  id
+  locationCity
+  locationPostalcode
+  locationStreet
+  locationDescription
+  contactTelephone
+  contactName
+}
+
+fragment Booking on BookingNode {
+  uuid
+  bike {
+    pickupStation {
+      ...PickupStation
+    }
+  }
+  token
+  pickupTimestamp
+  startDate
+  state
+}
+
+fragment Bike on BikeNode {
+  uuid
+  name
+  pickupStation {
+    ...PickupStation
+  }
+}
+
+query Bikes {
+  bikes {
+    edges {
+      node {
+        ...Bike
+      }
+    }
+  }
+}
+
 query Bookings {
   __typename
   bookings {
@@ -22,32 +63,9 @@ query UserQuery {
   }
 }
 
-query BookedDates($bikeId: Int!) {
+query BookedDates($bikeUuid: String!) {
   __typename
-  bookedDates(bikeId: $bikeId)
-}
-
-fragment PickupStation on PickupStationNode {
-  id
-  locationCity
-  locationPostalcode
-  locationStreet
-  locationDescription
-  contactTelephone
-  contactName
-}
-
-fragment Booking on BookingNode {
-  uuid
-  bike {
-    pickupStation {
-      ...PickupStation
-    }
-  }
-  token
-  pickupTimestamp
-  startDate
-  state
+  bookedDates(bikeUuid: $bikeUuid)
 }
 
 query BookingDetails($uuid: String!) {
@@ -65,9 +83,9 @@ query StatsQuery {
   }
 }
 
-query PickupStation($bikeId: Int!) {
+query PickupStation($bikeUuid: String!) {
   __typename
-  pickupStation(bikeId: $bikeId) {
+  pickupStation(bikeUuid: $bikeUuid) {
     ...PickupStation
   }
 }

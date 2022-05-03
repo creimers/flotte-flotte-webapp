@@ -20,8 +20,9 @@ import DefaultLayout from "components/layout/DefaultLayout";
 import { useAuth, AuthStatus } from "context/auth";
 import {
   useCreateABookingMutation,
-  useBookedDatesQuery,
-  usePickupStationQuery,
+  useBookedDatesLazyQuery,
+  useBikesQuery,
+  BikeFragment,
 } from "generated/graphql";
 import PageTitle from "components/PageTitle";
 
@@ -49,12 +50,13 @@ function getEarliestDate(bookedDates: string[]): string {
 export default function NewBooking() {
   const { authState, user } = useAuth();
   const router = useRouter();
-  const { data: bookedDates, refetch } = useBookedDatesQuery({
+  const [selectedBike, setSelectedBike] = React.useState<null | BikeFragment>(
+    null
+  );
+  const { data: bikes } = useBikesQuery();
+
+  const [loadBookedDates, { data: bookedDates }] = useBookedDatesLazyQuery({
     nextFetchPolicy: "network-only",
-    variables: { bikeId: 1 },
-  });
-  const { data: pickupStation } = usePickupStationQuery({
-    variables: { bikeId: 1 },
   });
   const [createBooking, { loading }] = useCreateABookingMutation();
 
@@ -65,8 +67,16 @@ export default function NewBooking() {
   }, [authState, router, router.asPath]);
 
   React.useEffect(() => {
-    refetch();
-  }, []);
+    if (bikes?.bikes?.edges.length) {
+      setSelectedBike(bikes.bikes.edges[0]?.node!);
+    }
+  }, [bikes]);
+
+  React.useEffect(() => {
+    if (selectedBike) {
+      loadBookedDates({ variables: { bikeUuid: selectedBike.uuid } });
+    }
+  }, [selectedBike]);
 
   const earliestDate = React.useMemo(() => {
     return getEarliestDate(bookedDates?.bookedDates || []);
@@ -76,6 +86,7 @@ export default function NewBooking() {
     const input = {
       startDate: values.startDate,
       pickupTimestamp: values.pickupTimestamp,
+      bikeUuid: selectedBike?.uuid!,
     };
     const result = await createBooking({ variables: { input } });
     const uuid = result?.data?.createBooking?.booking?.uuid;
@@ -91,16 +102,49 @@ export default function NewBooking() {
   return (
     <DefaultLayout>
       <PageTitle title="Neue Buchung" />
-      {pickupStation?.pickupStation?.locationDescription && (
-        <Alert
-          type="info"
-          text={pickupStation?.pickupStation?.locationDescription}
-        />
-      )}
+      <div className="flex flex-col justify-center sm:px-6 lg:px-8">
+        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="px-4 sm:px-10">
+            {bikes?.bikes?.edges && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Fahrrad
+                </label>
+                <select
+                  className="w-full"
+                  disabled={bikes.bikes.edges.length === 1}
+                  value={selectedBike?.uuid}
+                  onChange={(evt) => {
+                    const uuid = evt.currentTarget.value;
+                    const bike = bikes.bikes?.edges.find(
+                      (node) => node?.node?.uuid === uuid
+                    );
+                    if (bike) {
+                      setSelectedBike(bike?.node!);
+                    }
+                  }}
+                >
+                  {bikes.bikes.edges.map((node, index) => (
+                    <option value={node?.node?.uuid} key={node?.node?.uuid}>
+                      {node?.node?.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            {selectedBike?.pickupStation?.locationDescription && (
+              <Alert
+                type="info"
+                text={selectedBike?.pickupStation?.locationDescription}
+              />
+            )}
+          </div>
+        </div>
+      </div>
       {bookedDates !== undefined && (
         <div className="flex flex-col justify-center sm:px-6 lg:px-8">
           <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-            <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
+            <div className="bg-white px-4 sm:rounded-lg sm:px-10">
               <Formik
                 initialValues={{
                   startDate: earliestDate,
