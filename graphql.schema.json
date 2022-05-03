@@ -1803,6 +1803,18 @@
             "deprecationReason": null
           },
           {
+            "name": "locationDescription",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "locationPostalcode",
             "description": null,
             "args": [],
@@ -2074,6 +2086,35 @@
             "type": {
               "kind": "OBJECT",
               "name": "UserNode",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pickupStation",
+            "description": null,
+            "args": [
+              {
+                "name": "bikeId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "PickupStationNode",
               "ofType": null
             },
             "isDeprecated": false,

@@ -5,6 +5,7 @@ import {
   LocationMarkerIcon,
   ExternalLinkIcon,
   PhoneIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/outline";
 
 import { BookingFragment } from "generated/graphql";
@@ -142,6 +143,14 @@ export default function BookingDetails({ booking }: Props) {
             <a href={`tel:${booking.bike.pickupStation?.contactTelephone}`}>
               {booking.bike.pickupStation?.contactTelephone}
             </a>
+          </div>
+        </div>
+      )}
+      {booking.bike.pickupStation?.locationDescription && (
+        <div className="flex space-x-4">
+          <InformationCircleIcon className="w-5 h-5 stroke-current" />
+          <div className="prose">
+            {booking.bike.pickupStation?.locationDescription}
           </div>
         </div>
       )}

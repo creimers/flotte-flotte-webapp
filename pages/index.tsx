@@ -123,6 +123,9 @@ const Home: NextPage = () => {
               Der Este-Esel hat außerdem eine Sitzbank, auf der zwei Kinder
               angeschnallt sitzen können.
             </p>
+            <p>
+              Wir raten davon ab, Erwachsene im Este-Esel zu transportieren.
+            </p>
           </FAQItem>
         </div>
         <Stats />

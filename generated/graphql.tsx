@@ -478,6 +478,7 @@ export type PickupStationNode = Node & {
   /** The ID of the object. */
   id: Scalars['ID'];
   locationCity?: Maybe<Scalars['String']>;
+  locationDescription?: Maybe<Scalars['String']>;
   locationPostalcode?: Maybe<Scalars['String']>;
   locationStreet?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -499,6 +500,7 @@ export type Query = {
   booking?: Maybe<BookingNode>;
   bookings?: Maybe<BookingNodeConnection>;
   me?: Maybe<UserNode>;
+  pickupStation?: Maybe<PickupStationNode>;
   stats?: Maybe<Stats>;
 };
 
@@ -528,6 +530,11 @@ export type QueryBookingsArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryPickupStationArgs = {
+  bikeId: Scalars['Int'];
 };
 
 /** Same as `grapgql_jwt` implementation, with standard output. */
@@ -755,30 +762,46 @@ export type BookedDatesQueryVariables = Exact<{
 
 export type BookedDatesQuery = { __typename: 'Query', bookedDates?: Array<any | null | undefined> | null | undefined };
 
-export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } };
+export type PickupStationFragment = { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined };
+
+export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } };
 
 export type BookingDetailsQueryVariables = Exact<{
   uuid: Scalars['String'];
 }>;
 
 
-export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
+export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
 
 export type StatsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type StatsQueryQuery = { __typename?: 'Query', stats?: { __typename?: 'Stats', users?: number | null | undefined, kilometers?: number | null | undefined, bookings?: number | null | undefined } | null | undefined };
 
+export type PickupStationQueryVariables = Exact<{
+  bikeId: Scalars['Int'];
+}>;
+
+
+export type PickupStationQuery = { __typename: 'Query', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined };
+
+export const PickupStationFragmentDoc = gql`
+    fragment PickupStation on PickupStationNode {
+  id
+  locationCity
+  locationPostalcode
+  locationStreet
+  locationDescription
+  contactTelephone
+  contactName
+}
+    `;
 export const BookingFragmentDoc = gql`
     fragment Booking on BookingNode {
   uuid
   bike {
     pickupStation {
-      locationCity
-      locationPostalcode
-      locationStreet
-      contactTelephone
-      contactName
+      ...PickupStation
     }
   }
   token
@@ -786,7 +809,7 @@ export const BookingFragmentDoc = gql`
   startDate
   state
 }
-    `;
+    ${PickupStationFragmentDoc}`;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password1: String!, $password2: String!, $firstName: String!, $lastName: String!) {
   __typename
@@ -1319,3 +1342,39 @@ export function useStatsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type StatsQueryQueryHookResult = ReturnType<typeof useStatsQueryQuery>;
 export type StatsQueryLazyQueryHookResult = ReturnType<typeof useStatsQueryLazyQuery>;
 export type StatsQueryQueryResult = Apollo.QueryResult<StatsQueryQuery, StatsQueryQueryVariables>;
+export const PickupStationDocument = gql`
+    query PickupStation($bikeId: Int!) {
+  __typename
+  pickupStation(bikeId: $bikeId) {
+    ...PickupStation
+  }
+}
+    ${PickupStationFragmentDoc}`;
+
+/**
+ * __usePickupStationQuery__
+ *
+ * To run a query within a React component, call `usePickupStationQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePickupStationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePickupStationQuery({
+ *   variables: {
+ *      bikeId: // value for 'bikeId'
+ *   },
+ * });
+ */
+export function usePickupStationQuery(baseOptions: Apollo.QueryHookOptions<PickupStationQuery, PickupStationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PickupStationQuery, PickupStationQueryVariables>(PickupStationDocument, options);
+      }
+export function usePickupStationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PickupStationQuery, PickupStationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PickupStationQuery, PickupStationQueryVariables>(PickupStationDocument, options);
+        }
+export type PickupStationQueryHookResult = ReturnType<typeof usePickupStationQuery>;
+export type PickupStationLazyQueryHookResult = ReturnType<typeof usePickupStationLazyQuery>;
+export type PickupStationQueryResult = Apollo.QueryResult<PickupStationQuery, PickupStationQueryVariables>;

@@ -21,6 +21,7 @@ import { useAuth, AuthStatus } from "context/auth";
 import {
   useCreateABookingMutation,
   useBookedDatesQuery,
+  usePickupStationQuery,
 } from "generated/graphql";
 import PageTitle from "components/PageTitle";
 
@@ -50,6 +51,9 @@ export default function NewBooking() {
   const router = useRouter();
   const { data: bookedDates, refetch } = useBookedDatesQuery({
     nextFetchPolicy: "network-only",
+    variables: { bikeId: 1 },
+  });
+  const { data: pickupStation } = usePickupStationQuery({
     variables: { bikeId: 1 },
   });
   const [createBooking, { loading }] = useCreateABookingMutation();
@@ -87,10 +91,12 @@ export default function NewBooking() {
   return (
     <DefaultLayout>
       <PageTitle title="Neue Buchung" />
-      <Alert
-        type="info"
-        text="Die Abhol-Station liegt im Esteburgring, Moorende, und ist fußläufig vom Estebrügger Zentrum zu erreichen. Es gibt dort keine Parkplätze."
-      />
+      {pickupStation?.pickupStation?.locationDescription && (
+        <Alert
+          type="info"
+          text={pickupStation?.pickupStation?.locationDescription}
+        />
+      )}
       {bookedDates !== undefined && (
         <div className="flex flex-col justify-center sm:px-6 lg:px-8">
           <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
