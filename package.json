@@ -14,7 +14,7 @@
     "@apollo/client": "^3.4.16",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
-    "@mdx-js/loader": "^2.0.0",
+    "@mdx-js/loader": "^2.1.1",
     "@mdx-js/react": "^2.0.0",
     "@next/mdx": "^12.1.6",
     "@tailwindcss/aspect-ratio": "^0.3.0",
