@@ -27,7 +27,7 @@ const Home: NextPage = () => {
                   <div className="absolute inset-0 transform -translate-y-3 translate-x-3">
                     <Image
                       className="relative z-10 block"
-                      src="/img/esel-estebruegge.jpg"
+                      src="/img/esel-estebruegge.JPG"
                       alt="Este-Esel in Estebrügge"
                       layout="fill"
                     />
