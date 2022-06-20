@@ -22,13 +22,13 @@ const Home: NextPage = () => {
             <Waves />
 
             <div className="absolute inset-0 flex justify-center items-center">
-              <div className="w-2/3 sm:w-1/2">
-                <div className="aspect-w-4 aspect-h-3 bg-pink-600 relative">
+              <div className="w-1/2">
+                <div className="aspect-w-4 aspect-h-4 bg-pink-600 relative">
                   <div className="absolute inset-0 transform -translate-y-3 translate-x-3">
                     <Image
                       className="relative z-10 block"
-                      src="/img/esel-hamburg.jpg"
-                      alt="Este-Esel in Hamburg"
+                      src="/img/esel-estebruegge.jpg"
+                      alt="Este-Esel in Estebrügge"
                       layout="fill"
                     />
                   </div>
@@ -78,9 +78,9 @@ const Home: NextPage = () => {
               Das Ausleihen vom Este-Esel ist ganz einfach. Hier auf der
               Webseite registrieren, das Wunsch-Datum auswählen und eine
               Abhol-Zeit angeben. Die Buchung wird dann von uns bestätigt, und
-              du erhälst einen Buchungs-Code. Mit diesem (und einem Ausweis)
-              kannst du dann am vereinbarten Datum den Este-Esel bei der
-              Leih-Station abholen.
+              du erhälst einen Buchungs-Code. Mit diesem (und einem gültigen
+              Ausweis) kannst du dann am vereinbarten Datum den Este-Esel bei
+              der Leih-Station abholen.
             </p>
           </FAQItem>
 
@@ -95,10 +95,10 @@ const Home: NextPage = () => {
               Ja, du kannst den Este-Esel wirklich komplett umsonst ausleihen.
             </p>
             <p>
-              Trotzdem ist es natürlich so, dass der Betrieb des Rads Kosten
-              verursacht (Versicherung, Wartung, etc.). Diese finanzieren wir
-              durch Spenden. Wenn du ein paar Groschen übrig hast, freuen wir
-              uns, die Kosten auf viele Schultern zu verteilen.
+              Trotzdem verursacht der Betrieb des Rads natürlich Kosten
+              (Versicherung, Wartung, etc.). Diese finanzieren wir durch
+              Spenden. Wenn du ein paar Groschen übrig hast, freuen wir uns, die
+              Kosten auf viele Schultern zu verteilen.
             </p>
           </FAQItem>
           <FAQItem question="Ist es schwer, mit einem Lastenrad zu fahren?">

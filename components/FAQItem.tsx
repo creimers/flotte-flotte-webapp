@@ -30,7 +30,7 @@ const FAQItem: React.FC<Props> = ({
           </Disclosure.Button>
 
           <Disclosure.Panel>
-            <div className="prose px-5">{children}</div>
+            <div className="prose px-5 mb-8">{children}</div>
           </Disclosure.Panel>
         </>
       )}
