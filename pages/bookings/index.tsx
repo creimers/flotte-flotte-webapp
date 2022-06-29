@@ -51,7 +51,18 @@ export default function Bookings() {
             : []
         }
       >
-        <PageTitle title="Buchungen" />
+        <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 justify-between items-center mb-2">
+          <div className="flex-1 w-full">
+            <PageTitle title="Buchungen" />
+          </div>
+          <div className="flex-1 w-full flex justify-end">
+            <Link href="/bookings/new/">
+              <a className="px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                Jetzt buchen
+              </a>
+            </Link>
+          </div>
+        </div>
         {!loading && data?.bookings?.edges && !data?.bookings?.edges.length ? (
           <div className="prose">
             <p>Du hast bisher noch keine Buchungen.</p>

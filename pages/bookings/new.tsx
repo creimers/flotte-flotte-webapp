@@ -170,7 +170,7 @@ export default function NewBooking() {
                           htmlFor="startDate"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Datum
+                          Für welchen Tag buchst du den Este-Esel?
                         </label>
                         <div className="mt-1">
                           <DatePicker
@@ -201,7 +201,7 @@ export default function NewBooking() {
                           htmlFor="pickupTimestamp"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Abhol-Zeit
+                          Wann holst du den Este-Esel ab?
                         </label>
                         <div className="mt-1">
                           <DatePicker
