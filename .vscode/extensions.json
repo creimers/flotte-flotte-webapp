@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-rename-tag",
+    "formulahendry.auto-close-tag",
+    "GraphQL.vscode-graphql",
+    "bradlc.vscode-tailwindcss"
+  ]
+}
