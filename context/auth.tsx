@@ -62,30 +62,26 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   React.useEffect(() => {
     console.log({ refreshTokenData });
+    if (refreshTokenData) {
+      const { refreshToken, token } = refreshTokenData.refreshToken!;
+      if (token && refreshToken) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        localStorage.setItem(JWT_TOKEN_KEY, token);
+        setTimeout(() => {
+          setAuthState(AuthStatus.authenticated);
+        }, 200);
+      } else {
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        localStorage.removeItem(JWT_TOKEN_KEY);
+        setAuthState(AuthStatus.unauthenticated);
+      }
+    }
+    // else {
+    //   localStorage.removeItem(REFRESH_TOKEN_KEY);
+    //   localStorage.removeItem(JWT_TOKEN_KEY);
+    //   setAuthState(AuthStatus.unauthenticated);
+    // }
   }, [refreshTokenData]);
-
-  // const [refreshTokenMutation] = useRefreshTokenMutation({
-  //   update: (_, { data: result }) => {
-  //     if (result?.refreshToken?.refreshToken) {
-  //       const { refreshToken, token } = result.refreshToken;
-  //       if (token && refreshToken) {
-  //         localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-  //         localStorage.setItem(JWT_TOKEN_KEY, token);
-  //         setTimeout(() => {
-  //           setAuthState(AuthStatus.authenticated);
-  //         }, 200);
-  //       } else {
-  //         localStorage.removeItem(REFRESH_TOKEN_KEY);
-  //         localStorage.removeItem(JWT_TOKEN_KEY);
-  //         setAuthState(AuthStatus.unauthenticated);
-  //       }
-  //     } else {
-  //       localStorage.removeItem(REFRESH_TOKEN_KEY);
-  //       localStorage.removeItem(JWT_TOKEN_KEY);
-  //       setAuthState(AuthStatus.unauthenticated);
-  //     }
-  //   },
-  // });
 
   function logout() {
     router.push("/");

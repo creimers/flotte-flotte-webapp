@@ -9,14 +9,15 @@ import { AuthStatus, useAuth } from "context/auth";
 import Alert from "components/Alert";
 import PageTitle from "components/PageTitle";
 
-import { useBookingsLazyQuery } from "generated/graphql";
+import { useBookingsQuery } from "generated/graphql";
 
 export default function Bookings() {
   const { authState } = useAuth();
   const router = useRouter();
 
-  const [getBookings, { loading, data }] = useBookingsLazyQuery({
-    fetchPolicy: "cache-and-network",
+  const [{ fetching: loading, data }, getBookings] = useBookingsQuery({
+    requestPolicy: "cache-and-network",
+    pause: true,
   });
 
   React.useEffect(() => {
@@ -88,6 +89,12 @@ export default function Bookings() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Fahrrad
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Datum
                 </th>
                 <th
@@ -115,8 +122,11 @@ export default function Bookings() {
                       <CheckCircleIcon className="h-5 w-5 text-green-500" />
                     )}
                     {["REJECTED", "CANCELED"].includes(
-                      edge?.node?.state || ""
+                      edge?.node?.state || "",
                     ) && <XCircleIcon className="h-5 w-5 text-red-500" />}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {edge?.node?.bike.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {new Date(edge?.node?.startDate).toLocaleDateString()}

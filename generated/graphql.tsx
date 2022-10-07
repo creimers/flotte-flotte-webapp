@@ -739,7 +739,7 @@ export type PasswordResetMutation = { __typename: 'Mutation', passwordReset?: { 
 
 export type PickupStationFragment = { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null };
 
-export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null } };
+export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null } };
 
 export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null };
 
@@ -751,7 +751,7 @@ export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNod
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, pickupTimestamp?: any | null, state: BookingState } | null } | null> } | null };
+export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, pickupTimestamp?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string } } | null } | null> } | null };
 
 export type UserQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -770,7 +770,7 @@ export type BookingDetailsQueryVariables = Exact<{
 }>;
 
 
-export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null } } | null };
+export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null } } | null };
 
 export type StatsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2766,13 +2766,16 @@ export const BookingFragmentDoc = gql`
     fragment Booking on BookingNode {
   uuid
   bike {
+    name
     pickupStation {
       ...PickupStation
     }
   }
   token
   pickupTimestamp
+  returnTimestamp
   startDate
+  returnDate
   state
 }
     ${PickupStationFragmentDoc}`;
@@ -2951,6 +2954,9 @@ export const BookingsDocument = gql`
         startDate
         pickupTimestamp
         state
+        bike {
+          name
+        }
       }
     }
   }

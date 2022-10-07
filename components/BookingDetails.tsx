@@ -6,6 +6,7 @@ import {
   ExternalLinkIcon,
   PhoneIcon,
   InformationCircleIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/outline";
 
 import { BookingFragment } from "generated/graphql";
@@ -49,7 +50,7 @@ export default function BookingDetails({ booking }: Props) {
       <Heading title="Status" />
       <div className="flex items-center space-x-4">
         {["REQUESTED", "CONFIRMED", "REJECTED", "CANCELED"].includes(
-          booking.state
+          booking.state,
         ) && (
           <StatusItem
             name="Gebucht"
@@ -87,6 +88,12 @@ export default function BookingDetails({ booking }: Props) {
       <div className="font-mono flex space-x-4 items-center">
         <TicketIcon className="w-5 h-5 stroke-current" />
         <span>{booking.token}</span>
+      </div>
+
+      <Heading title="Lastenrad" />
+      <div className="flex space-x-4 items-center">
+        <ShieldCheckIcon className="w-5 h-5 stroke-current" />
+        <span>{booking.bike.name}</span>
       </div>
 
       <Heading title="Datum &amp; Abohlzeit" />

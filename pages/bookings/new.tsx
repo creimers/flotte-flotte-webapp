@@ -20,7 +20,7 @@ import DefaultLayout from "components/layout/DefaultLayout";
 import { useAuth, AuthStatus } from "context/auth";
 import {
   useCreateABookingMutation,
-  useBookedDatesLazyQuery,
+  useBookedDatesQuery,
   useBikesQuery,
   BikeFragment,
 } from "generated/graphql";
@@ -51,14 +51,16 @@ export default function NewBooking() {
   const { authState, user } = useAuth();
   const router = useRouter();
   const [selectedBike, setSelectedBike] = React.useState<null | BikeFragment>(
-    null
+    null,
   );
-  const { data: bikes } = useBikesQuery();
+  const [{ data: bikes }] = useBikesQuery();
 
-  const [loadBookedDates, { data: bookedDates }] = useBookedDatesLazyQuery({
-    nextFetchPolicy: "network-only",
+  const [{ data: bookedDates }, loadBookedDates] = useBookedDatesQuery({
+    requestPolicy: "network-only",
+    pause: true,
+    variables: { bikeUuid: selectedBike?.uuid },
   });
-  const [createBooking, { loading }] = useCreateABookingMutation();
+  const [{ fetching: loading }, createBooking] = useCreateABookingMutation();
 
   React.useEffect(() => {
     if (authState === AuthStatus.unauthenticated) {
@@ -74,9 +76,9 @@ export default function NewBooking() {
 
   React.useEffect(() => {
     if (selectedBike) {
-      loadBookedDates({ variables: { bikeUuid: selectedBike.uuid } });
+      loadBookedDates();
     }
-  }, [selectedBike]);
+  }, [selectedBike, loadBookedDates]);
 
   const earliestDate = React.useMemo(() => {
     return getEarliestDate(bookedDates?.bookedDates || []);
@@ -85,10 +87,11 @@ export default function NewBooking() {
   async function handleSubmit(values: Values) {
     const input = {
       startDate: values.startDate,
+      returnDate: values.startDate,
       pickupTimestamp: values.pickupTimestamp,
       bikeUuid: selectedBike?.uuid!,
     };
-    const result = await createBooking({ variables: { input } });
+    const result = await createBooking({ input });
     const uuid = result?.data?.createBooking?.booking?.uuid;
     if (uuid) {
       router.push(`/bookings/${uuid}?success=true`);
@@ -114,10 +117,10 @@ export default function NewBooking() {
                   className="w-full"
                   disabled={bikes.bikes.edges.length === 1}
                   value={selectedBike?.uuid}
-                  onChange={(evt) => {
+                  onChange={evt => {
                     const uuid = evt.currentTarget.value;
                     const bike = bikes.bikes?.edges.find(
-                      (node) => node?.node?.uuid === uuid
+                      node => node?.node?.uuid === uuid,
                     );
                     if (bike) {
                       setSelectedBike(bike?.node!);
@@ -156,11 +159,11 @@ export default function NewBooking() {
                 {({ values, setFieldValue }) => {
                   let pickupTimestampDate = setHours(
                     addDays(new Date(), 1),
-                    parseInt(values.pickupTimestamp.split(":")[0])
+                    parseInt(values.pickupTimestamp.split(":")[0]),
                   );
                   pickupTimestampDate = setMinutes(
                     pickupTimestampDate,
-                    parseInt(values.pickupTimestamp.split(":")[1])
+                    parseInt(values.pickupTimestamp.split(":")[1]),
                   );
 
                   return (
@@ -180,16 +183,16 @@ export default function NewBooking() {
                             dateFormat="dd.MM.yyyy"
                             selected={new Date(values.startDate)}
                             excludeDates={bookedDates?.bookedDates?.map(
-                              (d) => new Date(d)
+                              d => new Date(d),
                             )}
                             minDate={new Date()}
                             maxDate={addMonths(new Date(), 1)}
-                            onChange={(date) => {
+                            onChange={date => {
                               if (date) {
                                 const d = new Date(date.toString());
                                 setFieldValue(
                                   "startDate",
-                                  d.toISOString().split("T")[0]
+                                  d.toISOString().split("T")[0],
                                 );
                               }
                             }}
@@ -213,7 +216,7 @@ export default function NewBooking() {
                             locale="de"
                             dateFormat="HH:mm"
                             selected={pickupTimestampDate}
-                            onChange={(date) => {
+                            onChange={date => {
                               if (date) {
                                 const d = new Date(date.toString());
                                 const hours = getHours(d);
@@ -221,11 +224,11 @@ export default function NewBooking() {
                                 const paddedHours = `${hours}`.padStart(2, "0");
                                 const paddedMinutes = `${minutes}`.padStart(
                                   2,
-                                  "0"
+                                  "0",
                                 );
                                 setFieldValue(
                                   "pickupTimestamp",
-                                  `${paddedHours}:${paddedMinutes}`
+                                  `${paddedHours}:${paddedMinutes}`,
                                 );
                               }
                             }}
