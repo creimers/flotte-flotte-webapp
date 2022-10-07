@@ -3,15 +3,41 @@ import "tailwindcss/tailwind.css";
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import { DefaultSeo } from "next-seo";
+import jwt_decode, { JwtPayload } from "jwt-decode";
 
-import { ApolloProvider } from "@apollo/client";
-import { useApollo } from "lib/apolloClient";
+import { createClient, dedupExchange, Provider } from "urql";
+// import { multipartFetchExchange } from "@urql/exchange-multipart-fetch";
+// import { Cache, cacheExchange } from "@urql/exchange-graphcache";
+
 import { AuthProvider } from "context/auth";
 
+const client = createClient({
+  url: process.env.NEXT_PUBLIC_API_URI!,
+  // exchanges: [dedupExchange],
+  fetchOptions: () => {
+    const isClient = typeof window !== "undefined";
+    if (isClient) {
+      const token = localStorage.getItem("jwt-token");
+      if (token) {
+        const decoded = jwt_decode<JwtPayload>(token);
+        const now = new Date();
+        if (decoded.exp && now.getTime() < decoded.exp * 1000) {
+          return {
+            headers: { authorization: token ? `JWT ${token}` : "" },
+          };
+        }
+      }
+    }
+    return {
+      headers: { authorization: "" },
+    };
+  },
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
-  const apolloClient = useApollo(pageProps.initialApolloState);
+  // const apolloClient = useApollo(pageProps.initialApolloState);
   return (
-    <ApolloProvider client={apolloClient}>
+    <Provider value={client}>
       <Head>
         <link
           rel="apple-touch-icon"
@@ -62,7 +88,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           alt="ding dong"
         />
       </noscript>
-    </ApolloProvider>
+    </Provider>
   );
 }
 export default MyApp;
