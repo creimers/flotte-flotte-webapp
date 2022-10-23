@@ -4,7 +4,7 @@ import CarbonSavings from "./CarbonSavings";
 import Usage from "./Usage";
 
 export default function Stats() {
-  const { data, loading } = useStatsQueryQuery();
+  const [{ data, loading }] = useStatsQueryQuery();
   return (
     <div>
       <div className="mb-3">
