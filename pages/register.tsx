@@ -23,16 +23,16 @@ interface Values {
 
 export default function Register() {
   const { setAuthState } = useAuth();
-  const [registerMutation, { error, data, loading }] = useRegisterMutation();
+  const [{ error, data, fetching }, registerMutation] = useRegisterMutation();
   const router = useRouter();
 
   const registrationSucceeded = data?.register?.success === true;
   const registrationFailed =
-    (!registrationSucceeded && !loading && data) || error;
+    (!registrationSucceeded && !fetching && data) || error;
 
   async function handleSubmit(
     values: Values,
-    { resetForm, setErrors }: FormikHelpers<Values>
+    { resetForm, setErrors }: FormikHelpers<Values>,
   ) {
     const variables = {
       firstName: values.firstName,
@@ -41,7 +41,7 @@ export default function Register() {
       password1: values.password1,
       password2: values.password2,
     };
-    const resp = await registerMutation({ variables });
+    const resp = await registerMutation(variables);
     const success = resp.data?.register?.success === true;
     window.scrollTo(0, 0);
     if (success) {
@@ -216,8 +216,8 @@ export default function Register() {
                     <Button
                       text="Registrieren"
                       type="submit"
-                      disabled={!values.agreeToTerms || loading}
-                      loading={loading}
+                      disabled={!values.agreeToTerms || fetching}
+                      loading={fetching}
                     />
                   </div>
                 </Form>

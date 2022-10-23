@@ -6,6 +6,10 @@ fragment PickupStation on PickupStationNode {
   locationDescription
   contactTelephone
   contactName
+  terms
+  maxConsecutiveDays
+  earliestPickupTime
+  latestReturnTime
 }
 
 fragment Booking on BookingNode {
@@ -27,6 +31,8 @@ fragment Booking on BookingNode {
 fragment Bike on BikeNode {
   uuid
   name
+  model
+  slug
   pickupStation {
     ...PickupStation
   }

@@ -61,7 +61,6 @@ function AuthProvider({ children }: AuthProviderProps) {
     useRefreshTokenMutation();
 
   React.useEffect(() => {
-    console.log({ refreshTokenData });
     if (refreshTokenData) {
       const { refreshToken, token } = refreshTokenData.refreshToken!;
       if (token && refreshToken) {

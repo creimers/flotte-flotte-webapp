@@ -119,6 +119,18 @@
             "deprecationReason": null
           },
           {
+            "name": "model",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "name",
             "description": "",
             "args": [],
@@ -158,6 +170,18 @@
                 "name": "Date",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "slug",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1985,6 +2009,18 @@
           {
             "name": "notificationEmails",
             "description": "Mehrere Adressen durch Kommata separieren.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "terms",
+            "description": "",
             "args": [],
             "type": {
               "kind": "SCALAR",

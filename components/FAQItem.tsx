@@ -1,5 +1,5 @@
 import { Disclosure } from "@headlessui/react";
-import { ChevronRightIcon } from "@heroicons/react/outline";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   question: string;

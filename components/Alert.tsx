@@ -2,8 +2,8 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   InformationCircleIcon,
-  ExclamationIcon,
-} from "@heroicons/react/solid";
+  ExclamationTriangleIcon,
+} from "@heroicons/react/24/solid";
 
 type Props = {
   type: "success" | "error" | "warning" | "info";
@@ -14,7 +14,7 @@ const iconMapping = {
   success: CheckCircleIcon,
   error: ExclamationCircleIcon,
   info: InformationCircleIcon,
-  warning: ExclamationIcon,
+  warning: ExclamationTriangleIcon,
 };
 
 const backgroundColorMapping = {

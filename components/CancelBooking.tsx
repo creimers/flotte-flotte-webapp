@@ -12,9 +12,7 @@ type Props = {
   booking: BookingFragment;
 };
 export default function CancelBooking({ booking }: Props) {
-  const [cancelBooking, { loading }] = useCancelThatBookingMutation({
-    variables: { bookingUuid: booking.uuid },
-  });
+  const [{ fetching }, cancelBooking] = useCancelThatBookingMutation();
   let [isOpen, setIsOpen] = React.useState(false);
   const router = useRouter();
 
@@ -26,7 +24,7 @@ export default function CancelBooking({ booking }: Props) {
     setIsOpen(true);
   }
   async function handleCancel() {
-    await cancelBooking();
+    await cancelBooking({ bookingUuid: booking.uuid });
     closeModal();
     router.push("/bookings");
   }
@@ -93,13 +91,13 @@ export default function CancelBooking({ booking }: Props) {
                     text="Abbrechen"
                     onClick={closeModal}
                     emphasis="neutral"
-                    disabled={loading}
+                    disabled={fetching}
                   />
                   <Button
                     text="Stornieren"
                     onClick={handleCancel}
-                    loading={loading}
-                    disabled={loading}
+                    loading={fetching}
+                    disabled={fetching}
                     emphasis="negative"
                   />
                 </div>

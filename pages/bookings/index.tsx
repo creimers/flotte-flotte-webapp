@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
-import { ChevronRightIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 import DefaultLayout from "components/layout/DefaultLayout";
 import { AuthStatus, useAuth } from "context/auth";
@@ -67,13 +67,6 @@ export default function Bookings() {
         {!loading && data?.bookings?.edges && !data?.bookings?.edges.length ? (
           <div className="prose">
             <p>Du hast bisher noch keine Buchungen.</p>
-            <p>
-              Jetzt den Este-Esel{" "}
-              <Link href="/bookings/new">
-                <a>buchen</a>
-              </Link>
-              .
-            </p>
           </div>
         ) : (
           <table className="min-w-full divide-y divide-gray-200">

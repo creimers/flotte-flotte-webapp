@@ -27,9 +27,11 @@ export type BikeNode = Node & {
   /** The ID of the object. */
   id: Scalars['ID'];
   logo?: Maybe<Scalars['String']>;
+  model?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   pickupStation?: Maybe<PickupStationNode>;
   purchaseDate: Scalars['Date'];
+  slug?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -447,6 +449,7 @@ export type PickupStationNode = Node & {
   name: Scalars['String'];
   /** Mehrere Adressen durch Kommata separieren. */
   notificationEmails?: Maybe<Scalars['String']>;
+  terms?: Maybe<Scalars['String']>;
 };
 
 
@@ -737,16 +740,16 @@ export type PasswordResetMutationVariables = Exact<{
 
 export type PasswordResetMutation = { __typename: 'Mutation', passwordReset?: { __typename?: 'PasswordReset', success?: boolean | null, errors?: any | null } | null };
 
-export type PickupStationFragment = { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null };
+export type PickupStationFragment = { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null };
 
-export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null } };
+export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } };
 
-export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null };
+export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null };
 
 export type BikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNodeConnection', edges: Array<{ __typename?: 'BikeNodeEdge', node?: { __typename?: 'BikeNode', uuid: any, name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null } | null } | null> } | null };
+export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNodeConnection', edges: Array<{ __typename?: 'BikeNodeEdge', node?: { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } | null } | null> } | null };
 
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -770,7 +773,7 @@ export type BookingDetailsQueryVariables = Exact<{
 }>;
 
 
-export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null } } | null };
+export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } } | null };
 
 export type StatsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -782,7 +785,7 @@ export type PickupStationQueryVariables = Exact<{
 }>;
 
 
-export type PickupStationQuery = { __typename: 'Query', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null } | null };
+export type PickupStationQuery = { __typename: 'Query', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null };
 
 import { IntrospectionQuery } from 'graphql';
 export default {
@@ -867,6 +870,14 @@ export default {
             "args": []
           },
           {
+            "name": "model",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
             "name": "name",
             "type": {
               "kind": "NON_NULL",
@@ -894,6 +905,14 @@ export default {
                 "kind": "SCALAR",
                 "name": "Any"
               }
+            },
+            "args": []
+          },
+          {
+            "name": "slug",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
             },
             "args": []
           },
@@ -2012,6 +2031,14 @@ export default {
               "name": "Any"
             },
             "args": []
+          },
+          {
+            "name": "terms",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
           }
         ],
         "interfaces": [
@@ -2760,6 +2787,10 @@ export const PickupStationFragmentDoc = gql`
   locationDescription
   contactTelephone
   contactName
+  terms
+  maxConsecutiveDays
+  earliestPickupTime
+  latestReturnTime
 }
     `;
 export const BookingFragmentDoc = gql`
@@ -2783,6 +2814,8 @@ export const BikeFragmentDoc = gql`
     fragment Bike on BikeNode {
   uuid
   name
+  model
+  slug
   pickupStation {
     ...PickupStation
   }

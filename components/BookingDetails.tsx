@@ -2,15 +2,15 @@ import {
   TicketIcon,
   CalendarIcon,
   ClockIcon,
-  LocationMarkerIcon,
-  ExternalLinkIcon,
+  MapPinIcon,
+  ArrowTopRightOnSquareIcon,
   PhoneIcon,
   InformationCircleIcon,
   ShieldCheckIcon,
-} from "@heroicons/react/outline";
+} from "@heroicons/react/24/outline";
 
 import { BookingFragment } from "generated/graphql";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 
 type Props = {
   booking: BookingFragment;
@@ -117,7 +117,7 @@ export default function BookingDetails({ booking }: Props) {
       </div>
       <Heading title="Abhol-Station" />
       <div className="flex space-x-4 items-start">
-        <LocationMarkerIcon className="w-5 h-5 stroke-current" />
+        <MapPinIcon className="w-5 h-5 stroke-current" />
         <div>
           <div className="flex items-center space-x-4">
             <div>
@@ -136,7 +136,7 @@ export default function BookingDetails({ booking }: Props) {
               href={`https://maps.google.com/?q=${booking.bike.pickupStation?.locationStreet},${booking.bike.pickupStation?.locationPostalcode},${booking.bike.pickupStation?.locationCity}`}
             >
               <span className="flex items-center space-x-2">
-                <ExternalLinkIcon className="stroke-current w-3 h-3" />
+                <ArrowTopRightOnSquareIcon className="stroke-current w-3 h-3" />
                 <span>Auf der Karte ansehen.</span>
               </span>
             </a>
