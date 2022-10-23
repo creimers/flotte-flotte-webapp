@@ -4,7 +4,7 @@ import useInterval from "@use-it/interval";
 
 import {
   useRefreshTokenMutation,
-  useUserQueryLazyQuery,
+  useUserQueryQuery,
   UserQueryQuery,
 } from "generated/graphql";
 
@@ -37,11 +37,13 @@ function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
   const [authState, setAuthState] = React.useState(AuthStatus.idle);
 
-  const [getUser, { data: user, loading: userLoading }] = useUserQueryLazyQuery(
-    {
-      fetchPolicy: "network-only",
-    }
-  );
+  const [{ data: user, fetching: userLoading }, getUser] = useUserQueryQuery({
+    pause: true,
+    requestPolicy: "network-only",
+  });
+  // {
+  //   fetchPolicy: "network-only",
+  // },
 
   function refetchUser() {
     const emailVerified = window.localStorage.getItem(EMAIL_VERIFIED_KEY);
@@ -55,28 +57,30 @@ function AuthProvider({ children }: AuthProviderProps) {
     return () => window.removeEventListener("storage", refetchUser);
   }, []);
 
-  const [refreshTokenMutation] = useRefreshTokenMutation({
-    update: (_, { data: result }) => {
-      if (result?.refreshToken?.refreshToken) {
-        const { refreshToken, token } = result.refreshToken;
-        if (token && refreshToken) {
-          localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-          localStorage.setItem(JWT_TOKEN_KEY, token);
-          setTimeout(() => {
-            setAuthState(AuthStatus.authenticated);
-          }, 200);
-        } else {
-          localStorage.removeItem(REFRESH_TOKEN_KEY);
-          localStorage.removeItem(JWT_TOKEN_KEY);
-          setAuthState(AuthStatus.unauthenticated);
-        }
+  const [{ data: refreshTokenData }, refreshTokenMutation] =
+    useRefreshTokenMutation();
+
+  React.useEffect(() => {
+    if (refreshTokenData) {
+      const { refreshToken, token } = refreshTokenData.refreshToken!;
+      if (token && refreshToken) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        localStorage.setItem(JWT_TOKEN_KEY, token);
+        setTimeout(() => {
+          setAuthState(AuthStatus.authenticated);
+        }, 200);
       } else {
         localStorage.removeItem(REFRESH_TOKEN_KEY);
         localStorage.removeItem(JWT_TOKEN_KEY);
         setAuthState(AuthStatus.unauthenticated);
       }
-    },
-  });
+    }
+    // else {
+    //   localStorage.removeItem(REFRESH_TOKEN_KEY);
+    //   localStorage.removeItem(JWT_TOKEN_KEY);
+    //   setAuthState(AuthStatus.unauthenticated);
+    // }
+  }, [refreshTokenData]);
 
   function logout() {
     router.push("/");
@@ -100,7 +104,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         // get that token
         try {
           await refreshTokenMutation({
-            variables: { refreshToken: theRefreshToken },
+            refreshToken: theRefreshToken,
           });
           // if (router.asPath == "/") {
           // router.push(router.asPath);
@@ -132,7 +136,7 @@ function AuthProvider({ children }: AuthProviderProps) {
           // get that token
           try {
             await refreshTokenMutation({
-              variables: { refreshToken: theRefreshToken },
+              refreshToken: theRefreshToken,
             });
           } catch (error) {
             router.push("/");

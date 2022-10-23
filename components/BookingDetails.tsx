@@ -2,14 +2,15 @@ import {
   TicketIcon,
   CalendarIcon,
   ClockIcon,
-  LocationMarkerIcon,
-  ExternalLinkIcon,
+  MapPinIcon,
+  ArrowTopRightOnSquareIcon,
   PhoneIcon,
   InformationCircleIcon,
-} from "@heroicons/react/outline";
+  ShieldCheckIcon,
+} from "@heroicons/react/24/outline";
 
 import { BookingFragment } from "generated/graphql";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 
 type Props = {
   booking: BookingFragment;
@@ -49,7 +50,7 @@ export default function BookingDetails({ booking }: Props) {
       <Heading title="Status" />
       <div className="flex items-center space-x-4">
         {["REQUESTED", "CONFIRMED", "REJECTED", "CANCELED"].includes(
-          booking.state
+          booking.state,
         ) && (
           <StatusItem
             name="Gebucht"
@@ -89,6 +90,12 @@ export default function BookingDetails({ booking }: Props) {
         <span>{booking.token}</span>
       </div>
 
+      <Heading title="Lastenrad" />
+      <div className="flex space-x-4 items-center">
+        <ShieldCheckIcon className="w-5 h-5 stroke-current" />
+        <span>{booking.bike.name}</span>
+      </div>
+
       <Heading title="Datum &amp; Abohlzeit" />
       <div className="flex space-x-4 items-center">
         <CalendarIcon className="w-5 h-5 stroke-current" />
@@ -110,7 +117,7 @@ export default function BookingDetails({ booking }: Props) {
       </div>
       <Heading title="Abhol-Station" />
       <div className="flex space-x-4 items-start">
-        <LocationMarkerIcon className="w-5 h-5 stroke-current" />
+        <MapPinIcon className="w-5 h-5 stroke-current" />
         <div>
           <div className="flex items-center space-x-4">
             <div>
@@ -129,7 +136,7 @@ export default function BookingDetails({ booking }: Props) {
               href={`https://maps.google.com/?q=${booking.bike.pickupStation?.locationStreet},${booking.bike.pickupStation?.locationPostalcode},${booking.bike.pickupStation?.locationCity}`}
             >
               <span className="flex items-center space-x-2">
-                <ExternalLinkIcon className="stroke-current w-3 h-3" />
+                <ArrowTopRightOnSquareIcon className="stroke-current w-3 h-3" />
                 <span>Auf der Karte ansehen.</span>
               </span>
             </a>

@@ -1,15 +1,19 @@
 import React from "react";
 import { render, RenderOptions } from "@testing-library/react";
-// import { ApolloProvider } from "@apollo/client";
-import { MockedProvider } from "@apollo/client/testing";
-// import { useApollo } from "lib/apolloClient";
+import { Provider } from "urql";
+import { never } from "wonka";
 
 import { AuthProvider } from "context/auth";
 
+const mockClient = {
+  executeSubscription: jest.fn(() => never),
+  executeQuery: jest.fn(() => never),
+} as any;
+
 const AllTheProviders: React.FC = ({ children }) => (
-  <MockedProvider>
+  <Provider value={mockClient}>
     <AuthProvider>{children}</AuthProvider>
-  </MockedProvider>
+  </Provider>
 );
 
 const customRender = (ui: React.ReactElement, options: RenderOptions = {}) =>

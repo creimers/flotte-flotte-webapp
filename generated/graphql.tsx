@@ -1,10 +1,11 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,62 +13,11 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /**
-   * The `Date` scalar type represents a Date
-   * value as specified by
-   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-   */
   Date: any;
-  /**
-   * The `DateTime` scalar type represents a DateTime
-   * value as specified by
-   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-   */
   DateTime: any;
-  /**
-   *
-   *     Errors messages and codes mapped to
-   *     fields or non fields errors.
-   *     Example:
-   *     {
-   *         field_name: [
-   *             {
-   *                 "message": "error message",
-   *                 "code": "error_code"
-   *             }
-   *         ],
-   *         other_field: [
-   *             {
-   *                 "message": "error message",
-   *                 "code": "error_code"
-   *             }
-   *         ],
-   *         nonFieldErrors: [
-   *             {
-   *                 "message": "error message",
-   *                 "code": "error_code"
-   *             }
-   *         ]
-   *     }
-   *
-   */
   ExpectedErrorType: any;
-  /**
-   * The `GenericScalar` scalar type represents a generic
-   * GraphQL scalar value that could be:
-   * String, Boolean, Int, Float, List or Object.
-   */
   GenericScalar: any;
-  /**
-   * The `Time` scalar type represents a Time value as
-   * specified by
-   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-   */
   Time: any;
-  /**
-   * Leverages the internal Python implmeentation of UUID (uuid.UUID) to provide native UUID objects
-   * in fields, resolvers and input.
-   */
   UUID: any;
 };
 
@@ -76,19 +26,22 @@ export type BikeNode = Node & {
   bookings: BookingNodeConnection;
   /** The ID of the object. */
   id: Scalars['ID'];
+  logo?: Maybe<Scalars['String']>;
+  model?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   pickupStation?: Maybe<PickupStationNode>;
   purchaseDate: Scalars['Date'];
+  slug?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
 
 export type BikeNodeBookingsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type BikeNodeConnection = {
@@ -117,6 +70,7 @@ export type BookingNode = Node & {
   notes?: Maybe<Scalars['String']>;
   pickupKilometers?: Maybe<Scalars['Int']>;
   pickupTimestamp?: Maybe<Scalars['Time']>;
+  returnDate?: Maybe<Scalars['Date']>;
   returnKilometers?: Maybe<Scalars['Int']>;
   returnTimestamp?: Maybe<Scalars['Time']>;
   startDate: Scalars['Date'];
@@ -162,6 +116,7 @@ export type CancelBookingMutation = {
 export type CreateBookingInput = {
   bikeUuid: Scalars['String'];
   pickupTimestamp: Scalars['Time'];
+  returnDate: Scalars['Date'];
   startDate: Scalars['Date'];
 };
 
@@ -303,12 +258,12 @@ export type Mutation = {
 
 
 export type MutationCancelBookingArgs = {
-  bookingUuid?: Maybe<Scalars['String']>;
+  bookingUuid?: InputMaybe<Scalars['String']>;
 };
 
 
 export type MutationCreateBookingArgs = {
-  input?: Maybe<CreateBookingInput>;
+  input?: InputMaybe<CreateBookingInput>;
 };
 
 
@@ -369,7 +324,7 @@ export type MutationSendPasswordResetEmailArgs = {
 
 
 export type MutationTokenAuthArgs = {
-  email?: Maybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
   password: Scalars['String'];
 };
 
@@ -474,25 +429,53 @@ export type PasswordSet = {
 
 export type PickupStationNode = Node & {
   __typename?: 'PickupStationNode';
+  /** Buchungen sollen automatisch bestätigt werden, eine manuelle Freigabe ist nicht erforderlich. */
+  autoConfirm: Scalars['Boolean'];
   bikes: BikeNodeConnection;
   contactName?: Maybe<Scalars['String']>;
   contactTelephone?: Maybe<Scalars['String']>;
+  /** Frühste Abholzeit */
+  earliestPickupTime?: Maybe<Scalars['Time']>;
   /** The ID of the object. */
   id: Scalars['ID'];
+  /** Späteste Rückgabezeit */
+  latestReturnTime?: Maybe<Scalars['Time']>;
   locationCity?: Maybe<Scalars['String']>;
   locationDescription?: Maybe<Scalars['String']>;
   locationPostalcode?: Maybe<Scalars['String']>;
   locationStreet?: Maybe<Scalars['String']>;
+  /** Für wieviel aufeinanderfolgende Tage darf bei dieser Station ausgeliehen werden? */
+  maxConsecutiveDays: Scalars['Int'];
   name: Scalars['String'];
+  /** Mehrere Adressen durch Kommata separieren. */
+  notificationEmails?: Maybe<Scalars['String']>;
+  terms?: Maybe<Scalars['String']>;
 };
 
 
 export type PickupStationNodeBikesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+export type PickupStationNodeConnection = {
+  __typename?: 'PickupStationNodeConnection';
+  /** Contains the nodes in this connection. */
+  edges: Array<Maybe<PickupStationNodeEdge>>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+};
+
+/** A Relay edge containing a `PickupStationNode` and its cursor. */
+export type PickupStationNodeEdge = {
+  __typename?: 'PickupStationNodeEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<PickupStationNode>;
 };
 
 export type Query = {
@@ -508,11 +491,11 @@ export type Query = {
 
 
 export type QueryBikesArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -527,11 +510,11 @@ export type QueryBookingArgs = {
 
 
 export type QueryBookingsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -639,6 +622,7 @@ export type UserNode = Node & {
   isStaff: Scalars['Boolean'];
   lastLogin?: Maybe<Scalars['DateTime']>;
   lastName: Scalars['String'];
+  pickupStations: PickupStationNodeConnection;
   pk?: Maybe<Scalars['Int']>;
   rentals: BookingNodeConnection;
   secondaryEmail?: Maybe<Scalars['String']>;
@@ -648,12 +632,21 @@ export type UserNode = Node & {
 };
 
 
+export type UserNodePickupStationsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type UserNodeRentalsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 /**
@@ -686,7 +679,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename: 'Mutation', register?: { __typename?: 'Register', success?: boolean | null | undefined, errors?: any | null | undefined, token?: string | null | undefined, refreshToken?: string | null | undefined } | null | undefined };
+export type RegisterMutation = { __typename: 'Mutation', register?: { __typename?: 'Register', success?: boolean | null, errors?: any | null, token?: string | null, refreshToken?: string | null } | null };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
@@ -694,49 +687,49 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename: 'Mutation', tokenAuth?: { __typename?: 'ObtainJSONWebToken', refreshToken?: string | null | undefined, token?: string | null | undefined } | null | undefined };
+export type LoginMutation = { __typename: 'Mutation', tokenAuth?: { __typename?: 'ObtainJSONWebToken', refreshToken?: string | null, token?: string | null } | null };
 
 export type RefreshTokenMutationVariables = Exact<{
   refreshToken: Scalars['String'];
 }>;
 
 
-export type RefreshTokenMutation = { __typename: 'Mutation', refreshToken?: { __typename?: 'RefreshToken', refreshToken?: string | null | undefined, token?: string | null | undefined } | null | undefined };
+export type RefreshTokenMutation = { __typename: 'Mutation', refreshToken?: { __typename?: 'RefreshToken', refreshToken?: string | null, token?: string | null } | null };
 
 export type VerifyEmailMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
 
 
-export type VerifyEmailMutation = { __typename: 'Mutation', verifyAccount?: { __typename?: 'VerifyAccount', errors?: any | null | undefined, success?: boolean | null | undefined } | null | undefined };
+export type VerifyEmailMutation = { __typename: 'Mutation', verifyAccount?: { __typename?: 'VerifyAccount', errors?: any | null, success?: boolean | null } | null };
 
 export type CreateABookingMutationVariables = Exact<{
   input: CreateBookingInput;
 }>;
 
 
-export type CreateABookingMutation = { __typename: 'Mutation', createBooking?: { __typename?: 'CreateBookingMutation', booking?: { __typename?: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
+export type CreateABookingMutation = { __typename: 'Mutation', createBooking?: { __typename?: 'CreateBookingMutation', booking?: { __typename?: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null } | null } | null };
 
 export type CancelThatBookingMutationVariables = Exact<{
   bookingUuid: Scalars['String'];
 }>;
 
 
-export type CancelThatBookingMutation = { __typename: 'Mutation', cancelBooking?: { __typename?: 'CancelBookingMutation', booking?: { __typename: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null | undefined } | null | undefined } | null | undefined };
+export type CancelThatBookingMutation = { __typename: 'Mutation', cancelBooking?: { __typename?: 'CancelBookingMutation', booking?: { __typename: 'BookingNode', id: string, uuid: any, state: BookingState, startDate: any, pickupTimestamp?: any | null } | null } | null };
 
 export type ResendActiviationEmailMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
 
 
-export type ResendActiviationEmailMutation = { __typename: 'Mutation', resendActivationEmail?: { __typename?: 'ResendActivationEmail', errors?: any | null | undefined, success?: boolean | null | undefined } | null | undefined };
+export type ResendActiviationEmailMutation = { __typename: 'Mutation', resendActivationEmail?: { __typename?: 'ResendActivationEmail', errors?: any | null, success?: boolean | null } | null };
 
 export type SendPasswordResetEmailMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
 
 
-export type SendPasswordResetEmailMutation = { __typename: 'Mutation', sendPasswordResetEmail?: { __typename?: 'SendPasswordResetEmail', success?: boolean | null | undefined, errors?: any | null | undefined } | null | undefined };
+export type SendPasswordResetEmailMutation = { __typename: 'Mutation', sendPasswordResetEmail?: { __typename?: 'SendPasswordResetEmail', success?: boolean | null, errors?: any | null } | null };
 
 export type PasswordResetMutationVariables = Exact<{
   token: Scalars['String'];
@@ -745,55 +738,2046 @@ export type PasswordResetMutationVariables = Exact<{
 }>;
 
 
-export type PasswordResetMutation = { __typename: 'Mutation', passwordReset?: { __typename?: 'PasswordReset', success?: boolean | null | undefined, errors?: any | null | undefined } | null | undefined };
+export type PasswordResetMutation = { __typename: 'Mutation', passwordReset?: { __typename?: 'PasswordReset', success?: boolean | null, errors?: any | null } | null };
 
-export type PickupStationFragment = { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined };
+export type PickupStationFragment = { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null };
 
-export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } };
+export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } };
 
-export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined };
+export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null };
 
 export type BikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNodeConnection', edges: Array<{ __typename?: 'BikeNodeEdge', node?: { __typename?: 'BikeNode', uuid: any, name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> } | null | undefined };
+export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNodeConnection', edges: Array<{ __typename?: 'BikeNodeEdge', node?: { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } | null } | null> } | null };
 
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, pickupTimestamp?: any | null | undefined, state: BookingState } | null | undefined } | null | undefined> } | null | undefined };
+export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, pickupTimestamp?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string } } | null } | null> } | null };
 
 export type UserQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQueryQuery = { __typename: 'Query', me?: { __typename?: 'UserNode', email: string, firstName: string, lastName: string, verified?: boolean | null | undefined } | null | undefined };
+export type UserQueryQuery = { __typename: 'Query', me?: { __typename?: 'UserNode', email: string, firstName: string, lastName: string, verified?: boolean | null } | null };
 
 export type BookedDatesQueryVariables = Exact<{
   bikeUuid: Scalars['String'];
 }>;
 
 
-export type BookedDatesQuery = { __typename: 'Query', bookedDates?: Array<any | null | undefined> | null | undefined };
+export type BookedDatesQuery = { __typename: 'Query', bookedDates?: Array<any | null> | null };
 
 export type BookingDetailsQueryVariables = Exact<{
   uuid: Scalars['String'];
 }>;
 
 
-export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null | undefined, pickupTimestamp?: any | null | undefined, startDate: any, state: BookingState, bike: { __typename?: 'BikeNode', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined } } | null | undefined };
+export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } } | null };
 
 export type StatsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StatsQueryQuery = { __typename?: 'Query', stats?: { __typename?: 'Stats', users?: number | null | undefined, kilometers?: number | null | undefined, bookings?: number | null | undefined } | null | undefined };
+export type StatsQueryQuery = { __typename?: 'Query', stats?: { __typename?: 'Stats', users?: number | null, kilometers?: number | null, bookings?: number | null } | null };
 
 export type PickupStationQueryVariables = Exact<{
   bikeUuid: Scalars['String'];
 }>;
 
 
-export type PickupStationQuery = { __typename: 'Query', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null | undefined, locationPostalcode?: string | null | undefined, locationStreet?: string | null | undefined, locationDescription?: string | null | undefined, contactTelephone?: string | null | undefined, contactName?: string | null | undefined } | null | undefined };
+export type PickupStationQuery = { __typename: 'Query', pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null };
 
+import { IntrospectionQuery } from 'graphql';
+export default {
+  "__schema": {
+    "queryType": {
+      "name": "Query"
+    },
+    "mutationType": {
+      "name": "Mutation"
+    },
+    "subscriptionType": null,
+    "types": [
+      {
+        "kind": "OBJECT",
+        "name": "BikeNode",
+        "fields": [
+          {
+            "name": "bookings",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "BookingNodeConnection",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "logo",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "model",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "name",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pickupStation",
+            "type": {
+              "kind": "OBJECT",
+              "name": "PickupStationNode",
+              "ofType": null
+            },
+            "args": []
+          },
+          {
+            "name": "purchaseDate",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "slug",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "uuid",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "BikeNodeConnection",
+        "fields": [
+          {
+            "name": "edges",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "BikeNodeEdge",
+                  "ofType": null
+                }
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pageInfo",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "BikeNodeEdge",
+        "fields": [
+          {
+            "name": "cursor",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "node",
+            "type": {
+              "kind": "OBJECT",
+              "name": "BikeNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "BookingNode",
+        "fields": [
+          {
+            "name": "bike",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "BikeNode",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "created",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "notes",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "pickupKilometers",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "pickupTimestamp",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "returnDate",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "returnKilometers",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "returnTimestamp",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "startDate",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "state",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "token",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "uuid",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "BookingNodeConnection",
+        "fields": [
+          {
+            "name": "edges",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "BookingNodeEdge",
+                  "ofType": null
+                }
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pageInfo",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "BookingNodeEdge",
+        "fields": [
+          {
+            "name": "cursor",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "node",
+            "type": {
+              "kind": "OBJECT",
+              "name": "BookingNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CancelBookingMutation",
+        "fields": [
+          {
+            "name": "booking",
+            "type": {
+              "kind": "OBJECT",
+              "name": "BookingNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CreateBookingMutation",
+        "fields": [
+          {
+            "name": "booking",
+            "type": {
+              "kind": "OBJECT",
+              "name": "BookingNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DeleteAccount",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Mutation",
+        "fields": [
+          {
+            "name": "cancelBooking",
+            "type": {
+              "kind": "OBJECT",
+              "name": "CancelBookingMutation",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "bookingUuid",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
+            "name": "createBooking",
+            "type": {
+              "kind": "OBJECT",
+              "name": "CreateBookingMutation",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "input",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
+            "name": "deleteAccount",
+            "type": {
+              "kind": "OBJECT",
+              "name": "DeleteAccount",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "password",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "passwordChange",
+            "type": {
+              "kind": "OBJECT",
+              "name": "PasswordChange",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "newPassword1",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "newPassword2",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "oldPassword",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "passwordReset",
+            "type": {
+              "kind": "OBJECT",
+              "name": "PasswordReset",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "newPassword1",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "newPassword2",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "token",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "passwordSet",
+            "type": {
+              "kind": "OBJECT",
+              "name": "PasswordSet",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "newPassword1",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "newPassword2",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "token",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "refreshToken",
+            "type": {
+              "kind": "OBJECT",
+              "name": "RefreshToken",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "refreshToken",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "register",
+            "type": {
+              "kind": "OBJECT",
+              "name": "Register",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "email",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "firstName",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "lastName",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "password1",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "password2",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              },
+              {
+                "name": "username",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "resendActivationEmail",
+            "type": {
+              "kind": "OBJECT",
+              "name": "ResendActivationEmail",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "email",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "revokeToken",
+            "type": {
+              "kind": "OBJECT",
+              "name": "RevokeToken",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "refreshToken",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "sendPasswordResetEmail",
+            "type": {
+              "kind": "OBJECT",
+              "name": "SendPasswordResetEmail",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "email",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "tokenAuth",
+            "type": {
+              "kind": "OBJECT",
+              "name": "ObtainJSONWebToken",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "email",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "password",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "verifyAccount",
+            "type": {
+              "kind": "OBJECT",
+              "name": "VerifyAccount",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "token",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "verifyToken",
+            "type": {
+              "kind": "OBJECT",
+              "name": "VerifyToken",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "token",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Node",
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": [],
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "BikeNode"
+          },
+          {
+            "kind": "OBJECT",
+            "name": "BookingNode"
+          },
+          {
+            "kind": "OBJECT",
+            "name": "PickupStationNode"
+          },
+          {
+            "kind": "OBJECT",
+            "name": "UserNode"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ObtainJSONWebToken",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "refreshToken",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "token",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "unarchiving",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "user",
+            "type": {
+              "kind": "OBJECT",
+              "name": "UserNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PageInfo",
+        "fields": [
+          {
+            "name": "endCursor",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "hasNextPage",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "hasPreviousPage",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "startCursor",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PasswordChange",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "refreshToken",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "token",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PasswordReset",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PasswordSet",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PickupStationNode",
+        "fields": [
+          {
+            "name": "autoConfirm",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "bikes",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "BikeNodeConnection",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
+            "name": "contactName",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "contactTelephone",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "earliestPickupTime",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "latestReturnTime",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "locationCity",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "locationDescription",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "locationPostalcode",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "locationStreet",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "maxConsecutiveDays",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "name",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "notificationEmails",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "terms",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PickupStationNodeConnection",
+        "fields": [
+          {
+            "name": "edges",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PickupStationNodeEdge",
+                  "ofType": null
+                }
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pageInfo",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PickupStationNodeEdge",
+        "fields": [
+          {
+            "name": "cursor",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "node",
+            "type": {
+              "kind": "OBJECT",
+              "name": "PickupStationNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Query",
+        "fields": [
+          {
+            "name": "bikes",
+            "type": {
+              "kind": "OBJECT",
+              "name": "BikeNodeConnection",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
+            "name": "bookedDates",
+            "type": {
+              "kind": "LIST",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": [
+              {
+                "name": "bikeUuid",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "booking",
+            "type": {
+              "kind": "OBJECT",
+              "name": "BookingNode",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "uuid",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "bookings",
+            "type": {
+              "kind": "OBJECT",
+              "name": "BookingNodeConnection",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
+            "name": "me",
+            "type": {
+              "kind": "OBJECT",
+              "name": "UserNode",
+              "ofType": null
+            },
+            "args": []
+          },
+          {
+            "name": "pickupStation",
+            "type": {
+              "kind": "OBJECT",
+              "name": "PickupStationNode",
+              "ofType": null
+            },
+            "args": [
+              {
+                "name": "bikeUuid",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "stats",
+            "type": {
+              "kind": "OBJECT",
+              "name": "Stats",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RefreshToken",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "payload",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "refreshToken",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "token",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Register",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "refreshToken",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "token",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ResendActivationEmail",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "RevokeToken",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "revoked",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SendPasswordResetEmail",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Stats",
+        "fields": [
+          {
+            "name": "bookings",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "kilometers",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "users",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UserNode",
+        "fields": [
+          {
+            "name": "archived",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "dateJoined",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "email",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "firstName",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "isActive",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "isStaff",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "lastLogin",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "lastName",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pickupStations",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PickupStationNodeConnection",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
+            "name": "pk",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "rentals",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "BookingNodeConnection",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
+            "name": "secondaryEmail",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "username",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "verified",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "VerifyAccount",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "VerifyToken",
+        "fields": [
+          {
+            "name": "errors",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "payload",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "success",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Any"
+      }
+    ],
+    "directives": []
+  }
+} as unknown as IntrospectionQuery;
 export const PickupStationFragmentDoc = gql`
     fragment PickupStation on PickupStationNode {
   id
@@ -803,19 +2787,26 @@ export const PickupStationFragmentDoc = gql`
   locationDescription
   contactTelephone
   contactName
+  terms
+  maxConsecutiveDays
+  earliestPickupTime
+  latestReturnTime
 }
     `;
 export const BookingFragmentDoc = gql`
     fragment Booking on BookingNode {
   uuid
   bike {
+    name
     pickupStation {
       ...PickupStation
     }
   }
   token
   pickupTimestamp
+  returnTimestamp
   startDate
+  returnDate
   state
 }
     ${PickupStationFragmentDoc}`;
@@ -823,6 +2814,8 @@ export const BikeFragmentDoc = gql`
     fragment Bike on BikeNode {
   uuid
   name
+  model
+  slug
   pickupStation {
     ...PickupStation
   }
@@ -846,36 +2839,10 @@ export const RegisterDocument = gql`
   }
 }
     `;
-export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
-/**
- * __useRegisterMutation__
- *
- * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRegisterMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [registerMutation, { data, loading, error }] = useRegisterMutation({
- *   variables: {
- *      email: // value for 'email'
- *      password1: // value for 'password1'
- *      password2: // value for 'password2'
- *      firstName: // value for 'firstName'
- *      lastName: // value for 'lastName'
- *   },
- * });
- */
-export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
-      }
-export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
-export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
-export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export function useRegisterMutation() {
+  return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   __typename
@@ -885,33 +2852,10 @@ export const LoginDocument = gql`
   }
 }
     `;
-export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
-/**
- * __useLoginMutation__
- *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
- *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
- *   },
- * });
- */
-export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
-      }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
 export const RefreshTokenDocument = gql`
     mutation RefreshToken($refreshToken: String!) {
   __typename
@@ -921,32 +2865,10 @@ export const RefreshTokenDocument = gql`
   }
 }
     `;
-export type RefreshTokenMutationFn = Apollo.MutationFunction<RefreshTokenMutation, RefreshTokenMutationVariables>;
 
-/**
- * __useRefreshTokenMutation__
- *
- * To run a mutation, you first call `useRefreshTokenMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRefreshTokenMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [refreshTokenMutation, { data, loading, error }] = useRefreshTokenMutation({
- *   variables: {
- *      refreshToken: // value for 'refreshToken'
- *   },
- * });
- */
-export function useRefreshTokenMutation(baseOptions?: Apollo.MutationHookOptions<RefreshTokenMutation, RefreshTokenMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RefreshTokenMutation, RefreshTokenMutationVariables>(RefreshTokenDocument, options);
-      }
-export type RefreshTokenMutationHookResult = ReturnType<typeof useRefreshTokenMutation>;
-export type RefreshTokenMutationResult = Apollo.MutationResult<RefreshTokenMutation>;
-export type RefreshTokenMutationOptions = Apollo.BaseMutationOptions<RefreshTokenMutation, RefreshTokenMutationVariables>;
+export function useRefreshTokenMutation() {
+  return Urql.useMutation<RefreshTokenMutation, RefreshTokenMutationVariables>(RefreshTokenDocument);
+};
 export const VerifyEmailDocument = gql`
     mutation VerifyEmail($token: String!) {
   __typename
@@ -956,32 +2878,10 @@ export const VerifyEmailDocument = gql`
   }
 }
     `;
-export type VerifyEmailMutationFn = Apollo.MutationFunction<VerifyEmailMutation, VerifyEmailMutationVariables>;
 
-/**
- * __useVerifyEmailMutation__
- *
- * To run a mutation, you first call `useVerifyEmailMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useVerifyEmailMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [verifyEmailMutation, { data, loading, error }] = useVerifyEmailMutation({
- *   variables: {
- *      token: // value for 'token'
- *   },
- * });
- */
-export function useVerifyEmailMutation(baseOptions?: Apollo.MutationHookOptions<VerifyEmailMutation, VerifyEmailMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(VerifyEmailDocument, options);
-      }
-export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
-export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutation>;
-export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;
+export function useVerifyEmailMutation() {
+  return Urql.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(VerifyEmailDocument);
+};
 export const CreateABookingDocument = gql`
     mutation CreateABooking($input: CreateBookingInput!) {
   __typename
@@ -996,32 +2896,10 @@ export const CreateABookingDocument = gql`
   }
 }
     `;
-export type CreateABookingMutationFn = Apollo.MutationFunction<CreateABookingMutation, CreateABookingMutationVariables>;
 
-/**
- * __useCreateABookingMutation__
- *
- * To run a mutation, you first call `useCreateABookingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateABookingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createABookingMutation, { data, loading, error }] = useCreateABookingMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateABookingMutation(baseOptions?: Apollo.MutationHookOptions<CreateABookingMutation, CreateABookingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateABookingMutation, CreateABookingMutationVariables>(CreateABookingDocument, options);
-      }
-export type CreateABookingMutationHookResult = ReturnType<typeof useCreateABookingMutation>;
-export type CreateABookingMutationResult = Apollo.MutationResult<CreateABookingMutation>;
-export type CreateABookingMutationOptions = Apollo.BaseMutationOptions<CreateABookingMutation, CreateABookingMutationVariables>;
+export function useCreateABookingMutation() {
+  return Urql.useMutation<CreateABookingMutation, CreateABookingMutationVariables>(CreateABookingDocument);
+};
 export const CancelThatBookingDocument = gql`
     mutation CancelThatBooking($bookingUuid: String!) {
   __typename
@@ -1037,32 +2915,10 @@ export const CancelThatBookingDocument = gql`
   }
 }
     `;
-export type CancelThatBookingMutationFn = Apollo.MutationFunction<CancelThatBookingMutation, CancelThatBookingMutationVariables>;
 
-/**
- * __useCancelThatBookingMutation__
- *
- * To run a mutation, you first call `useCancelThatBookingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCancelThatBookingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [cancelThatBookingMutation, { data, loading, error }] = useCancelThatBookingMutation({
- *   variables: {
- *      bookingUuid: // value for 'bookingUuid'
- *   },
- * });
- */
-export function useCancelThatBookingMutation(baseOptions?: Apollo.MutationHookOptions<CancelThatBookingMutation, CancelThatBookingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CancelThatBookingMutation, CancelThatBookingMutationVariables>(CancelThatBookingDocument, options);
-      }
-export type CancelThatBookingMutationHookResult = ReturnType<typeof useCancelThatBookingMutation>;
-export type CancelThatBookingMutationResult = Apollo.MutationResult<CancelThatBookingMutation>;
-export type CancelThatBookingMutationOptions = Apollo.BaseMutationOptions<CancelThatBookingMutation, CancelThatBookingMutationVariables>;
+export function useCancelThatBookingMutation() {
+  return Urql.useMutation<CancelThatBookingMutation, CancelThatBookingMutationVariables>(CancelThatBookingDocument);
+};
 export const ResendActiviationEmailDocument = gql`
     mutation ResendActiviationEmail($email: String!) {
   __typename
@@ -1072,32 +2928,10 @@ export const ResendActiviationEmailDocument = gql`
   }
 }
     `;
-export type ResendActiviationEmailMutationFn = Apollo.MutationFunction<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>;
 
-/**
- * __useResendActiviationEmailMutation__
- *
- * To run a mutation, you first call `useResendActiviationEmailMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useResendActiviationEmailMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [resendActiviationEmailMutation, { data, loading, error }] = useResendActiviationEmailMutation({
- *   variables: {
- *      email: // value for 'email'
- *   },
- * });
- */
-export function useResendActiviationEmailMutation(baseOptions?: Apollo.MutationHookOptions<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>(ResendActiviationEmailDocument, options);
-      }
-export type ResendActiviationEmailMutationHookResult = ReturnType<typeof useResendActiviationEmailMutation>;
-export type ResendActiviationEmailMutationResult = Apollo.MutationResult<ResendActiviationEmailMutation>;
-export type ResendActiviationEmailMutationOptions = Apollo.BaseMutationOptions<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>;
+export function useResendActiviationEmailMutation() {
+  return Urql.useMutation<ResendActiviationEmailMutation, ResendActiviationEmailMutationVariables>(ResendActiviationEmailDocument);
+};
 export const SendPasswordResetEmailDocument = gql`
     mutation SendPasswordResetEmail($email: String!) {
   __typename
@@ -1107,32 +2941,10 @@ export const SendPasswordResetEmailDocument = gql`
   }
 }
     `;
-export type SendPasswordResetEmailMutationFn = Apollo.MutationFunction<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>;
 
-/**
- * __useSendPasswordResetEmailMutation__
- *
- * To run a mutation, you first call `useSendPasswordResetEmailMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSendPasswordResetEmailMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [sendPasswordResetEmailMutation, { data, loading, error }] = useSendPasswordResetEmailMutation({
- *   variables: {
- *      email: // value for 'email'
- *   },
- * });
- */
-export function useSendPasswordResetEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>(SendPasswordResetEmailDocument, options);
-      }
-export type SendPasswordResetEmailMutationHookResult = ReturnType<typeof useSendPasswordResetEmailMutation>;
-export type SendPasswordResetEmailMutationResult = Apollo.MutationResult<SendPasswordResetEmailMutation>;
-export type SendPasswordResetEmailMutationOptions = Apollo.BaseMutationOptions<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>;
+export function useSendPasswordResetEmailMutation() {
+  return Urql.useMutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>(SendPasswordResetEmailDocument);
+};
 export const PasswordResetDocument = gql`
     mutation PasswordReset($token: String!, $newPassword1: String!, $newPassword2: String!) {
   __typename
@@ -1146,34 +2958,10 @@ export const PasswordResetDocument = gql`
   }
 }
     `;
-export type PasswordResetMutationFn = Apollo.MutationFunction<PasswordResetMutation, PasswordResetMutationVariables>;
 
-/**
- * __usePasswordResetMutation__
- *
- * To run a mutation, you first call `usePasswordResetMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePasswordResetMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [passwordResetMutation, { data, loading, error }] = usePasswordResetMutation({
- *   variables: {
- *      token: // value for 'token'
- *      newPassword1: // value for 'newPassword1'
- *      newPassword2: // value for 'newPassword2'
- *   },
- * });
- */
-export function usePasswordResetMutation(baseOptions?: Apollo.MutationHookOptions<PasswordResetMutation, PasswordResetMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PasswordResetMutation, PasswordResetMutationVariables>(PasswordResetDocument, options);
-      }
-export type PasswordResetMutationHookResult = ReturnType<typeof usePasswordResetMutation>;
-export type PasswordResetMutationResult = Apollo.MutationResult<PasswordResetMutation>;
-export type PasswordResetMutationOptions = Apollo.BaseMutationOptions<PasswordResetMutation, PasswordResetMutationVariables>;
+export function usePasswordResetMutation() {
+  return Urql.useMutation<PasswordResetMutation, PasswordResetMutationVariables>(PasswordResetDocument);
+};
 export const BikesDocument = gql`
     query Bikes {
   bikes {
@@ -1186,32 +2974,9 @@ export const BikesDocument = gql`
 }
     ${BikeFragmentDoc}`;
 
-/**
- * __useBikesQuery__
- *
- * To run a query within a React component, call `useBikesQuery` and pass it any options that fit your needs.
- * When your component renders, `useBikesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBikesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useBikesQuery(baseOptions?: Apollo.QueryHookOptions<BikesQuery, BikesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BikesQuery, BikesQueryVariables>(BikesDocument, options);
-      }
-export function useBikesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BikesQuery, BikesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BikesQuery, BikesQueryVariables>(BikesDocument, options);
-        }
-export type BikesQueryHookResult = ReturnType<typeof useBikesQuery>;
-export type BikesLazyQueryHookResult = ReturnType<typeof useBikesLazyQuery>;
-export type BikesQueryResult = Apollo.QueryResult<BikesQuery, BikesQueryVariables>;
+export function useBikesQuery(options?: Omit<Urql.UseQueryArgs<BikesQueryVariables>, 'query'>) {
+  return Urql.useQuery<BikesQuery, BikesQueryVariables>({ query: BikesDocument, ...options });
+};
 export const BookingsDocument = gql`
     query Bookings {
   __typename
@@ -1222,38 +2987,18 @@ export const BookingsDocument = gql`
         startDate
         pickupTimestamp
         state
+        bike {
+          name
+        }
       }
     }
   }
 }
     `;
 
-/**
- * __useBookingsQuery__
- *
- * To run a query within a React component, call `useBookingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useBookingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBookingsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useBookingsQuery(baseOptions?: Apollo.QueryHookOptions<BookingsQuery, BookingsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BookingsQuery, BookingsQueryVariables>(BookingsDocument, options);
-      }
-export function useBookingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookingsQuery, BookingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BookingsQuery, BookingsQueryVariables>(BookingsDocument, options);
-        }
-export type BookingsQueryHookResult = ReturnType<typeof useBookingsQuery>;
-export type BookingsLazyQueryHookResult = ReturnType<typeof useBookingsLazyQuery>;
-export type BookingsQueryResult = Apollo.QueryResult<BookingsQuery, BookingsQueryVariables>;
+export function useBookingsQuery(options?: Omit<Urql.UseQueryArgs<BookingsQueryVariables>, 'query'>) {
+  return Urql.useQuery<BookingsQuery, BookingsQueryVariables>({ query: BookingsDocument, ...options });
+};
 export const UserQueryDocument = gql`
     query UserQuery {
   __typename
@@ -1266,32 +3011,9 @@ export const UserQueryDocument = gql`
 }
     `;
 
-/**
- * __useUserQueryQuery__
- *
- * To run a query within a React component, call `useUserQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserQueryQuery({
- *   variables: {
- *   },
- * });
- */
-export function useUserQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserQueryQuery, UserQueryQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserQueryQuery, UserQueryQueryVariables>(UserQueryDocument, options);
-      }
-export function useUserQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQueryQuery, UserQueryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserQueryQuery, UserQueryQueryVariables>(UserQueryDocument, options);
-        }
-export type UserQueryQueryHookResult = ReturnType<typeof useUserQueryQuery>;
-export type UserQueryLazyQueryHookResult = ReturnType<typeof useUserQueryLazyQuery>;
-export type UserQueryQueryResult = Apollo.QueryResult<UserQueryQuery, UserQueryQueryVariables>;
+export function useUserQueryQuery(options?: Omit<Urql.UseQueryArgs<UserQueryQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserQueryQuery, UserQueryQueryVariables>({ query: UserQueryDocument, ...options });
+};
 export const BookedDatesDocument = gql`
     query BookedDates($bikeUuid: String!) {
   __typename
@@ -1299,33 +3021,9 @@ export const BookedDatesDocument = gql`
 }
     `;
 
-/**
- * __useBookedDatesQuery__
- *
- * To run a query within a React component, call `useBookedDatesQuery` and pass it any options that fit your needs.
- * When your component renders, `useBookedDatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBookedDatesQuery({
- *   variables: {
- *      bikeUuid: // value for 'bikeUuid'
- *   },
- * });
- */
-export function useBookedDatesQuery(baseOptions: Apollo.QueryHookOptions<BookedDatesQuery, BookedDatesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BookedDatesQuery, BookedDatesQueryVariables>(BookedDatesDocument, options);
-      }
-export function useBookedDatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookedDatesQuery, BookedDatesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BookedDatesQuery, BookedDatesQueryVariables>(BookedDatesDocument, options);
-        }
-export type BookedDatesQueryHookResult = ReturnType<typeof useBookedDatesQuery>;
-export type BookedDatesLazyQueryHookResult = ReturnType<typeof useBookedDatesLazyQuery>;
-export type BookedDatesQueryResult = Apollo.QueryResult<BookedDatesQuery, BookedDatesQueryVariables>;
+export function useBookedDatesQuery(options: Omit<Urql.UseQueryArgs<BookedDatesQueryVariables>, 'query'>) {
+  return Urql.useQuery<BookedDatesQuery, BookedDatesQueryVariables>({ query: BookedDatesDocument, ...options });
+};
 export const BookingDetailsDocument = gql`
     query BookingDetails($uuid: String!) {
   __typename
@@ -1335,33 +3033,9 @@ export const BookingDetailsDocument = gql`
 }
     ${BookingFragmentDoc}`;
 
-/**
- * __useBookingDetailsQuery__
- *
- * To run a query within a React component, call `useBookingDetailsQuery` and pass it any options that fit your needs.
- * When your component renders, `useBookingDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBookingDetailsQuery({
- *   variables: {
- *      uuid: // value for 'uuid'
- *   },
- * });
- */
-export function useBookingDetailsQuery(baseOptions: Apollo.QueryHookOptions<BookingDetailsQuery, BookingDetailsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BookingDetailsQuery, BookingDetailsQueryVariables>(BookingDetailsDocument, options);
-      }
-export function useBookingDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookingDetailsQuery, BookingDetailsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BookingDetailsQuery, BookingDetailsQueryVariables>(BookingDetailsDocument, options);
-        }
-export type BookingDetailsQueryHookResult = ReturnType<typeof useBookingDetailsQuery>;
-export type BookingDetailsLazyQueryHookResult = ReturnType<typeof useBookingDetailsLazyQuery>;
-export type BookingDetailsQueryResult = Apollo.QueryResult<BookingDetailsQuery, BookingDetailsQueryVariables>;
+export function useBookingDetailsQuery(options: Omit<Urql.UseQueryArgs<BookingDetailsQueryVariables>, 'query'>) {
+  return Urql.useQuery<BookingDetailsQuery, BookingDetailsQueryVariables>({ query: BookingDetailsDocument, ...options });
+};
 export const StatsQueryDocument = gql`
     query StatsQuery {
   stats {
@@ -1372,32 +3046,9 @@ export const StatsQueryDocument = gql`
 }
     `;
 
-/**
- * __useStatsQueryQuery__
- *
- * To run a query within a React component, call `useStatsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useStatsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useStatsQueryQuery({
- *   variables: {
- *   },
- * });
- */
-export function useStatsQueryQuery(baseOptions?: Apollo.QueryHookOptions<StatsQueryQuery, StatsQueryQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<StatsQueryQuery, StatsQueryQueryVariables>(StatsQueryDocument, options);
-      }
-export function useStatsQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StatsQueryQuery, StatsQueryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<StatsQueryQuery, StatsQueryQueryVariables>(StatsQueryDocument, options);
-        }
-export type StatsQueryQueryHookResult = ReturnType<typeof useStatsQueryQuery>;
-export type StatsQueryLazyQueryHookResult = ReturnType<typeof useStatsQueryLazyQuery>;
-export type StatsQueryQueryResult = Apollo.QueryResult<StatsQueryQuery, StatsQueryQueryVariables>;
+export function useStatsQueryQuery(options?: Omit<Urql.UseQueryArgs<StatsQueryQueryVariables>, 'query'>) {
+  return Urql.useQuery<StatsQueryQuery, StatsQueryQueryVariables>({ query: StatsQueryDocument, ...options });
+};
 export const PickupStationDocument = gql`
     query PickupStation($bikeUuid: String!) {
   __typename
@@ -1407,30 +3058,6 @@ export const PickupStationDocument = gql`
 }
     ${PickupStationFragmentDoc}`;
 
-/**
- * __usePickupStationQuery__
- *
- * To run a query within a React component, call `usePickupStationQuery` and pass it any options that fit your needs.
- * When your component renders, `usePickupStationQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePickupStationQuery({
- *   variables: {
- *      bikeUuid: // value for 'bikeUuid'
- *   },
- * });
- */
-export function usePickupStationQuery(baseOptions: Apollo.QueryHookOptions<PickupStationQuery, PickupStationQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PickupStationQuery, PickupStationQueryVariables>(PickupStationDocument, options);
-      }
-export function usePickupStationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PickupStationQuery, PickupStationQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PickupStationQuery, PickupStationQueryVariables>(PickupStationDocument, options);
-        }
-export type PickupStationQueryHookResult = ReturnType<typeof usePickupStationQuery>;
-export type PickupStationLazyQueryHookResult = ReturnType<typeof usePickupStationLazyQuery>;
-export type PickupStationQueryResult = Apollo.QueryResult<PickupStationQuery, PickupStationQueryVariables>;
+export function usePickupStationQuery(options: Omit<Urql.UseQueryArgs<PickupStationQueryVariables>, 'query'>) {
+  return Urql.useQuery<PickupStationQuery, PickupStationQueryVariables>({ query: PickupStationDocument, ...options });
+};

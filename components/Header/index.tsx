@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 import { useAuth, AuthStatus } from "context/auth";
@@ -44,9 +44,9 @@ export default function Header() {
                 <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-800 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XIcon className="block h-6 w-6" aria-hidden="true" />
+                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
-                    <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
               </div>
@@ -62,12 +62,12 @@ export default function Header() {
                 </div>
                 <div className="hidden sm:block sm:ml-6 sm:flex-1">
                   <div className="flex space-x-4 justify-end">
-                    {menuItems.map((item) => (
+                    {menuItems.map(item => (
                       <Link href={item.href} key={item.name}>
                         <a
                           className={classNames(
                             "text-blue-500 hover:text-blue-700",
-                            "px-3 py-2 rounded-md text-sm font-medium"
+                            "px-3 py-2 rounded-md text-sm font-medium",
                           )}
                         >
                           {item.name}
@@ -118,7 +118,7 @@ export default function Header() {
                                 onClick={logout}
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
-                                  "px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                                  "px-4 py-2 text-sm text-gray-700 cursor-pointer",
                                 )}
                               >
                                 ausloggen
@@ -135,12 +135,12 @@ export default function Header() {
           </div>
           <Disclosure.Panel className="sm:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {menuItems.map((item) => (
+              {menuItems.map(item => (
                 <Link key={item.name} href={item.href}>
                   <a
                     className={classNames(
                       "text-blue-500 hover:text-blue-700",
-                      "block px-3 py-2 rounded-md text-base font-medium"
+                      "block px-3 py-2 rounded-md text-base font-medium",
                     )}
                     aria-current={item.current ? "page" : undefined}
                   >

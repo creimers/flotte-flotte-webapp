@@ -1,4 +1,4 @@
-import { CloudIcon } from "@heroicons/react/solid";
+import { CloudIcon } from "@heroicons/react/24/solid";
 
 import { CARBON_PER_KILOMETER } from "lib/constants";
 

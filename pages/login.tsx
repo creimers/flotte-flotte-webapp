@@ -19,22 +19,22 @@ interface Values {
 
 export default function Login() {
   const router = useRouter();
-  const [loginMutation, { error, data, loading }] = useLoginMutation();
+  const [{ error, data, fetching }, loginMutation] = useLoginMutation();
   const { setAuthState } = useAuth();
 
   const registrationSucceeded = data?.tokenAuth?.token;
   const registrationFailed =
-    (!registrationSucceeded && !loading && data) || error;
+    (!registrationSucceeded && !fetching && data) || error;
 
   async function handleSubmit(
     values: Values,
-    { resetForm }: FormikHelpers<Values>
+    { resetForm }: FormikHelpers<Values>,
   ) {
     const variables = {
       email: values.email,
       password: values.password,
     };
-    const resp = await loginMutation({ variables });
+    const resp = await loginMutation(variables);
     const token = resp.data?.tokenAuth?.token;
     const refreshToken = resp.data?.tokenAuth?.refreshToken;
     if (token && refreshToken) {
@@ -136,8 +136,8 @@ export default function Login() {
                   <Button
                     text="Einloggen"
                     type="submit"
-                    disabled={loading}
-                    loading={loading}
+                    disabled={fetching}
+                    loading={fetching}
                   />
                 </div>
               </Form>

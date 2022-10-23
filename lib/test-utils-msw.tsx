@@ -1,26 +1,20 @@
 import React from "react";
 import { render, RenderOptions } from "@testing-library/react";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  HttpLink,
-} from "@apollo/client";
-import fetch from "cross-fetch";
+import { Provider } from "urql";
+import { never } from "wonka";
 
-const cache = new InMemoryCache();
-const client = new ApolloClient({
-  link: new HttpLink({ uri: "http://localhost:2000/graphql", fetch }),
-  cache: cache,
-});
+const mockClient = {
+  executeSubscription: jest.fn(() => never),
+  executeQuery: jest.fn(() => never),
+} as any;
 
 import { AuthProvider } from "context/auth";
 
 const AllTheProviders: React.FC = ({ children }) => {
   return (
-    <ApolloProvider client={client}>
+    <Provider value={mockClient}>
       <AuthProvider>{children}</AuthProvider>
-    </ApolloProvider>
+    </Provider>
   );
 };
 

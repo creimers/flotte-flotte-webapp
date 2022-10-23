@@ -18,6 +18,6 @@ jobs:
       NEXT_TELEMETRY_DISABLED: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: npm install
       - run: npm test
