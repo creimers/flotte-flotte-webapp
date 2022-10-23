@@ -10,7 +10,7 @@ export default function ConfirmEmail() {
   const [token, setToken] = React.useState<string | null>(null);
   const router = useRouter();
 
-  const [verifyEmail, { data, loading }] = useVerifyEmailMutation();
+  const [{ data, fetching }, verifyEmail] = useVerifyEmailMutation();
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -24,7 +24,7 @@ export default function ConfirmEmail() {
     async function action() {
       // do the mutation
       if (token) {
-        await verifyEmail({ variables: { token } });
+        await verifyEmail({ token });
       }
     }
     action();
@@ -42,11 +42,11 @@ export default function ConfirmEmail() {
   return (
     <DefaultLayout>
       <div className="mt-4">
-        {loading && !token && <p>Verifying your email...</p>}
-        {token && !loading && data?.verifyAccount?.success && (
+        {fetching && !token && <p>Verifying your email...</p>}
+        {token && !fetching && data?.verifyAccount?.success && (
           <Alert type="success" text="Email bestätigt, vielen Dank!" />
         )}
-        {token && !loading && !data?.verifyAccount?.success && (
+        {token && !fetching && !data?.verifyAccount?.success && (
           <Alert type="error" text="Email konnte nicht bestätigt werden." />
         )}
       </div>

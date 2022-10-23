@@ -12,17 +12,14 @@ interface Values {
 }
 
 export default function Login() {
-  const [mutate, { error, data, loading }] =
+  const [{ error, data, fetching }, mutate] =
     useSendPasswordResetEmailMutation();
 
   async function handleSubmit(
     values: Values,
-    { resetForm }: FormikHelpers<Values>
+    { resetForm }: FormikHelpers<Values>,
   ) {
-    const variables = {
-      email: values.email,
-    };
-    await mutate({ variables });
+    await mutate({ email: values.email });
     resetForm();
     window.scrollTo(0, 0);
   }
@@ -84,7 +81,7 @@ export default function Login() {
                   <button
                     type="submit"
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-500"
-                    disabled={loading}
+                    disabled={fetching}
                   >
                     Jetzt zurücksetzen
                   </button>

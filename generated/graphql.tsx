@@ -117,6 +117,7 @@ export type CreateBookingInput = {
   bikeUuid: Scalars['String'];
   pickupTimestamp: Scalars['Time'];
   returnDate: Scalars['Date'];
+  returnTimestamp: Scalars['Time'];
   startDate: Scalars['Date'];
 };
 

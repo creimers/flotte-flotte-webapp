@@ -15,7 +15,7 @@ export default function SetNewPassword() {
   const [token, setToken] = React.useState<string | null>(null);
   const router = useRouter();
 
-  const [resetPassword, { data, loading, error }] = usePasswordResetMutation();
+  const [{ data, fetching, error }, resetPassword] = usePasswordResetMutation();
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -27,14 +27,14 @@ export default function SetNewPassword() {
 
   async function handleSubmit(
     values: IFormValues,
-    { resetForm }: FormikHelpers<IFormValues>
+    { resetForm }: FormikHelpers<IFormValues>,
   ) {
     const variables = {
       newPassword1: values.newPassword1,
       newPassword2: values.newPassword2,
       token: token || "",
     };
-    const response = await resetPassword({ variables });
+    const response = await resetPassword(variables);
     resetForm();
     window.scrollTo(0, 0);
     if (response.data?.passwordReset?.success) {
@@ -123,7 +123,7 @@ export default function SetNewPassword() {
                       type="submit"
                       className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-500"
                       disabled={
-                        loading ||
+                        fetching ||
                         values.newPassword1 !== values.newPassword2 ||
                         !values.newPassword1 ||
                         !values.newPassword2
