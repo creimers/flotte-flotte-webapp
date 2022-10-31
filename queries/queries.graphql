@@ -33,6 +33,8 @@ fragment Bike on BikeNode {
   name
   model
   slug
+  active
+  statusNote
   pickupStation {
     ...PickupStation
   }

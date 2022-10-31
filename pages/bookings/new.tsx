@@ -114,7 +114,7 @@ export default function NewBooking() {
     if (selectedBike?.pickupStation?.latestReturnTime) {
       const [hours, minutes, _seconds] =
         selectedBike?.pickupStation?.latestReturnTime.split(":");
-      console.log({ hours, minutes });
+      // console.log({ hours, minutes });
       return setHours(setMinutes(new Date(), Number(minutes)), Number(hours));
     } else {
       return setHours(setMinutes(new Date(), 18), 0);
@@ -176,13 +176,21 @@ export default function NewBooking() {
           )}
         </div>
         <div>
-          {selectedBike?.pickupStation?.locationDescription && (
+          {selectedBike?.statusNote && (
+            <Alert
+              type={!selectedBike?.active ? "error" : "success"}
+              text={selectedBike?.statusNote}
+            />
+          )}
+        </div>
+        {selectedBike?.pickupStation?.locationDescription && (
+          <div className="col-span-2">
             <Alert
               type="info"
               text={selectedBike?.pickupStation?.locationDescription}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
       {bookedDates !== undefined && (
         <Formik
@@ -221,7 +229,7 @@ export default function NewBooking() {
 
             return (
               <Form className="sm:grid grid-cols-2 gap-8 space-y-8 sm:space-y-0">
-                <div className="bg-green-200 p-4 rounded space-y-4">
+                <div className="bg-indigo-100 p-4 rounded space-y-4">
                   <h2 className="flex items-center space-x-2">
                     <ArrowRightOnRectangleIcon className="w-5" />
                     <span>Abholung</span>
@@ -235,8 +243,9 @@ export default function NewBooking() {
                     </label>
                     <div className="mt-1">
                       <DatePicker
+                        disabled={!selectedBike?.active}
                         name="startDate"
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm disabled:text-gray-400"
                         locale="de"
                         dateFormat="dd.MM.yyyy"
                         selected={new Date(values.startDate)}
@@ -270,8 +279,9 @@ export default function NewBooking() {
                     </label>
                     <div className="mt-1">
                       <DatePicker
+                        disabled={!selectedBike?.active}
                         name="pickupTimestamp"
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm disabled:text-gray-400"
                         showTimeSelect
                         showTimeSelectOnly
                         locale="de"
@@ -296,7 +306,7 @@ export default function NewBooking() {
                     </div>
                   </div>
                 </div>
-                <div className="bg-yellow-200 p-4 rounded space-y-4">
+                <div className="bg-yellow-100 p-4 rounded space-y-4">
                   <h2 className="flex items-center space-x-2">
                     <ArrowLeftOnRectangleIcon className="w-5" />
                     <span>Rückgabe</span>
@@ -310,8 +320,9 @@ export default function NewBooking() {
                     </label>
                     <div className="mt-1">
                       <DatePicker
+                        disabled={!selectedBike?.active}
                         name="startDate"
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm disabled:text-gray-400"
                         locale="de"
                         dateFormat="dd.MM.yyyy"
                         selected={new Date(values.returnDate)}
@@ -343,8 +354,9 @@ export default function NewBooking() {
                     </label>
                     <div className="mt-1">
                       <DatePicker
+                        disabled={!selectedBike?.active}
                         name="pickupTimestamp"
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm disabled:text-gray-400"
                         showTimeSelect
                         showTimeSelectOnly
                         locale="de"
@@ -401,7 +413,8 @@ export default function NewBooking() {
                         !values.agreeToTerms ||
                         // !values.agreeToTermsBike ||
                         loading ||
-                        !user?.me?.verified
+                        !user?.me?.verified ||
+                        selectedBike?.active === false
                       }
                       loading={loading}
                     />
