@@ -5,7 +5,7 @@ import Link from "next/link";
 import DefaultLayout from "components/layout/DefaultLayout";
 import Waves from "components/Waves";
 import Stats from "components/Stats";
-import FAQItem from "components/FAQItem";
+import FAQ from "components/FAQ";
 
 const Home: NextPage = () => {
   return (
@@ -13,8 +13,9 @@ const Home: NextPage = () => {
       <main>
         <div className="max-w-5xl mx-auto mb-8 sm:mb-12 mt-8 px-3">
           <h1 className="text-3xl sm:text-4xl md:text-7xl text-center font-semibold text-gray-900">
-            Este-Esel: Das{" "}
-            <span className="text-blue-500">freie Lastenrad</span> an der Este.
+            Flotte Flotte -
+            <span className="text-teal-500">freie Lastenräder</span> für Jork
+            und Buxtehude.
           </h1>
         </div>
         <div className="flex md:space-x-12 flex-col md:flex-row mb-12">
@@ -39,26 +40,24 @@ const Home: NextPage = () => {
           <div className="flex-1 prose-lg px-2 w-full">
             <div className="max-w-xs sm:max-w-md mx-auto md:mx-0">
               <p>
-                Der <span className="text-blue-500">Este-Esel</span> ist ein
-                Lastenrad zur freien Nutzung für die Este-Gemeinden und Jork und
-                eignet sich hervorragend...
-              </p>
-              <li>zum Einkaufen...</li>
-              <li>zum Rumdüsen...</li>
-              <li>für Ausflüge...</li>
-              <p>
-                Der <span className="text-blue-500">Este-Esel</span> ist dabei
-                ein{" "}
+                Die <span className="text-teal-500">Flotte Flotte</span> ist ein
+                Zusammenschluss von{" "}
                 <a
                   href="https://dein-lastenrad.de/wiki/Willkommen_beim_Forum_Freie_Lastenr%C3%A4der/de"
                   className="text-blue-500 underline hover:text-blue-700"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  freies Lastenrad
-                </a>
-                , das heißt es kann kostenfrei von allen ausgeliehen werden.
+                  freien Lastenrädern
+                </a>{" "}
+                in Jork und Buxtehude.
               </p>
+              <p>Latenräder eigenen sich hervorragend...</p>
+              <ul className="list-disc">
+                <li>zum Einkaufen...</li>
+                <li>zum Rumdüsen...</li>
+                <li>für Ausflüge...</li>
+              </ul>
               <div className="flex justify-center">
                 <Link href="/bookings/new/">
                   <a className="px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
@@ -69,69 +68,13 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-semibold my-2 text-gray-700 text-center mb-8">
-            Häufige Fragen &amp; Antworten
-          </h2>
-          <FAQItem question="Wie funktioniert das Ausleihen?">
-            <p>
-              Das Ausleihen vom Este-Esel ist ganz einfach. Hier auf der
-              Webseite registrieren, das Wunsch-Datum auswählen und eine
-              Abhol-Zeit angeben. Die Buchung wird dann von uns bestätigt, und
-              du erhälst einen Buchungs-Code. Mit diesem (und einem gültigen
-              Ausweis) kannst du dann am vereinbarten Datum den Este-Esel bei
-              der Leih-Station abholen.
-            </p>
-          </FAQItem>
-
-          <FAQItem question="Für wie lange kann ich den Este-Esel ausleihen?">
-            <p>
-              Du leihst den Este-Esel immer ab Abhol-Zeitpunkt für den Rest des
-              Tages aus.
-            </p>
-          </FAQItem>
-          <FAQItem question="Ist der Este-Esel wirklich umsonst?">
-            <p>
-              Ja, du kannst den Este-Esel wirklich komplett umsonst ausleihen.
-            </p>
-            <p>
-              Trotzdem verursacht der Betrieb des Rads natürlich Kosten
-              (Versicherung, Wartung, etc.). Diese finanzieren wir durch
-              Spenden. Wenn du ein paar Groschen übrig hast, freuen wir uns, die
-              Kosten auf viele Schultern zu verteilen.
-            </p>
-          </FAQItem>
-          <FAQItem question="Ist es schwer, mit einem Lastenrad zu fahren?">
-            <p>
-              Nein, ein Lastenrad fährt sich im Prinzip wie jedes andere
-              Fahrrad. Es ist nur ein bisschen länger. Daran hast du dich aber
-              in kürzester Zeit gewöhnt.
-            </p>
-          </FAQItem>
-
-          <FAQItem question="Was kann ich alles transportieren?">
-            <p>
-              Der Este-Esel ist ein{" "}
-              <a href="https://urbanarrow.com/de/family-fahrrader/family/">
-                Urban-Arrow Family
-              </a>
-              , dessen maximales Gesamtgewicht 250kg beträgt, wobei das Rad 50kg
-              schwer ist. Je nach deinem eigenen Gewicht kannst du also
-              ordentlich was reinpacken, in der Regel weit über 100kg.
-            </p>
-            <p>
-              Der Este-Esel hat außerdem eine Sitzbank, auf der zwei Kinder
-              angeschnallt sitzen können.
-            </p>
-            <p>
-              Wir raten davon ab, Erwachsene im Este-Esel zu transportieren.
-            </p>
-          </FAQItem>
-        </div>
+        {/* <div className="max-w-4xl mx-auto">
+          <FAQ />
+        </div> */}
         <Stats />
         <div className="px-8 mt-12">
           <p className="text-center mb-6">
-            Der <span className="text-blue-500">Este-Esel</span> ist eine
+            Die <span className="text-teal-500">Flotte Flotte</span> ist eine
             Initiative der{" "}
             <a
               href="https://diebrueckenbaeckerei.de/"

@@ -71,8 +71,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <DefaultSeo
-        title="Este-Esel - das freie Lastenrad an der Este"
-        description="Der Este-Esel ist das Lastenrad an der Este zur freien Nutzung für alle!"
+        title="Flotte Flotte - freie Lastenräder in Jork und Buxtehude"
+        description="Leihe dir ein Lastenrad - umsonst!"
       />
       <AuthProvider>
         <Component {...pageProps} />
