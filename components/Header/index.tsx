@@ -19,7 +19,7 @@ export default function Header() {
     if (authState === AuthStatus.authenticated) {
       return [
         { name: "Buchungen", href: "/bookings", current: true },
-        { name: "jetzt buchen", href: "/bookings/new", current: false },
+        { name: "Konto", href: "/account", current: false },
       ];
     } else if (authState === AuthStatus.unauthenticated) {
       return [
@@ -109,11 +109,6 @@ export default function Header() {
                         <Menu.Item>
                           {({ active }) => (
                             <>
-                              {user?.me?.email && (
-                                <div className="px-4 py-2 text-sm text-gray-700">
-                                  {user?.me?.email}
-                                </div>
-                              )}
                               <div
                                 onClick={logout}
                                 className={classNames(

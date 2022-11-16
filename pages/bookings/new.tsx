@@ -22,6 +22,7 @@ import {
 import Alert from "components/Alert";
 import Button from "components/Button";
 import DefaultLayout from "components/layout/DefaultLayout";
+import BikePicker from "components/pages/bookings/new/BikePicker";
 import { useAuth, AuthStatus } from "context/auth";
 import {
   useCreateABookingMutation,
@@ -85,7 +86,9 @@ export default function NewBooking() {
           setSelectedBike(bike.node!);
         }
       } else {
-        setSelectedBike(bikes.bikes.edges[0]?.node!);
+        setSelectedBike(
+          bikes.bikes.edges.filter(b => b?.node?.active)[0]?.node!,
+        );
       }
     }
   }, [bikes]);
@@ -140,56 +143,35 @@ export default function NewBooking() {
     return null;
   }
 
-  // console.log(selectedBike);
+  const bks = (bikes?.bikes?.edges.map(b => b?.node).filter(Boolean) ||
+    []) as BikeFragment[];
+
+  console.log({ selectedBike });
 
   return (
     <DefaultLayout>
       <PageTitle title="Neue Buchung" />
-      <div className="md:grid grid-cols-2 gap-8 mb-8">
+      <div className="mb-8 space-y-8">
         <div>
           {bikes?.bikes?.edges && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Lastenrad
-              </label>
-              <select
-                className="w-full"
-                disabled={bikes.bikes.edges.length === 1}
-                value={selectedBike?.uuid}
-                onChange={evt => {
-                  const uuid = evt.currentTarget.value;
-                  const bike = bikes.bikes?.edges.find(
-                    node => node?.node?.uuid === uuid,
-                  );
-                  if (bike) {
-                    setSelectedBike(bike?.node!);
-                  }
-                }}
-              >
-                {bikes.bikes.edges.map((node, index) => (
-                  <option value={node?.node?.uuid} key={node?.node?.uuid}>
-                    {node?.node?.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </div>
-        <div>
-          {selectedBike?.statusNote && (
-            <Alert
-              type={!selectedBike?.active ? "error" : "success"}
-              text={selectedBike?.statusNote}
+            <BikePicker
+              selectedBike={selectedBike}
+              bikes={bks}
+              handleBikeSelection={setSelectedBike}
             />
           )}
         </div>
+        {selectedBike?.statusNote && (
+          <Alert
+            type={!selectedBike?.active ? "error" : "success"}
+            text={selectedBike?.statusNote || "Rad verfügbar."}
+          />
+        )}
         {selectedBike?.pickupStation?.locationDescription && (
-          <div className="col-span-2">
-            <Alert
-              type="info"
-              text={selectedBike?.pickupStation?.locationDescription}
-            />
-          </div>
+          <Alert
+            type="info"
+            text={selectedBike?.pickupStation?.locationDescription}
+          />
         )}
       </div>
       {bookedDates !== undefined && (
@@ -229,7 +211,7 @@ export default function NewBooking() {
 
             return (
               <Form className="sm:grid grid-cols-2 gap-8 space-y-8 sm:space-y-0">
-                <div className="bg-indigo-100 p-4 rounded space-y-4">
+                <div className="bg-teal-100 p-4 rounded space-y-4">
                   <h2 className="flex items-center space-x-2">
                     <ArrowRightOnRectangleIcon className="w-5" />
                     <span>Abholung</span>
@@ -306,7 +288,7 @@ export default function NewBooking() {
                     </div>
                   </div>
                 </div>
-                <div className="bg-yellow-100 p-4 rounded space-y-4">
+                <div className="bg-pink-100 p-4 rounded space-y-4">
                   <h2 className="flex items-center space-x-2">
                     <ArrowLeftOnRectangleIcon className="w-5" />
                     <span>Rückgabe</span>
@@ -386,14 +368,14 @@ export default function NewBooking() {
                   <label className="prose">
                     <Field type="checkbox" name="agreeToTerms" /> Ich habe die{" "}
                     <Link href="/terms">
-                      {/* <a>Nutzungsbedingungen von Flotte Flotte</a> */}
-                      <a>Nutzungsbedingungen</a>
+                      <a>Nutzungsbedingungen von Flotte Flotte</a>
+                      {/* <a>Nutzungsbedingungen</a> */}
                     </Link>{" "}
                     gelesen und stimme diesen zu.
                   </label>
                 </div>
 
-                {/* <div className="col-span-2">
+                <div className="col-span-2">
                   <label className="prose">
                     <Field type="checkbox" name="agreeToTermsBike" /> Ich habe
                     die{" "}
@@ -402,7 +384,7 @@ export default function NewBooking() {
                     </Link>{" "}
                     gelesen und stimme diesen zu.
                   </label>
-                </div> */}
+                </div>
 
                 <div className="flex justify-center col-span-2">
                   <div className="max-w-[300px] w-full">

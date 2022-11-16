@@ -7,8 +7,9 @@ import Alert from "components/Alert";
 import DefaultLayout from "components/layout/DefaultLayout";
 
 import { useBookingDetailsQuery } from "generated/graphql";
+import BookingDetails from "components/pages/bookings/details/BookingDetails";
 
-import BookingDetails from "components/BookingDetails";
+import BookingDetailsLegacy from "components/BookingDetails";
 import CancelBooking from "components/CancelBooking";
 import PageTitle from "components/PageTitle";
 import BackLink from "components/BackLink";
@@ -96,6 +97,7 @@ export default function BookingDetail() {
         </div>
       )}
       {data && data.booking && <BookingDetails booking={data.booking} />}
+      {/* {data && data.booking && <BookingDetailsLegacy booking={data.booking} />} */}
       {data &&
         data.booking &&
         !dateInPast &&
