@@ -40,7 +40,10 @@ export default function BookingDetail() {
   }, [authState, router, getBookingDetails]);
 
   const dateInPast =
-    new Date(data?.booking?.startDate) < new Date() ? true : false;
+    new Date(`${data?.booking?.startDate}T${data?.booking?.pickupTimestamp}`) <
+    new Date()
+      ? true
+      : false;
 
   return (
     <DefaultLayout>
