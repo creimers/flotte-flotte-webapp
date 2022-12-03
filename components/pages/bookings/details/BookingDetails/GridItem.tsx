@@ -10,7 +10,7 @@ export default function GridItem({
   children,
 }: Props) {
   return (
-    <div className={classNames(colSpan, "bg-teal-50 rounded-xl p-6")}>
+    <div className={classNames(colSpan, "bg-gray-100 rounded-xl p-6")}>
       <div className="mb-3 text-sm font-medium text-gray-600 underline">
         {title}
       </div>

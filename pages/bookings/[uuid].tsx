@@ -53,12 +53,12 @@ export default function BookingDetail() {
       </div>
       <PageTitle title="Buchungs-Details" />
       {showSuccessAlert && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert text="Du hast den Este-Esel gebucht!" type="success" />
         </div>
       )}
       {data?.booking?.state === "REQUESTED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert
             text="Bitte beachte, dass die Buchung noch bestätigt werden muss."
             type="info"
@@ -66,7 +66,7 @@ export default function BookingDetail() {
         </div>
       )}
       {!loading && data?.booking === null && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert
             text="Die Buchung konnte nicht gefunden werden."
             type="error"
@@ -74,17 +74,17 @@ export default function BookingDetail() {
         </div>
       )}
       {data?.booking?.state === "REJECTED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert text="Die Buchung wurde leider abgelehnt." type="error" />
         </div>
       )}
       {data?.booking?.state === "CANCELED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert text="Die Buchung wurde storniert." type="error" />
         </div>
       )}
       {!loading && !dateInPast && data?.booking?.state === "CONFIRMED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert
             text="Bitte bringe den Buchungs-Code und deinen Ausweis mit zum Abholen."
             type="info"
@@ -92,7 +92,7 @@ export default function BookingDetail() {
         </div>
       )}
       {!loading && dateInPast && data?.booking?.state === "CONFIRMED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert
             text="Die Buchung liegt in der Vergangenheit."
             type="warning"

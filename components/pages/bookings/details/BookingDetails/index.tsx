@@ -3,10 +3,7 @@ import {
   CalendarIcon,
   ClockIcon,
   MapPinIcon,
-  ArrowTopRightOnSquareIcon,
   PhoneIcon,
-  InformationCircleIcon,
-  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 
 import { BookingFragment } from "generated/graphql";
