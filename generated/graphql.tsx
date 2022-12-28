@@ -609,6 +609,7 @@ export type SendPasswordResetEmail = {
 
 export type Stats = {
   __typename?: 'Stats';
+  bikes?: Maybe<Scalars['Int']>;
   bookings?: Maybe<Scalars['Int']>;
   kilometers?: Maybe<Scalars['Int']>;
   users?: Maybe<Scalars['Int']>;
@@ -767,7 +768,7 @@ export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNod
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, pickupTimestamp?: any | null, state: BookingState, bike?: { __typename?: 'BikeNode', name: string } | null } | null } | null> } | null };
+export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, returnDate?: any | null, pickupTimestamp?: any | null, state: BookingState, bike?: { __typename?: 'BikeNode', name: string } | null } | null } | null> } | null };
 
 export type UserQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2494,6 +2495,14 @@ export default {
         "name": "Stats",
         "fields": [
           {
+            "name": "bikes",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
             "name": "bookings",
             "type": {
               "kind": "SCALAR",
@@ -3040,6 +3049,7 @@ export const BookingsDocument = gql`
       node {
         uuid
         startDate
+        returnDate
         pickupTimestamp
         state
         bike {

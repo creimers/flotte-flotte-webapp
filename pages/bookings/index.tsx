@@ -119,10 +119,19 @@ export default function Bookings() {
                     ) && <XCircleIcon className="h-5 w-5 text-red-500" />}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {edge?.node?.bike.name}
+                    {edge?.node?.bike?.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {new Date(edge?.node?.startDate).toLocaleDateString()}
+                    {edge?.node?.startDate === edge?.node?.returnDate ? (
+                      <>
+                        {new Date(edge?.node?.startDate).toLocaleDateString()}
+                      </>
+                    ) : (
+                      <>
+                        {new Date(edge?.node?.startDate).toLocaleDateString()} -{" "}
+                        {new Date(edge?.node?.returnDate).toLocaleDateString()}
+                      </>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
                     {edge?.node?.pickupTimestamp}
