@@ -32,6 +32,8 @@ import {
 } from "generated/graphql";
 import PageTitle from "components/PageTitle";
 
+import { getMaxReturnDate } from "lib/utils";
+
 registerLocale("de", de);
 interface Values {
   startDate: string;
@@ -146,8 +148,6 @@ export default function NewBooking() {
   const bks = (bikes?.bikes?.edges.map(b => b?.node).filter(Boolean) ||
     []) as BikeFragment[];
 
-  console.log({ selectedBike });
-
   return (
     <DefaultLayout>
       <PageTitle title="Neue Buchung" />
@@ -204,9 +204,15 @@ export default function NewBooking() {
               parseInt(values.pickupTimestamp.split(":")[1]),
             );
 
-            const maxReturnDate = addDays(
+            // const maxReturnDate = addDays(
+            //   pickupTimestampDate,
+            //   (selectedBike?.pickupStation?.maxConsecutiveDays || 1) - 1,
+            // );
+
+            const maxReturnDate = getMaxReturnDate(
               pickupTimestampDate,
-              (selectedBike?.pickupStation?.maxConsecutiveDays || 1) - 1,
+              selectedBike?.pickupStation?.maxConsecutiveDays || 1,
+              bookedDates?.bookedDates || [],
             );
 
             return (
@@ -234,6 +240,25 @@ export default function NewBooking() {
                         excludeDates={bookedDates?.bookedDates?.map(
                           d => new Date(d),
                         )}
+                        // dayClassName={
+                        //   // if not today, greater than min, smaller than max and not in booked dates!
+                        //   date => {
+                        //     const now = new Date();
+                        //     const isToday =
+                        //       date.toISOString().split("T")[0] ===
+                        //       now.toISOString().split("T")[0];
+                        //     const nowTime = now.getTime();
+                        //     const selectedDate = new Date(values.startDate);
+                        //     if (
+                        //       !isToday &&
+                        //       date.getTime() > nowTime &&
+                        //       date !== selectedDate
+                        //     ) {
+                        //       return "available";
+                        //     }
+                        //     return "";
+                        //   }
+                        // }
                         minDate={new Date()}
                         maxDate={addMonths(new Date(), 1)}
                         onChange={date => {
@@ -308,9 +333,10 @@ export default function NewBooking() {
                         locale="de"
                         dateFormat="dd.MM.yyyy"
                         selected={new Date(values.returnDate)}
-                        excludeDates={bookedDates?.bookedDates?.map(
-                          d => new Date(d),
-                        )}
+                        // excludeDates={bookedDates?.bookedDates?.map(
+                        //   d => new Date(d),
+                        // )}
+                        // includeDates={[]}
                         // min date should be the selected date
                         minDate={pickupTimestampDate}
                         // max date should be the selected date + addDays(pickupDate, maxConsecutiveDays)
