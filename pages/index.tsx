@@ -6,10 +6,12 @@ import DefaultLayout from "components/layout/DefaultLayout";
 import Waves from "components/Waves";
 import Stats from "components/Stats";
 import FAQ from "components/FAQ";
+import EsteEselModal from "components/EsteEselModal";
 
 const Home: NextPage = () => {
   return (
     <DefaultLayout fullWidth={true}>
+      <EsteEselModal />
       <main>
         <div className="max-w-5xl mx-auto mb-8 sm:mb-12 mt-8 px-3">
           <h1 className="text-3xl sm:text-4xl md:text-7xl text-center font-semibold text-gray-900">
