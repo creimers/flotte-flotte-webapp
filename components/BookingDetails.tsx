@@ -133,7 +133,7 @@ export default function BookingDetails({ booking }: Props) {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href={`https://maps.google.com/?q=${booking.bike.pickupStation?.locationStreet},${booking.bike.pickupStation?.locationPostalcode},${booking.bike.pickupStation?.locationCity}`}
+              href={`https://maps.google.com/?q=${booking?.bike?.pickupStation?.locationStreet},${booking?.bike?.pickupStation?.locationPostalcode},${booking?.bike?.pickupStation?.locationCity}`}
             >
               <span className="flex items-center space-x-2">
                 <ArrowTopRightOnSquareIcon className="stroke-current w-3 h-3" />
