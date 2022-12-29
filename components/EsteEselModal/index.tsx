@@ -64,11 +64,13 @@ export default function EsteEselModal() {
               </Dialog.Title>
               <div className="mt-2 prose">
                 <p>Liebe Este-Esel-Nutzer:in,</p>
+                <p>der Este-Esel ist jetzt Teil der Flotten Flotte.</p>
                 <p>
-                  der Este-Esel ist jetzt Teil der Flotten Flotte. Für dich
-                  ändert sich nichts. Du kannst aber mit deinem Este-Esel-Konto
-                  ab sofort auch die anderen Lastenräder der Flotten Flotte
-                  nutzen.
+                  <strong>Für dich ändert sich dadurch nichts!</strong>
+                </p>
+                <p>
+                  Du kannst aber mit deinem Este-Esel-Konto ab sofort auch die
+                  anderen Lastenräder der Flotten Flotte nutzen.
                 </p>
                 <p>Viel Spaß und gute Fahrt!</p>
               </div>
