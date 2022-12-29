@@ -57,6 +57,7 @@ query Bookings {
       node {
         uuid
         startDate
+        returnDate
         pickupTimestamp
         state
         bike {

@@ -15,7 +15,7 @@
         "fields": [
           {
             "name": "active",
-            "description": "",
+            "description": "Buchbar.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -170,6 +170,22 @@
               "kind": "OBJECT",
               "name": "PickupStationNode",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "public",
+            "description": "Veröffentlicht und buchbar",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -338,13 +354,9 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "BikeNode",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "BikeNode",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2696,6 +2708,18 @@
         "name": "Stats",
         "description": null,
         "fields": [
+          {
+            "name": "bikes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "bookings",
             "description": null,

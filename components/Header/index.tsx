@@ -19,7 +19,7 @@ export default function Header() {
     if (authState === AuthStatus.authenticated) {
       return [
         { name: "Buchungen", href: "/bookings", current: true },
-        { name: "jetzt buchen", href: "/bookings/new", current: false },
+        { name: "Konto", href: "/account", current: false },
       ];
     } else if (authState === AuthStatus.unauthenticated) {
       return [
@@ -54,7 +54,7 @@ export default function Header() {
                 <div className="flex-shrink-0 flex items-center">
                   <Link href="/">
                     <a>
-                      <span className="inline-block text-blue-500 h-10 w-10">
+                      <span className="inline-block text-teal-500 w-48">
                         <Logo />
                       </span>
                     </a>
@@ -66,7 +66,7 @@ export default function Header() {
                       <Link href={item.href} key={item.name}>
                         <a
                           className={classNames(
-                            "text-blue-500 hover:text-blue-700",
+                            "text-teal-500 hover:text-teal-700",
                             "px-3 py-2 rounded-md text-sm font-medium",
                           )}
                         >
@@ -109,11 +109,6 @@ export default function Header() {
                         <Menu.Item>
                           {({ active }) => (
                             <>
-                              {user?.me?.email && (
-                                <div className="px-4 py-2 text-sm text-gray-700">
-                                  {user?.me?.email}
-                                </div>
-                              )}
                               <div
                                 onClick={logout}
                                 className={classNames(

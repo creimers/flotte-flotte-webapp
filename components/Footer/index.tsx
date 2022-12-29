@@ -6,14 +6,12 @@ export default function Footer() {
   return (
     <footer className="mt-auto">
       <div className="h-32"></div>
-      <div className="p-4 text-white bg-blue-500 h-full">
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8  flex space-x-4 h-full">
-          <div className="bg-white h-32 w-32 p-1 inline-block">
-            <div className="h-full w-full bg-blue-500 text-blue-500">
-              <Logo />
-            </div>
+      <div className="p-4 text-white bg-teal-500 h-full py-24">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex space-x-4 h-full items-center">
+          <div className="w-64  text-white">
+            <Logo />
           </div>
-          <div className="flex flex-col ">
+          <div className="flex space-x-4">
             <Link href="/terms">
               <a>Nutzungsbedingungen</a>
             </Link>

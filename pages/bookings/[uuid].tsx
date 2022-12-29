@@ -7,8 +7,9 @@ import Alert from "components/Alert";
 import DefaultLayout from "components/layout/DefaultLayout";
 
 import { useBookingDetailsQuery } from "generated/graphql";
+import BookingDetails from "components/pages/bookings/details/BookingDetails";
 
-import BookingDetails from "components/BookingDetails";
+import BookingDetailsLegacy from "components/BookingDetails";
 import CancelBooking from "components/CancelBooking";
 import PageTitle from "components/PageTitle";
 import BackLink from "components/BackLink";
@@ -52,12 +53,12 @@ export default function BookingDetail() {
       </div>
       <PageTitle title="Buchungs-Details" />
       {showSuccessAlert && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert text="Du hast den Este-Esel gebucht!" type="success" />
         </div>
       )}
       {data?.booking?.state === "REQUESTED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert
             text="Bitte beachte, dass die Buchung noch bestätigt werden muss."
             type="info"
@@ -65,7 +66,7 @@ export default function BookingDetail() {
         </div>
       )}
       {!loading && data?.booking === null && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert
             text="Die Buchung konnte nicht gefunden werden."
             type="error"
@@ -73,17 +74,17 @@ export default function BookingDetail() {
         </div>
       )}
       {data?.booking?.state === "REJECTED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert text="Die Buchung wurde leider abgelehnt." type="error" />
         </div>
       )}
       {data?.booking?.state === "CANCELED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert text="Die Buchung wurde storniert." type="error" />
         </div>
       )}
       {!loading && !dateInPast && data?.booking?.state === "CONFIRMED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert
             text="Bitte bringe den Buchungs-Code und deinen Ausweis mit zum Abholen."
             type="info"
@@ -91,7 +92,7 @@ export default function BookingDetail() {
         </div>
       )}
       {!loading && dateInPast && data?.booking?.state === "CONFIRMED" && (
-        <div className="my-2">
+        <div className="my-4">
           <Alert
             text="Die Buchung liegt in der Vergangenheit."
             type="warning"
@@ -99,6 +100,7 @@ export default function BookingDetail() {
         </div>
       )}
       {data && data.booking && <BookingDetails booking={data.booking} />}
+      {/* {data && data.booking && <BookingDetailsLegacy booking={data.booking} />} */}
       {data &&
         data.booking &&
         !dateInPast &&
