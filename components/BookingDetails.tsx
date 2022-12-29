@@ -93,7 +93,7 @@ export default function BookingDetails({ booking }: Props) {
       <Heading title="Lastenrad" />
       <div className="flex space-x-4 items-center">
         <ShieldCheckIcon className="w-5 h-5 stroke-current" />
-        <span>{booking.bike.name}</span>
+        <span>{booking?.bike?.name}</span>
       </div>
 
       <Heading title="Datum &amp; Abohlzeit" />
@@ -121,11 +121,11 @@ export default function BookingDetails({ booking }: Props) {
         <div>
           <div className="flex items-center space-x-4">
             <div>
-              <div>{booking.bike.pickupStation?.contactName}</div>
-              <div>{booking.bike.pickupStation?.locationStreet}</div>
+              <div>{booking?.bike?.pickupStation?.contactName}</div>
+              <div>{booking?.bike?.pickupStation?.locationStreet}</div>
               <div>
-                {booking.bike.pickupStation?.locationPostalcode}{" "}
-                {booking.bike.pickupStation?.locationCity}
+                {booking?.bike?.pickupStation?.locationPostalcode}{" "}
+                {booking?.bike?.pickupStation?.locationCity}
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function BookingDetails({ booking }: Props) {
           </div>
         </div>
       </div>
-      {booking.bike.pickupStation?.contactTelephone && (
+      {booking?.bike?.pickupStation?.contactTelephone && (
         <div className="flex space-x-4 items-center">
           <PhoneIcon className="w-5 h-5 stroke-current" />
           <div>
@@ -153,7 +153,7 @@ export default function BookingDetails({ booking }: Props) {
           </div>
         </div>
       )}
-      {booking.bike.pickupStation?.locationDescription && (
+      {booking?.bike?.pickupStation?.locationDescription && (
         <div className="flex space-x-4">
           <InformationCircleIcon className="w-5 h-5 stroke-current flex-shrink-0" />
           <div className="prose">
