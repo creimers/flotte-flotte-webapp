@@ -56,12 +56,6 @@ export default function EsteEselModal() {
             leaveTo="opacity-0 scale-95"
           >
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg">
-              <Dialog.Title
-                as="h3"
-                className="text-lg font-medium leading-6 text-gray-900"
-              >
-                Este-Esel wird Flotte Flotte
-              </Dialog.Title>
               <div className="mt-2 prose">
                 <p>Liebe Este-Esel-Nutzer:in,</p>
                 <p>der Este-Esel ist jetzt Teil der Flotten Flotte.</p>
