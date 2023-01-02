@@ -12,9 +12,28 @@ import Status from "./Status";
 
 type Props = {
   booking: BookingFragment;
+  loading: boolean;
 };
 
-export default function BookingDetails({ booking }: Props) {
+export default function BookingDetails({ booking, loading }: Props) {
+  if (loading) {
+    return (
+      <div className="space-y-6 animate-pulse">
+        <div className="grid md:grid-cols-3 gap-6">
+          <GridItem />
+          <GridItem />
+          <GridItem />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <GridItem />
+          <GridItem />
+          <GridItem />
+          <GridItem />
+        </div>
+      </div>
+    );
+  }
   if (!booking) {
     return null;
   }
