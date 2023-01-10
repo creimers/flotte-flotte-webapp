@@ -54,7 +54,7 @@ const Home: NextPage = () => {
                 </a>{" "}
                 in Jork und Buxtehude.
               </p>
-              <p>Latenräder eigenen sich hervorragend...</p>
+              <p>Lastenräder eigenen sich hervorragend...</p>
               <ul className="list-disc">
                 <li>zum Einkaufen...</li>
                 <li>zum Rumdüsen...</li>
