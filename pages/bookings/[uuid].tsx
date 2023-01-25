@@ -53,7 +53,10 @@ export default function BookingDetail() {
       <PageTitle title="Buchungs-Details" />
       {showSuccessAlert && (
         <div className="my-4">
-          <Alert text="Du hast den Este-Esel gebucht!" type="success" />
+          <Alert
+            text={`Du hast das Rad ${data?.booking?.bike?.name} gebucht!`}
+            type="success"
+          />
         </div>
       )}
       {data?.booking?.state === "REQUESTED" && (
