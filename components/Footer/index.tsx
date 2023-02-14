@@ -7,11 +7,11 @@ export default function Footer() {
     <footer className="mt-auto">
       <div className="h-32"></div>
       <div className="p-4 text-white bg-teal-500 h-full py-24">
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex space-x-4 h-full items-center">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 flex space-x-4 h-full items-center flex-col space-y-8 md:flex-row md:space-y-0">
           <div className="w-64  text-white">
             <Logo />
           </div>
-          <div className="flex space-x-4">
+          <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-left">
             <Link href="/terms">
               <a>Nutzungsbedingungen</a>
             </Link>
