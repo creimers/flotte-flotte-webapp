@@ -13,7 +13,9 @@ export default function Account() {
     <DefaultLayout>
       <PageTitle title="Konto" />
       {authState === AuthStatus.authenticated && (
-        <div>Eingeloggt als {user?.me?.email}</div>
+        <div>
+          Eingeloggt als <strong>{user?.me?.email}</strong>
+        </div>
       )}
       <div className="h-12" />
       <div className="max-w-lg">
