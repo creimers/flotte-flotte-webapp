@@ -27,6 +27,11 @@ export default function BikeDetailPage() {
                 <p>{bike.node?.model}</p>
               </>
             )}
+            {bike.node?.statusNote && (
+              <div className="bg-gray-100 py-2 px-4 rounded-md border-gray-600 border text-gray-600">
+                Status: {bike.node.statusNote}
+              </div>
+            )}
             {bike.node?.pickupStation?.locationCity && (
               <>
                 <h2>Standort</h2>

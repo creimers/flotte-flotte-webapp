@@ -148,6 +148,8 @@ export default function NewBooking() {
   const bks = (bikes?.bikes?.edges.map(b => b?.node).filter(Boolean) ||
     []) as BikeFragment[];
 
+  console.log({ bookedDates });
+
   return (
     <DefaultLayout>
       <PageTitle title="Neue Buchung" />
@@ -240,25 +242,6 @@ export default function NewBooking() {
                         excludeDates={bookedDates?.bookedDates?.map(
                           d => new Date(d),
                         )}
-                        // dayClassName={
-                        //   // if not today, greater than min, smaller than max and not in booked dates!
-                        //   date => {
-                        //     const now = new Date();
-                        //     const isToday =
-                        //       date.toISOString().split("T")[0] ===
-                        //       now.toISOString().split("T")[0];
-                        //     const nowTime = now.getTime();
-                        //     const selectedDate = new Date(values.startDate);
-                        //     if (
-                        //       !isToday &&
-                        //       date.getTime() > nowTime &&
-                        //       date !== selectedDate
-                        //     ) {
-                        //       return "available";
-                        //     }
-                        //     return "";
-                        //   }
-                        // }
                         minDate={new Date()}
                         maxDate={addMonths(new Date(), 1)}
                         onChange={date => {
@@ -419,7 +402,7 @@ export default function NewBooking() {
                       type="submit"
                       disabled={
                         !values.agreeToTerms ||
-                        // !values.agreeToTermsBike ||
+                        !values.agreeToTermsBike ||
                         loading ||
                         !user?.me?.verified ||
                         selectedBike?.active === false

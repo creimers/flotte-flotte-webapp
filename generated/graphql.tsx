@@ -489,6 +489,7 @@ export type Query = {
   bikes?: Maybe<BikeNodeConnection>;
   bookedDates?: Maybe<Array<Maybe<Scalars['Date']>>>;
   booking?: Maybe<BookingNode>;
+  bookingCount?: Maybe<Scalars['Int']>;
   bookings?: Maybe<BookingNodeConnection>;
   me?: Maybe<UserNode>;
   pickupStation?: Maybe<PickupStationNode>;
@@ -768,7 +769,7 @@ export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNod
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BookingsQuery = { __typename: 'Query', bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, returnDate?: any | null, pickupTimestamp?: any | null, state: BookingState, bike?: { __typename?: 'BikeNode', name: string } | null } | null } | null> } | null };
+export type BookingsQuery = { __typename: 'Query', bookingCount?: number | null, bookings?: { __typename?: 'BookingNodeConnection', edges: Array<{ __typename?: 'BookingNodeEdge', node?: { __typename?: 'BookingNode', uuid: any, startDate: any, returnDate?: any | null, pickupTimestamp?: any | null, state: BookingState, bike?: { __typename?: 'BikeNode', name: string } | null } | null } | null> } | null };
 
 export type UserQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2242,6 +2243,14 @@ export default {
             ]
           },
           {
+            "name": "bookingCount",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
             "name": "bookings",
             "type": {
               "kind": "OBJECT",
@@ -3044,6 +3053,7 @@ export function useBikesQuery(options?: Omit<Urql.UseQueryArgs<BikesQueryVariabl
 export const BookingsDocument = gql`
     query Bookings {
   __typename
+  bookingCount
   bookings {
     edges {
       node {

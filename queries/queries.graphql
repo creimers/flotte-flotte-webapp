@@ -52,6 +52,7 @@ query Bikes {
 
 query Bookings {
   __typename
+  bookingCount
   bookings {
     edges {
       node {
