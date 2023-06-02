@@ -35,6 +35,7 @@ fragment Bike on BikeNode {
   slug
   active
   statusNote
+  logoUrl
   pickupStation {
     ...PickupStation
   }

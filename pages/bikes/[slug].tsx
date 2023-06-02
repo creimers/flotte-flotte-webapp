@@ -17,20 +17,37 @@ export default function BikeDetailPage() {
   return (
     <DefaultLayout>
       <BackLink href="/bikes" />
+      <div className="h-4" />
       {bike && (
         <div>
-          <div className="prose">
-            <h1>Flotte Flotte - {bike.node?.name}</h1>
-            {bike.node?.model && (
-              <>
-                <h2>Model</h2>
-                <p>{bike.node?.model}</p>
-              </>
+          <div className="flex space-x-8 mb-8">
+            {bike.node?.logoUrl && (
+              <img
+                className="w-32 float-left"
+                src={bike.node?.logoUrl}
+                alt={bike.node?.name}
+              />
             )}
+            <div className="flex-1 prose">
+              <h1>Flotte Flotte - {bike.node?.name}</h1>
+            </div>
+          </div>
+          <div className="prose">
+            <div>
+              {bike.node?.model && (
+                <>
+                  <h2>Model</h2>
+                  <p>{bike.node?.model}</p>
+                </>
+              )}
+            </div>
             {bike.node?.statusNote && (
-              <div className="bg-gray-100 py-2 px-4 rounded-md border-gray-600 border text-gray-600">
-                Status: {bike.node.statusNote}
-              </div>
+              <>
+                <h2>Status</h2>
+                <div className="bg-gray-100 py-2 px-4 rounded-md border-gray-600 border text-gray-600">
+                  {bike.node.statusNote}
+                </div>
+              </>
             )}
             {bike.node?.pickupStation?.locationCity && (
               <>
