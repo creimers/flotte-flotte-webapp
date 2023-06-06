@@ -55,6 +55,30 @@ export default function BikeDetailPage() {
                 <p>{bike.node?.pickupStation?.locationCity}</p>
               </>
             )}
+            {bike.node?.sponsors.edges && (
+              <>
+                <h2>Sponsoren</h2>
+                <div className="grid grid-cols-3 gap-8">
+                  {bike.node?.sponsors.edges.map(sponsor => (
+                    <div
+                      key={sponsor?.node?.id}
+                      className="h-full flex justify-center items-center"
+                    >
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href={sponsor?.node?.url || "#"}
+                      >
+                        <img
+                          src={sponsor?.node?.logoUrl || ""}
+                          alt={sponsor?.node?.name}
+                        />
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
             {bike.node?.pickupStation?.terms && (
               <>
                 <h2 id="terms">Nutzungsbedingungen</h2>

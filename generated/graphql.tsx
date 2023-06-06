@@ -37,12 +37,22 @@ export type BikeNode = Node & {
   public: Scalars['Boolean'];
   purchaseDate: Scalars['Date'];
   slug?: Maybe<Scalars['String']>;
+  sponsors: SponsorNodeConnection;
   statusNote?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
 
 export type BikeNodeBookingsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type BikeNodeSponsorsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -609,6 +619,33 @@ export type SendPasswordResetEmail = {
   success?: Maybe<Scalars['Boolean']>;
 };
 
+export type SponsorNode = Node & {
+  __typename?: 'SponsorNode';
+  /** The ID of the object. */
+  id: Scalars['ID'];
+  logo?: Maybe<Scalars['String']>;
+  logoUrl?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
+};
+
+export type SponsorNodeConnection = {
+  __typename?: 'SponsorNodeConnection';
+  /** Contains the nodes in this connection. */
+  edges: Array<Maybe<SponsorNodeEdge>>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+};
+
+/** A Relay edge containing a `SponsorNode` and its cursor. */
+export type SponsorNodeEdge = {
+  __typename?: 'SponsorNodeEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<SponsorNode>;
+};
+
 export type Stats = {
   __typename?: 'Stats';
   bikes?: Maybe<Scalars['Int']>;
@@ -758,14 +795,16 @@ export type DeleteAccountMutation = { __typename: 'Mutation', deleteAccount?: { 
 
 export type PickupStationFragment = { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null };
 
+export type SponsorFragment = { __typename?: 'SponsorNode', id: string, name: string, logoUrl?: string | null, url?: string | null };
+
 export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike?: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } | null };
 
-export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, active: boolean, statusNote?: string | null, logoUrl?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null };
+export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, active: boolean, statusNote?: string | null, logoUrl?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null, sponsors: { __typename?: 'SponsorNodeConnection', edges: Array<{ __typename?: 'SponsorNodeEdge', node?: { __typename?: 'SponsorNode', id: string, name: string, logoUrl?: string | null, url?: string | null } | null } | null> } };
 
 export type BikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNodeConnection', edges: Array<{ __typename?: 'BikeNodeEdge', node?: { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, active: boolean, statusNote?: string | null, logoUrl?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } | null } | null> } | null };
+export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNodeConnection', edges: Array<{ __typename?: 'BikeNodeEdge', node?: { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, active: boolean, statusNote?: string | null, logoUrl?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null, sponsors: { __typename?: 'SponsorNodeConnection', edges: Array<{ __typename?: 'SponsorNodeEdge', node?: { __typename?: 'SponsorNode', id: string, name: string, logoUrl?: string | null, url?: string | null } | null } | null> } } | null } | null> } | null };
 
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -961,6 +1000,54 @@ export default {
               "name": "Any"
             },
             "args": []
+          },
+          {
+            "name": "sponsors",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "SponsorNodeConnection",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
           },
           {
             "name": "statusNote",
@@ -1722,6 +1809,10 @@ export default {
           {
             "kind": "OBJECT",
             "name": "PickupStationNode"
+          },
+          {
+            "kind": "OBJECT",
+            "name": "SponsorNode"
           },
           {
             "kind": "OBJECT",
@@ -2510,6 +2601,125 @@ export default {
       },
       {
         "kind": "OBJECT",
+        "name": "SponsorNode",
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "logo",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "logoUrl",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "name",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "url",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SponsorNodeConnection",
+        "fields": [
+          {
+            "name": "edges",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SponsorNodeEdge",
+                  "ofType": null
+                }
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pageInfo",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SponsorNodeEdge",
+        "fields": [
+          {
+            "name": "cursor",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "node",
+            "type": {
+              "kind": "OBJECT",
+              "name": "SponsorNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
         "name": "Stats",
         "fields": [
           {
@@ -2877,6 +3087,14 @@ export const BookingFragmentDoc = gql`
   state
 }
     ${PickupStationFragmentDoc}`;
+export const SponsorFragmentDoc = gql`
+    fragment Sponsor on SponsorNode {
+  id
+  name
+  logoUrl
+  url
+}
+    `;
 export const BikeFragmentDoc = gql`
     fragment Bike on BikeNode {
   uuid
@@ -2889,8 +3107,16 @@ export const BikeFragmentDoc = gql`
   pickupStation {
     ...PickupStation
   }
+  sponsors {
+    edges {
+      node {
+        ...Sponsor
+      }
+    }
+  }
 }
-    ${PickupStationFragmentDoc}`;
+    ${PickupStationFragmentDoc}
+${SponsorFragmentDoc}`;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password1: String!, $password2: String!, $firstName: String!, $lastName: String!) {
   __typename

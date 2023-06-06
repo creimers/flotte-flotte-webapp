@@ -12,6 +12,13 @@ fragment PickupStation on PickupStationNode {
   latestReturnTime
 }
 
+fragment Sponsor on SponsorNode {
+  id
+  name
+  logoUrl
+  url
+}
+
 fragment Booking on BookingNode {
   uuid
   bike {
@@ -38,6 +45,13 @@ fragment Bike on BikeNode {
   logoUrl
   pickupStation {
     ...PickupStation
+  }
+  sponsors {
+    edges {
+      node {
+        ...Sponsor
+      }
+    }
   }
 }
 
