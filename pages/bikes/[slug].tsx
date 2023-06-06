@@ -32,7 +32,7 @@ export default function BikeDetailPage() {
               <h1>Flotte Flotte - {bike.node?.name}</h1>
             </div>
           </div>
-          <div className="prose">
+          <div className="prose max-w-full w-full">
             <div>
               {bike.node?.model && (
                 <>
