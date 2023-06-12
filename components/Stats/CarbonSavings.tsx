@@ -8,9 +8,14 @@ type Props = {
 };
 
 export default function CarbonSavings({ kilometers, loading }: Props) {
-  const savings = kilometers
-    ? `${(kilometers * CARBON_PER_KILOMETER).toFixed(0)}`
-    : "-";
+  const savingsInKg = (kilometers || 0) * CARBON_PER_KILOMETER;
+  let savingsWithUnit = "-";
+  if (savingsInKg > 1000) {
+    savingsWithUnit = `${(savingsInKg / 1000).toFixed(1)} t`;
+  } else if (savingsInKg > 0) {
+    savingsWithUnit = `${savingsInKg.toFixed(0)} kg`;
+  }
+
   return (
     <div className="py-8 lg:py-12 bg-teal-200 text-teal-600">
       <div className="flex flex-col lg:flex-row items-center text-5xl lg:text-6xl justify-center lg:space-x-4 mb-4">
@@ -18,7 +23,7 @@ export default function CarbonSavings({ kilometers, loading }: Props) {
           <CloudIcon />
         </span>
         <span className="text-center">
-          ca. {savings} kg CO<sub>2</sub>&nbsp;eingespart!<sup>*</sup>
+          ca. {savingsWithUnit} CO<sub>2</sub>&nbsp;eingespart!<sup>*</sup>
         </span>
       </div>
       <div className="text-xs text-center">
