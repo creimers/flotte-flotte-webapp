@@ -46,10 +46,27 @@ fragment Bike on BikeNode {
   pickupStation {
     ...PickupStation
   }
+  images {
+    edges {
+      node {
+        id
+        imageUrl
+      }
+    }
+  }
   sponsors {
     edges {
       node {
         ...Sponsor
+      }
+    }
+  }
+  socialMediaAccounts {
+    edges {
+      node {
+        id
+        accountType
+        url
       }
     }
   }

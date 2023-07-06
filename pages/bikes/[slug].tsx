@@ -1,10 +1,11 @@
 import * as React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useBikesQuery } from "generated/graphql";
+import { useBikesQuery, SocialMediaAccountNodeEdge } from "generated/graphql";
 
 import BackLink from "components/BackLink";
 import DefaultLayout from "components/layout/DefaultLayout";
+import SocialMediaAccounts from "components/pages/bike-details/social-media-accounts";
 
 export default function BikeDetailPage() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function BikeDetailPage() {
   const [{ data }] = useBikesQuery({ requestPolicy: "cache-first" });
 
   const bike = data?.bikes?.edges.find(e => e?.node?.slug === slug);
+  const socialMediaAccounts = bike?.node?.socialMediaAccounts.edges;
 
   return (
     <DefaultLayout>
@@ -32,6 +34,15 @@ export default function BikeDetailPage() {
               <h1>Flotte Flotte - {bike.node?.name}</h1>
             </div>
           </div>
+          {socialMediaAccounts && (
+            <div>
+              <SocialMediaAccounts
+                socialMediaAccounts={
+                  socialMediaAccounts as SocialMediaAccountNodeEdge[]
+                }
+              />
+            </div>
+          )}
           <div className="prose max-w-full w-full">
             <div>
               {bike.node?.model && (
@@ -41,6 +52,18 @@ export default function BikeDetailPage() {
                 </>
               )}
             </div>
+            {bike.node?.images.edges && (
+              <div className="grid grid-cols-4 gap-8">
+                {bike.node?.images.edges.map((imageNode, i) => (
+                  <div key={`image-${i}`} className="h-48 w-48">
+                    <img
+                      src={imageNode?.node?.imageUrl!}
+                      className="object-cover h-48 w-auto"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             {bike.node?.statusNote && (
               <>
                 <h2>Status</h2>

@@ -21,6 +21,31 @@ export type Scalars = {
   UUID: any;
 };
 
+export type BikeImageNode = Node & {
+  __typename?: 'BikeImageNode';
+  /** The ID of the object. */
+  id: Scalars['ID'];
+  image?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+};
+
+export type BikeImageNodeConnection = {
+  __typename?: 'BikeImageNodeConnection';
+  /** Contains the nodes in this connection. */
+  edges: Array<Maybe<BikeImageNodeEdge>>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+};
+
+/** A Relay edge containing a `BikeImageNode` and its cursor. */
+export type BikeImageNodeEdge = {
+  __typename?: 'BikeImageNodeEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<BikeImageNode>;
+};
+
 export type BikeNode = Node & {
   __typename?: 'BikeNode';
   /** Buchbar. */
@@ -28,6 +53,7 @@ export type BikeNode = Node & {
   bookings: BookingNodeConnection;
   /** The ID of the object. */
   id: Scalars['ID'];
+  images: BikeImageNodeConnection;
   logo?: Maybe<Scalars['String']>;
   logoUrl?: Maybe<Scalars['String']>;
   model?: Maybe<Scalars['String']>;
@@ -37,6 +63,7 @@ export type BikeNode = Node & {
   public: Scalars['Boolean'];
   purchaseDate: Scalars['Date'];
   slug?: Maybe<Scalars['String']>;
+  socialMediaAccounts: SocialMediaAccountNodeConnection;
   sponsors: SponsorNodeConnection;
   statusNote?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
@@ -44,6 +71,24 @@ export type BikeNode = Node & {
 
 
 export type BikeNodeBookingsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type BikeNodeImagesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type BikeNodeSocialMediaAccountsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -619,6 +664,46 @@ export type SendPasswordResetEmail = {
   success?: Maybe<Scalars['Boolean']>;
 };
 
+/** An enumeration. */
+export enum SocialMediaAccountAccountType {
+  /** Facebook */
+  Facebook = 'FACEBOOK',
+  /** Instagram */
+  Instagram = 'INSTAGRAM',
+  /** Mastodon */
+  Mastodon = 'MASTODON',
+  /** Twitter */
+  Twitter = 'TWITTER',
+  /** Website */
+  Website = 'WEBSITE'
+}
+
+export type SocialMediaAccountNode = Node & {
+  __typename?: 'SocialMediaAccountNode';
+  accountType: SocialMediaAccountAccountType;
+  bike: BikeNode;
+  /** The ID of the object. */
+  id: Scalars['ID'];
+  url: Scalars['String'];
+};
+
+export type SocialMediaAccountNodeConnection = {
+  __typename?: 'SocialMediaAccountNodeConnection';
+  /** Contains the nodes in this connection. */
+  edges: Array<Maybe<SocialMediaAccountNodeEdge>>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+};
+
+/** A Relay edge containing a `SocialMediaAccountNode` and its cursor. */
+export type SocialMediaAccountNodeEdge = {
+  __typename?: 'SocialMediaAccountNodeEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<SocialMediaAccountNode>;
+};
+
 export type SponsorNode = Node & {
   __typename?: 'SponsorNode';
   /** The ID of the object. */
@@ -799,12 +884,12 @@ export type SponsorFragment = { __typename?: 'SponsorNode', id: string, name: st
 
 export type BookingFragment = { __typename?: 'BookingNode', uuid: any, token?: string | null, pickupTimestamp?: any | null, returnTimestamp?: any | null, startDate: any, returnDate?: any | null, state: BookingState, bike?: { __typename?: 'BikeNode', name: string, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null } | null };
 
-export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, active: boolean, statusNote?: string | null, logoUrl?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null, sponsors: { __typename?: 'SponsorNodeConnection', edges: Array<{ __typename?: 'SponsorNodeEdge', node?: { __typename?: 'SponsorNode', id: string, name: string, logoUrl?: string | null, url?: string | null } | null } | null> } };
+export type BikeFragment = { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, active: boolean, statusNote?: string | null, logoUrl?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null, images: { __typename?: 'BikeImageNodeConnection', edges: Array<{ __typename?: 'BikeImageNodeEdge', node?: { __typename?: 'BikeImageNode', id: string, imageUrl?: string | null } | null } | null> }, sponsors: { __typename?: 'SponsorNodeConnection', edges: Array<{ __typename?: 'SponsorNodeEdge', node?: { __typename?: 'SponsorNode', id: string, name: string, logoUrl?: string | null, url?: string | null } | null } | null> }, socialMediaAccounts: { __typename?: 'SocialMediaAccountNodeConnection', edges: Array<{ __typename?: 'SocialMediaAccountNodeEdge', node?: { __typename?: 'SocialMediaAccountNode', id: string, accountType: SocialMediaAccountAccountType, url: string } | null } | null> } };
 
 export type BikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNodeConnection', edges: Array<{ __typename?: 'BikeNodeEdge', node?: { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, active: boolean, statusNote?: string | null, logoUrl?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null, sponsors: { __typename?: 'SponsorNodeConnection', edges: Array<{ __typename?: 'SponsorNodeEdge', node?: { __typename?: 'SponsorNode', id: string, name: string, logoUrl?: string | null, url?: string | null } | null } | null> } } | null } | null> } | null };
+export type BikesQuery = { __typename?: 'Query', bikes?: { __typename?: 'BikeNodeConnection', edges: Array<{ __typename?: 'BikeNodeEdge', node?: { __typename?: 'BikeNode', uuid: any, name: string, model?: string | null, slug?: string | null, active: boolean, statusNote?: string | null, logoUrl?: string | null, pickupStation?: { __typename?: 'PickupStationNode', id: string, locationCity?: string | null, locationPostalcode?: string | null, locationStreet?: string | null, locationDescription?: string | null, contactTelephone?: string | null, contactName?: string | null, terms?: string | null, maxConsecutiveDays: number, earliestPickupTime?: any | null, latestReturnTime?: any | null } | null, images: { __typename?: 'BikeImageNodeConnection', edges: Array<{ __typename?: 'BikeImageNodeEdge', node?: { __typename?: 'BikeImageNode', id: string, imageUrl?: string | null } | null } | null> }, sponsors: { __typename?: 'SponsorNodeConnection', edges: Array<{ __typename?: 'SponsorNodeEdge', node?: { __typename?: 'SponsorNode', id: string, name: string, logoUrl?: string | null, url?: string | null } | null } | null> }, socialMediaAccounts: { __typename?: 'SocialMediaAccountNodeConnection', edges: Array<{ __typename?: 'SocialMediaAccountNodeEdge', node?: { __typename?: 'SocialMediaAccountNode', id: string, accountType: SocialMediaAccountAccountType, url: string } | null } | null> } } | null } | null> } | null };
 
 export type BookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -853,6 +938,106 @@ export default {
     },
     "subscriptionType": null,
     "types": [
+      {
+        "kind": "OBJECT",
+        "name": "BikeImageNode",
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "image",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "imageUrl",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "BikeImageNodeConnection",
+        "fields": [
+          {
+            "name": "edges",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "BikeImageNodeEdge",
+                  "ofType": null
+                }
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pageInfo",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "BikeImageNodeEdge",
+        "fields": [
+          {
+            "name": "cursor",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "node",
+            "type": {
+              "kind": "OBJECT",
+              "name": "BikeImageNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
       {
         "kind": "OBJECT",
         "name": "BikeNode",
@@ -928,6 +1113,54 @@ export default {
             "args": []
           },
           {
+            "name": "images",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "BikeImageNodeConnection",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
+          },
+          {
             "name": "logo",
             "type": {
               "kind": "SCALAR",
@@ -1000,6 +1233,54 @@ export default {
               "name": "Any"
             },
             "args": []
+          },
+          {
+            "name": "socialMediaAccounts",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "SocialMediaAccountNodeConnection",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "after",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "before",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "first",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "last",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "offset",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              }
+            ]
           },
           {
             "name": "sponsors",
@@ -1800,6 +2081,10 @@ export default {
         "possibleTypes": [
           {
             "kind": "OBJECT",
+            "name": "BikeImageNode"
+          },
+          {
+            "kind": "OBJECT",
             "name": "BikeNode"
           },
           {
@@ -1809,6 +2094,10 @@ export default {
           {
             "kind": "OBJECT",
             "name": "PickupStationNode"
+          },
+          {
+            "kind": "OBJECT",
+            "name": "SocialMediaAccountNode"
           },
           {
             "kind": "OBJECT",
@@ -2601,6 +2890,124 @@ export default {
       },
       {
         "kind": "OBJECT",
+        "name": "SocialMediaAccountNode",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "bike",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "BikeNode",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "id",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "url",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "Node"
+          }
+        ]
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SocialMediaAccountNodeConnection",
+        "fields": [
+          {
+            "name": "edges",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SocialMediaAccountNodeEdge",
+                  "ofType": null
+                }
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pageInfo",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SocialMediaAccountNodeEdge",
+        "fields": [
+          {
+            "name": "cursor",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Any"
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "node",
+            "type": {
+              "kind": "OBJECT",
+              "name": "SocialMediaAccountNode",
+              "ofType": null
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
         "name": "SponsorNode",
         "fields": [
           {
@@ -3107,10 +3514,27 @@ export const BikeFragmentDoc = gql`
   pickupStation {
     ...PickupStation
   }
+  images {
+    edges {
+      node {
+        id
+        imageUrl
+      }
+    }
+  }
   sponsors {
     edges {
       node {
         ...Sponsor
+      }
+    }
+  }
+  socialMediaAccounts {
+    edges {
+      node {
+        id
+        accountType
+        url
       }
     }
   }
