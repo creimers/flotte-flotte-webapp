@@ -13,6 +13,7 @@ export default function Stats() {
           users={data?.stats?.users || undefined}
           bookings={data?.stats?.bookings || undefined}
           kilometers={data?.stats?.kilometers || undefined}
+          bikes={data?.stats?.bikes || undefined}
         />
       </div>
       <div>

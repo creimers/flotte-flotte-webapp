@@ -833,7 +833,7 @@ export type BookingDetailsQuery = { __typename: 'Query', booking?: { __typename?
 export type StatsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StatsQueryQuery = { __typename?: 'Query', stats?: { __typename?: 'Stats', users?: number | null, kilometers?: number | null, bookings?: number | null } | null };
+export type StatsQueryQuery = { __typename?: 'Query', stats?: { __typename?: 'Stats', users?: number | null, kilometers?: number | null, bookings?: number | null, bikes?: number | null } | null };
 
 export type PickupStationQueryVariables = Exact<{
   bikeUuid: Scalars['String'];
@@ -3353,6 +3353,7 @@ export const StatsQueryDocument = gql`
     users
     kilometers
     bookings
+    bikes
   }
 }
     `;

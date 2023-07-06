@@ -44,7 +44,7 @@ export default function BikeDetailPage() {
             {bike.node?.statusNote && (
               <>
                 <h2>Status</h2>
-                <div className="bg-gray-100 py-2 px-4 rounded-md border-gray-600 border text-gray-600">
+                <div className="bg-teal-50 py-2 px-4 rounded-md border-teal-600 border text-teal-600">
                   {bike.node.statusNote}
                 </div>
               </>
