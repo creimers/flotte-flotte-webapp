@@ -21,9 +21,7 @@ export function getMaxReturnDate(
     const daysDelta = index;
     const date = addDays(pickupDate, daysDelta);
     const dateString = dateToIsoDateString(date);
-    if (bookedDates.includes(dateString)) {
-      break;
-    } else {
+    if (!bookedDates.includes(dateString)) {
       maxReturnDate = date;
     }
   }

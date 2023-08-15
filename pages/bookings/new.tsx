@@ -148,8 +148,6 @@ export default function NewBooking() {
   const bks = (bikes?.bikes?.edges.map(b => b?.node).filter(Boolean) ||
     []) as BikeFragment[];
 
-  console.log({ bookedDates });
-
   return (
     <DefaultLayout>
       <PageTitle title="Neue Buchung" />
@@ -316,6 +314,9 @@ export default function NewBooking() {
                         locale="de"
                         dateFormat="dd.MM.yyyy"
                         selected={new Date(values.returnDate)}
+                        excludeDates={bookedDates?.bookedDates?.map(
+                          d => new Date(d),
+                        )}
                         // excludeDates={bookedDates?.bookedDates?.map(
                         //   d => new Date(d),
                         // )}
