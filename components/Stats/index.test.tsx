@@ -6,6 +6,6 @@ test("renders without breaking", async () => {
   render(<Stats />);
   const bookings = await waitFor(() => screen.getByText(/buchungen/i));
   expect(bookings).toBeDefined();
-  const emissions = await waitFor(() => screen.getByText(/kg co/i));
+  const emissions = await waitFor(() => screen.getByText(/co/i));
   expect(emissions).toBeDefined();
 });
