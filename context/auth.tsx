@@ -75,11 +75,6 @@ function AuthProvider({ children }: AuthProviderProps) {
         setAuthState(AuthStatus.unauthenticated);
       }
     }
-    // else {
-    //   localStorage.removeItem(REFRESH_TOKEN_KEY);
-    //   localStorage.removeItem(JWT_TOKEN_KEY);
-    //   setAuthState(AuthStatus.unauthenticated);
-    // }
   }, [refreshTokenData]);
 
   function logout() {
