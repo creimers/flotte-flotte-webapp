@@ -306,7 +306,7 @@ export default function NewBooking() {
                       onChange={date => {
                         if (date) {
                           const d = new Date(date.toString());
-                          onChange(d);
+                          onChange(d.toISOString());
                         }
                       }}
                     />
@@ -386,7 +386,7 @@ export default function NewBooking() {
                       onChange={date => {
                         if (date) {
                           const d = new Date(date.toString());
-                          onChange(d);
+                          onChange(d.toISOString());
                         }
                       }}
                     />
