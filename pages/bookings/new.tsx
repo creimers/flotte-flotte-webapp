@@ -79,18 +79,10 @@ export default function NewBooking() {
   const router = useRouter();
   const [{ data: bikes }] = useBikesQuery();
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
-  });
-
-  console.log({ errors });
+  const { register, handleSubmit, control, setValue, watch } =
+    useForm<FormSchema>({
+      resolver: zodResolver(formSchema),
+    });
 
   const bks = (bikes?.bikes?.edges.map(b => b?.node).filter(Boolean) ||
     []) as BikeFragment[];
