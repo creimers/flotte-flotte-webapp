@@ -15,7 +15,7 @@ const Home: NextPage = () => {
       <main>
         <div className="max-w-5xl mx-auto mb-8 sm:mb-12 mt-8 px-3">
           <h1 className="text-3xl sm:text-4xl md:text-7xl text-center font-semibold text-gray-900">
-            Flotte Flotte -
+            Flotte Flotte -{" "}
             <span className="text-teal-500">freie Lastenräder</span> für Jork
             und Buxtehude.
           </h1>
